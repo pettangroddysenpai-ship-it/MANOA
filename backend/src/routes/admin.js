@@ -31,7 +31,7 @@ router.get('/chats', async (_req, res) => {
 });
 
 function dbIsFirestoreLabel() {
-  return getDb().constructor?.name?.includes('firestore') ? 'firestore' : 'local';
+  return getDb().kind === 'firestore' ? 'firestore' : 'local';
 }
 
 export default router;

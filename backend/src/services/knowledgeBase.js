@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import pdfParse from 'pdf-parse/lib/pdf-parse.js';
 import { config, hasOpenAIKey } from '../config/index.js';
 import { embed } from './openai.js';
 
@@ -23,6 +24,16 @@ export function extractTextFromHtml(html) {
     .trim();
 }
 
+export async function extractPdfText(buffer) {
+  try {
+    const data = await pdfParse(buffer);
+    return (data.text || '').trim();
+  } catch (err) {
+    console.warn('[kb] PDF parse failed:', err.message);
+    return '';
+  }
+}
+
 export function chunkText(text, size = 600, overlap = 80) {
   const cleaned = text.replace(/\s+/g, ' ').trim();
   if (cleaned.length <= size) return cleaned ? [cleaned] : [];
@@ -35,8 +46,8 @@ export function chunkText(text, size = 600, overlap = 80) {
   return chunks;
 }
 
-function listHtmlFiles() {
-  return fs.readdirSync(kbDir).filter((f) => /\.html?$/i.test(f));
+function listDocFiles() {
+  return fs.readdirSync(kbDir).filter((f) => /\.(html?|pdf|txt|md)$/i.test(f));
 }
 
 function cosine(a, b) {
@@ -73,13 +84,28 @@ function saveIndex(index) {
   fs.writeFileSync(indexFile, JSON.stringify(index), 'utf8');
 }
 
+async function extractFileText(file) {
+  const filePath = path.join(kbDir, file);
+  const ext = path.extname(file).toLowerCase();
+  if (ext === '.pdf') {
+    return extractPdfText(fs.readFileSync(filePath));
+  }
+  if (ext === '.txt' || ext === '.md') {
+    return fs.readFileSync(filePath, 'utf8').trim();
+  }
+  return extractTextFromHtml(fs.readFileSync(filePath, 'utf8'));
+}
+
 async function buildChunks() {
-  const files = listHtmlFiles();
+  const files = listDocFiles();
   const chunks = [];
   for (const file of files) {
-    const raw = fs.readFileSync(path.join(kbDir, file), 'utf8');
-    const text = extractTextFromHtml(raw);
-    const title = file.replace(/\.html?$/i, '').replace(/[-_]/g, ' ');
+    const text = await extractFileText(file);
+    if (!text) {
+      console.warn(`[kb] Aucun texte extrait de ${file}`);
+      continue;
+    }
+    const title = file.replace(/\.\w+$/i, '').replace(/[-_]+/g, ' ');
     chunkText(text).forEach((content, i) => {
       chunks.push({ id: crypto.randomUUID(), file, title, index: i, content });
     });

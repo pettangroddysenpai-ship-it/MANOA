@@ -9,10 +9,11 @@ feuilles de route pedagogiques style Duolingo et base de connaissances RAG (27 d
 |--------|-------------|
 | Frontend | React + Vite + Tailwind CSS + Framer Motion |
 | Backend | Node.js + Express |
-| IA | OpenAI API (GPT-4o-mini + text-embedding-3-small) |
+| IA | OpenAI API (GPT-4o-mini + text-embedding-3-small) + Google Gemini (gemini-1.5-flash) |
 | Base de donnees | Firebase Firestore (sinon JSON local automatique) |
 | Voix | SpeechRecognition (entree) + speechSynthesis (sortie) - gratuit, navigateur |
 | Robot | Image `MANOA.jpeg` animee en CSS/Framer Motion |
+| Animations | Bonhommes en SVG (SMIL) : architecture POP, configuration, ping, tutoriels logiciels |
 
 ## Demarrage rapide
 
@@ -25,16 +26,18 @@ cd matrix-ai\backend
 npm install
 ```
 
-### 2. Ajouter votre cle OpenAI (optionnel mais recommande)
+### 2. Ajouter vos cles IA (optionnel mais recommande)
 
-Ouvrez `backend\.env` et remplacez la valeur placeholder :
+Ouvrez `backend\.env` et renseignez :
 
 ```
-OPENAI_API_KEY=sk-...
+OPENAI_API_KEY=sk-...        # cle OpenAI (necessite des credits)
+GEMINI_API_KEY=AIza...       # cle Gemini gratuite : https://aistudio.google.com/apikey
 ```
 
-Sans cle, l'application fonctionne en mode hors-ligne (reponses generees depuis les documents
-de formation, feuilles de route predefinies) pour la demonstration.
+MANOA interroge **OpenAI et Gemini** a chaque question et combine leurs reponses.
+Sans cle, ou si OpenAI n'a pas de credits, l'application bascule automatiquement en
+mode hors-ligne (reponses issues des documents de formation, feuilles de route predefinies).
 
 ### 3. Lancer le projet
 
@@ -51,9 +54,13 @@ Cela ouvre :
 ## Fonctionnalites
 
 - **Assistant vocal** : cliquez sur le micro, parlez, MANOA repond en voix (navigation Chrome).
-- **Robot anime** : MANOA cligne des yeux, flotte et bouge la bouche quand il parle.
-- **Chat telecom** : reponses basees sur les 27 documents de formation Matrix (RAG).
-- **Feuilles de route** : questions "comment..." -> parcours Duolingo avec etapes, commandes et quiz.
+- **Robot anime + animations** : MANOA cligne des yeux, flotte et bouge la bouche quand il parle.
+  A droite de la discussion (chat 3/5, robot 2/5), une **scene bonhomme animee** (SVG) illustre chaque
+  etape : architecture POP -> Provider Edge (liens FO/FH), configuration d'equipement (Cisco/MikroTik),
+  test de liaison ping, et tutoriel logiciels (Winbox, Putty, Cisco Packet Tracer, Google Earth...).
+- **Double IA** : chaque question consulte **OpenAI et Gemini**, reponses combinees avec sources.
+- **Chat telecom** : reponses basees sur les 27 documents de formation Matrix (RAG, HTML + PDF).
+- **Feuilles de route** : questions "comment..." -> parcours Duolingo avec etapes, commandes, quiz et scenes.
 - **Progression** : XP, niveaux, badges, series.
 - **Tableau de bord admin** : statistiques d'utilisation, conversations (mot de passe : `manoa-admin`).
 
@@ -74,8 +81,9 @@ Pour utiliser **Firebase Firestore** :
 
 ## Ajouter des documents a la base de connaissances
 
-Deposez des fichiers `.txt`, `.md` ou `.html` dans `backend/knowledge/` puis supprimez
+Deposez des fichiers `.txt`, `.md`, `.html` **ou `.pdf`** dans `backend/knowledge/` puis supprimez
 `backend/data/knowledge_index.json` et relancez le backend pour re-indexer (28 docs / 504 fragments).
+Les PDF sont extraits automatiquement (librairie `pdf-parse`).
 
 ## Structure
 

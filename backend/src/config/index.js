@@ -11,6 +11,10 @@ export const config = {
     model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
     embedModel: process.env.OPENAI_EMBED_MODEL || 'text-embedding-3-small',
   },
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY || '',
+    model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+  },
   firebase: {
     serviceAccountPath: process.env.FIREBASE_SERVICE_ACCOUNT || process.env.GOOGLE_APPLICATION_CREDENTIALS || '',
     databaseURL: process.env.FIREBASE_DATABASE_URL || '',
@@ -25,3 +29,4 @@ export const config = {
 };
 
 export const hasOpenAIKey = () => Boolean(config.openai.apiKey && !config.openai.apiKey.includes('your-openai-api-key'));
+export const hasGeminiKey = () => Boolean(config.gemini.apiKey);

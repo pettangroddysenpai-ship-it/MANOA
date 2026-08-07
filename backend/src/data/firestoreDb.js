@@ -29,6 +29,7 @@ export function initFirestore() {
 const col = (name) => firestore.collection(name);
 
 export const firestoreDb = {
+  kind: 'firestore',
   isAvailable: () => available,
 
   async getUser(id) {

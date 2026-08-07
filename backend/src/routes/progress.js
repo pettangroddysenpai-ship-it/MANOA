@@ -53,7 +53,15 @@ router.post('/save', async (req, res) => {
       userId: uid,
       title: roadmap.title || 'Feuille de route',
       question: req.body.question || '',
-      steps: roadmap.steps.map((s) => ({ title: s.title, description: s.description, commands: s.commands || [], type: s.type || 'info', completed: false })),
+      steps: roadmap.steps.map((s) => ({
+        title: s.title,
+        description: s.description,
+        commands: s.commands || [],
+        type: s.type || 'info',
+        scene: s.scene || 'inspection',
+        app: s.app || '',
+        completed: false,
+      })),
       completed: false,
       createdAt: new Date().toISOString(),
     };

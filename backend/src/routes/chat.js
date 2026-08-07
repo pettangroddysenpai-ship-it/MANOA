@@ -31,7 +31,7 @@ router.post('/chat', async (req, res) => {
         answer: answer.text,
         type: answer.type,
         sources: answer.sources || [],
-        provider: answer.provider || 'unknown',
+        providers: answer.providers || [],
         createdAt: new Date().toISOString(),
       });
     }

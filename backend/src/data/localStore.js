@@ -34,6 +34,7 @@ function save() {
 }
 
 export const localStore = {
+  kind: 'local',
   load,
   save,
 

@@ -3,7 +3,7 @@ import multer from 'multer';
 import fs from 'node:fs';
 import path from 'node:path';
 import { getDb } from '../data/index.js';
-import { extractTextFromHtml, chunkText } from '../services/knowledgeBase.js';
+import { extractTextFromHtml, extractPdfText, chunkText } from '../services/knowledgeBase.js';
 import { config } from '../config/index.js';
 
 const router = Router();
@@ -29,14 +29,15 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 
     if (ext === '.html' || ext === '.htm') {
       text = extractTextFromHtml(fs.readFileSync(file.path, 'utf8'));
-    } else if (ext === '.txt') {
-      text = fs.readFileSync(file.path, 'utf8');
-    } else if (ext === '.md') {
+    } else if (ext === '.txt' || ext === '.md') {
       text = fs.readFileSync(file.path, 'utf8');
     } else if (ext === '.pdf') {
-      return res.status(400).json({ error: 'Le PDF necessite une librairie supplementaire; utilisez .txt, .md ou .html pour le moment' });
+      text = await extractPdfText(fs.readFileSync(file.path));
     } else {
-      return res.status(400).json({ error: 'Format non supporte' });
+      return res.status(400).json({ error: 'Format non supporte (utilisez .txt, .md, .html ou .pdf)' });
+    }
+    if (!text.trim()) {
+      return res.status(400).json({ error: 'Aucun texte extrait de ce fichier' });
     }
 
     const doc = await db.addDocument({

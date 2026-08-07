@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Check, ChevronDown, Play, Terminal, Star, Award, Flame } from 'lucide-react';
 import { api } from '../services/api.js';
 
 const STEP_ICON = { info: Play, run: Terminal, quiz: Star };
 
-export default function RoadmapView({ entry, onXpGained }) {
+export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
   const initialSteps = entry.steps.map((s) => ({ ...s, completed: !!s.completed }));
   const [steps, setSteps] = useState(initialSteps);
   const [openIndex, setOpenIndex] = useState(initialSteps.findIndex((s) => !s.completed));
@@ -13,6 +13,11 @@ export default function RoadmapView({ entry, onXpGained }) {
   const [wrong, setWrong] = useState(false);
   const [busy, setBusy] = useState(false);
   const [xpFlash, setXpFlash] = useState(null);
+
+  useEffect(() => {
+    const step = steps[openIndex];
+    if (onStepOpen && step) onStepOpen({ scene: step.scene || 'inspection', app: step.app || '', title: step.title });
+  }, [openIndex, steps]);
 
   const isUnlocked = (i) => i === 0 || steps[i - 1].completed;
 
