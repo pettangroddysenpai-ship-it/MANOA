@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cisco router step by step configuration guide</title>
+<meta name="description" content="255.0 MyRouter(config-if) no shutdown ``` Verifying Interface Status ```plaintext MyRouter show ip interface brief ``` Displays all interfaces, their IP addresses, and operational status. Routing Configuration Routing enables da">
+
+<!-- Preload critical fonts if any -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Dynamic Asset linking for Vite/Tailwind -->
+<link rel="stylesheet" href="/dist/assets/magazine-1784808096626.css">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="http://old.birthalarm.com">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://old.birthalarm.com">
+<meta property="og:title" content="cisco router step by step configuration guide">
+<meta property="og:description" content="255.0 MyRouter(config-if) no shutdown ``` Verifying Interface Status ```plaintext MyRouter show ip interface brief ``` Displays all interfaces, their IP addresses, and operational status. Routing Configuration Routing enables da">
+<meta property="og:image" content="">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="http://old.birthalarm.com">
+<meta property="twitter:title" content="cisco router step by step configuration guide">
+<meta property="twitter:description" content="255.0 MyRouter(config-if) no shutdown ``` Verifying Interface Status ```plaintext MyRouter show ip interface brief ``` Displays all interfaces, their IP addresses, and operational status. Routing Configuration Routing enables da">
+<meta property="twitter:image" content="">
+
+
+<meta name="author" content="Eldridge Lemke">
+
+
+
+<meta property="article:published_time" content="2025-08-28T04:52:43.335Z">
+
+
+<meta property="article:modified_time" content="2026-07-23 02:06:36">
+
+
+<!-- JSON-LD Structured Data -->
+
+<script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://old.birthalarm.com"},"headline":"cisco router step by step configuration guide","description":"255.0 MyRouter(config-if) no shutdown ``` Verifying Interface Status ```plaintext MyRouter show ip interface brief ``` Displays all interfaces, their IP addresses, and operational status. Routing Configuration Routing enables da","image":[""],"datePublished":"2025-08-28T04:52:43.335Z","dateModified":"2026-07-23T02:06:36.000Z","author":[{"@type":"Person","name":"Eldridge Lemke"}],"publisher":{"@type":"Organization","name":"Solid Tribune","logo":{"@type":"ImageObject","url":"undefined/images/logo.png"}}}
+</script>
+
+
+    <script>
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      } else if (localStorage.theme === "light") {
+        document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.remove("dark", "light");
+      }
+    </script>
+  </head>
+  <body
+    class="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 transition-colors duration-200 font-sans"
+  >
+    <header
+  class="bg-white dark:bg-zinc-900 border-b-4 border-zinc-900 dark:border-rose-600 transition-colors duration-200"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="flex flex-col items-center justify-center relative">
+      <!-- Left Side: Date/Info (Desktop Only) -->
+      <div
+        class="absolute left-0 hidden md:block text-sm font-serif text-zinc-500 dark:text-zinc-400"
+      >
+        Friday, August 7, 2026
+      </div>
+
+      <!-- Logo (Centered) -->
+      <a
+        href="/"
+        class="text-4xl md:text-5xl font-serif font-black text-zinc-900 dark:text-white tracking-tighter uppercase mb-4 md:mb-0"
+      >
+        Inner<span class="text-rose-600"
+          >Trend</span
+        >
+      </a>
+      
+      <!-- Right Side -->
+      <div
+        class="w-full mt-4 flex items-center justify-between
+              md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2
+              md:w-auto md:mt-0"
+      >
+        <!-- Mobile Date -->
+        <div class="md:hidden text-sm font-serif text-zinc-500 dark:text-zinc-400">
+          Aug 7, 2026
+        </div>
+
+        <div class="flex items-center gap-2 md:gap-4">
+
+          <!-- Theme Toggle -->
+          <div class="relative">
+            <button
+              id="theme-toggle"
+              class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white focus:outline-none p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            >
+              <svg
+                id="theme-icon-light"
+                class="w-5 h-5 hidden"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+
+              <svg
+                id="theme-icon-dark"
+                class="w-5 h-5 hidden"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20.354 15.354A9 9.003 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                />
+              </svg>
+
+              <svg
+                id="theme-icon-system"
+                class="w-5 h-5 hidden"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </button>
+
+            <div
+              id="theme-menu"
+              class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-zinc-800 rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 border border-zinc-100 dark:border-zinc-700 overflow-hidden z-50"
+            >
+              <div class="py-1">
+
+                <button
+                  data-theme-btn="light"
+                  class="w-full text-left px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 flex items-center gap-2"
+                >
+                  <span>☀️</span>
+                  <span>Light</span>
+                </button>
+
+                <button
+                  data-theme-btn="dark"
+                  class="w-full text-left px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 flex items-center gap-2"
+                >
+                  <span>🌙</span>
+                  <span>Dark</span>
+                </button>
+
+                <button
+                  data-theme-btn="system"
+                  class="w-full text-left px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 flex items-center gap-2"
+                >
+                  <span>💻</span>
+                  <span>System</span>
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Search Desktop -->
+          <form
+            action="/search"
+            method="GET"
+            class="relative hidden md:block"
+          >
+            <input
+              type="text"
+              name="q"
+              placeholder="Search..."
+              class="bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm border border-zinc-200 dark:border-zinc-700 pl-4 pr-10 py-1.5 focus:outline-none focus:border-rose-500 w-48"
+            />
+
+            <button
+              type="submit"
+              class="absolute right-2 top-1.5 text-zinc-400 hover:text-rose-500"
+            >
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+          </form>
+
+          <!-- Mobile Hamburger -->
+          <button
+            id="mobile-menu-btn"
+            class="md:hidden text-zinc-900 dark:text-white p-2"
+          >
+            <svg
+              class="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav
+      class="mt-6 border-t border-b border-zinc-200 dark:border-zinc-800 hidden md:flex justify-center space-x-12 py-3"
+    >
+       
+        <a
+            href="/"
+            class="text-zinc-700 dark:text-zinc-300 hover:text-rose-600 "
+        >
+            Home
+        </a>
+        
+        <a
+            href="/dmca"
+            class="text-zinc-700 dark:text-zinc-300 hover:text-rose-600 "
+        >
+            DMCA
+        </a>
+        
+        <a
+            href="/contact"
+            class="text-zinc-700 dark:text-zinc-300 hover:text-rose-600 "
+        >
+            Contact
+        </a>
+        
+        <a
+            href="/privacy"
+            class="text-zinc-700 dark:text-zinc-300 hover:text-rose-600 "
+        >
+            Privacy
+        </a>
+        
+    </nav>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800"
+  >
+    <div class="px-4 py-4 space-y-2">
+      <form action="/search" method="GET" class="mb-6 relative">
+        <input
+          type="text"
+          name="q"
+          placeholder="Search..."
+          class="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-none px-4 py-2 focus:outline-none"
+        />
+      </form>
+
+      
+        <a
+            href="/"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-rose-600 "
+        >
+            Home
+        </a>
+      
+        <a
+            href="/dmca"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-rose-600 "
+        >
+            DMCA
+        </a>
+      
+        <a
+            href="/contact"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-rose-600 "
+        >
+            Contact
+        </a>
+      
+        <a
+            href="/privacy"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-rose-600 "
+        >
+            Privacy
+        </a>
+      
+  
+    </div>
+  </div>
+</header>
+
+
+<script>
+  const themeMenu = document.getElementById("theme-menu");
+  const themeBtn = document.getElementById("theme-toggle");
+  const icons = {
+    light: document.getElementById("theme-icon-light"),
+    dark: document.getElementById("theme-icon-dark"),
+    system: document.getElementById("theme-icon-system"),
+  };
+
+  document.getElementById("mobile-menu-btn")?.addEventListener("click", () => {
+    document.getElementById("mobile-menu")?.classList.toggle("hidden");
+  });
+
+  themeBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    themeMenu?.classList.toggle("hidden");
+  });
+
+  document.addEventListener("click", () => {
+    if (!themeMenu?.classList.contains("hidden")) {
+      themeMenu.classList.add("hidden");
+    }
+  });
+
+  function updateThemeIcon(theme) {
+    Object.values(icons).forEach((icon) => icon?.classList.add("hidden"));
+    if (icons[theme]) icons[theme].classList.remove("hidden");
+  }
+
+  function setTheme(theme) {
+    if (theme === "system") {
+      localStorage.removeItem("theme");
+      document.documentElement.classList.remove("dark", "light");
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.classList.add("dark");
+      }
+    } else {
+      localStorage.theme = theme;
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      } else {
+        document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
+      }
+    }
+    updateThemeIcon(theme);
+  }
+
+  const currentTheme = localStorage.theme || "system";
+  setTheme(currentTheme);
+
+  document.querySelectorAll("[data-theme-btn]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const theme = e.currentTarget.getAttribute("data-theme-btn");
+      setTheme(theme);
+      themeMenu?.classList.add("hidden");
+    });
+  });
+</script> <main class="grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <!-- Top Ad -->
+    <div class="mb-8 flex justify-center w-full">
+        <!-- Adsterra 728x90 Placeholder -->
+<div
+  class="flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-sm w-full max-w-[728px] h-[90px] mx-auto overflow-hidden text-center"
+>
+  <script>
+    atOptions = {
+      key: "2a38aa3290e83ddfd9543f30e517e31e",
+      format: "iframe",
+      height: 90,
+      width: 728,
+      params: {},
+    };
+  </script>
+  <script src="https://frecklessfrecklessnestdeny.com/2a38aa3290e83ddfd9543f30e517e31e/invoke.js"></script>
+</div>
+
+    </div>
+    
+    <div class="flex flex-col lg:flex-row gap-12">
+        
+        <!-- Left Column: Article Content -->
+        <article class="w-full lg:w-2/3">
+            <header class="mb-8">
+                <div class="flex items-center space-x-2 text-sm font-bold uppercase tracking-widest text-rose-600 dark:text-rose-400 mb-4">
+                    <a href="/category/Thriller" class="hover:text-rose-800 dark:hover:text-rose-300">Thriller</a>
+                </div>
+                <h1 class="text-4xl sm:text-5xl font-serif font-black text-zinc-900 dark:text-white leading-tight mb-6">cisco router step by step configuration guide</h1>
+                
+                <div class="flex items-center justify-between border-t border-b border-zinc-200 dark:border-zinc-800 py-4">
+                    <div class="flex items-center">
+                        <div class="shrink-0 mr-3">
+                            <div class="h-12 w-12 rounded-full bg-zinc-900 dark:bg-rose-600 flex items-center justify-center text-white font-serif font-bold text-lg">
+                                E
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold uppercase tracking-widest text-zinc-900 dark:text-white">Eldridge Lemke</p>
+                            <time datetime="2025-08-28T04:52:43.335Z" class="text-sm text-zinc-500 dark:text-zinc-400 font-serif">August 28, 2025</time>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            
+
+            <div class="prose prose-zinc dark:prose-invert max-w-none mb-12">
+                <p><strong>cisco router step by step configuration guide</strong> is an essential resource for network administrators, IT professionals, and anyone looking to set up a Cisco router from scratch. Cisco routers are widely used in enterprise and small business networks due to their reliability, security features, and scalability. Proper configuration ensures efficient network performance, security, and seamless connectivity. In this comprehensive guide, we will walk you through the entire process of configuring a Cisco router step by step, covering everything from initial setup to advanced configurations.</p><h2>Understanding Cisco Router Basics</h2><p>Before diving into the configuration steps, it’s important to understand some fundamental concepts about Cisco routers.</p><h3>What is a Cisco Router?</h3><p>A Cisco router is a networking device that forwards data packets between computer networks, creating an internetwork. It operates at Layer 3 (Network layer) of the OSI model and uses routing tables to determine the best path for forwarding packets.</p><h3>Common Cisco Router Models</h3><ul><li>Cisco ISR (Integrated Services Routers)</li><li>Cisco Cisco 800 Series</li><li>Cisco Cisco 1900, 2900, 3900 Series</li><li>Cisco Catalyst Routers</li></ul><h3>Default Access to the Router</h3><p>Most Cisco routers have a default IP address (commonly 192.168.1.1) and a default username/password (often 'admin'/'admin' or blank). Initial access is usually through Console or Telnet/SSH.</p><h2>Prerequisites and Requirements</h2><ul><li>A Cisco router (physical or virtual)</li><li>Console cable (RJ45 to USB/Serial) for initial setup</li><li>Terminal emulation software (PuTTY, Tera Term, SecureCRT)</li><li>Network cables for physical connections</li><li>Basic knowledge of networking concepts and commands</li><li>An Ethernet switch or PC to connect for network configuration</li></ul><h2>Step-by-Step Cisco Router Configuration</h2><p>Below are detailed steps to configure your Cisco router.</p><h3>1. Connecting to the Router</h3><p>To begin, establish a console session:</p><ul><li>Connect the console cable from your PC to the router’s console port.</li><li>Open your terminal emulation program (e.g., PuTTY).</li><li>Configure the session with the following settings:<ul><li>Speed (baud rate): 9600 bps</li><li>Data bits: 8</li><li>Parity: None</li><li>Stop bits: 1</li><li>Flow control: None</li></ul></li><li>Power on the router; you should see boot messages and eventually a command prompt.</li></ul><h3>2. Entering Privileged EXEC Mode</h3><p>Once connected:</p><ol><li>At the initial prompt, press Enter if needed.</li><li>Type <strong>enable</strong> and press Enter.</li><li>If prompted, enter the enable password. If not set, you can skip this step.</li></ol><h3>3. Entering Global Configuration Mode</h3><p>To begin configuring the router:</p><ol><li>Type <strong>configure terminal</strong> or <strong>conf t</strong> and press Enter.</li><li>You are now in global configuration mode, indicated by the prompt: <code>Router(config)</code>.</li></ol><h3>4. Setting a Hostname</h3><p>Give your router a meaningful hostname:</p><pre><p>Router(config) hostname MyRouter</p><p>MyRouter(config)</p></pre><h3>5. Securing Access with Passwords</h3><p>Configure passwords to secure console and VTY (Telnet/SSH) access:</p><ul><li>Console password:<pre><p>MyRouter(config) line con 0</p><p>MyRouter(config-line) password your_console_password</p><p>MyRouter(config-line) login</p><p>MyRouter(config-line) exit</p></pre></li><li>VTY (Telnet/SSH) password:<pre><p>MyRouter(config) line vty 0 4</p><p>MyRouter(config-line) password your_vty_password</p><p>MyRouter(config-line) login</p><p>MyRouter(config-line) exit</p></pre></li></ul><h3>6. Configuring Interface IP Addresses</h3><p>Assign IP addresses to the router interfaces:</p><ul><li>Enter interface configuration mode:<pre><p>MyRouter(config) interface GigabitEthernet0/0</p></pre></li><li>Assign IP address and subnet mask:<pre><p>MyRouter(config-if) ip address 192.168.1.1 255.255.255.0</p><p>MyRouter(config-if) no shutdown</p></pre></li><li>Repeat for other interfaces as needed.</li></ul><h3>7. Configuring Routing</h3><p>Depending on your network, configure static routing or dynamic routing protocols.</p><h4>Static Routing Example:</h4><pre><p>MyRouter(config) ip route 0.0.0.0 0.0.0.0 192.168.1.254</p></pre><h4>Dynamic Routing (e.g., OSPF):</h4><pre><p>MyRouter(config) router ospf 1</p><p>MyRouter(config-router) network 192.168.1.0 0.0.0.255 area 0</p></pre><h3>8. Setting Up NAT (Optional)</h3><p>For internet sharing, configure NAT:</p><ul><li>Define inside and outside interfaces:<pre><p>MyRouter(config) interface GigabitEthernet0/0</p><p>MyRouter(config-if) ip nat inside</p><p>MyRouter(config-if) exit</p><p>MyRouter(config) interface GigabitEthernet0/1</p><p>MyRouter(config-if) ip nat outside</p></pre></li><li>Create NAT overload rule:<pre><p>MyRouter(config) access-list 1 permit 192.168.1.0 0.0.0.255</p><p>MyRouter(config) ip nat inside source list 1 interface GigabitEthernet0/1 overload</p></pre></li></ul><h2>Verifying the Configuration</h2><p>After completing configurations:</p><h3>1. Show Running Configuration</h3><pre><p>MyRouter show running-config</p></pre><p>This displays the current active configuration.</p><h3>2. Check Interface Status</h3><pre><p>MyRouter show ip interface brief</p></pre><p>Ensure interfaces are up and assigned correct IP addresses.</p><h3>3. Test Connectivity</h3><p>Use ping and traceroute commands:</p><ul><li>Ping your local interface:<pre>MyRouter ping 192.168.1.1</pre></li><li>Ping external IP addresses (e.g., 8.8.8.8):</li><li>Test from connected devices to verify network connectivity.</li></ul><h2>Advanced Configuration Tips</h2><p>Once basic setup is complete, consider additional configurations:</p><h3>1. Secure Access with SSH</h3><p>Replace Telnet with SSH for secure remote management:</p><pre><p>MyRouter(config) ip domain-name example.com</p><p>MyRouter(config) crypto key generate rsa</p><p>(Choose key size, e.g., 1024)</p><p>MyRouter(config) ip ssh version 2</p><p>MyRouter(config) line vty 0 4</p><p>MyRouter(config-line) transport input ssh</p><p>MyRouter(config-line) login local</p><p>MyRouter(config-line) exit</p><p>MyRouter(config) username admin privilege 15 secret admin_password</p></pre><h3>2. Setting Up VLANs</h3><p>Create and assign VLANs for network segmentation.</p><h3>3. Implementing ACLs</h3><p>Configure access control lists to restrict network access:</p><pre><p>MyRouter(config) access-list 100 permit ip any any</p><p>MyRouter(config) interface GigabitEthernet0/0</p><p>MyRouter(config-if) ip access-group 100 in</p></pre><h2>Saving and Backing Up Configuration</h2><p>Always save your configuration after changes:</p><pre><p>MyRouter copy running-config startup-config</p><p>Destination filename [startup-config]? </p></pre><p>To back up configuration to a TFTP server:</p><pre><p>MyRouter copy running-config tftp:</p><p>Address or name of remote host []? 192.168.1.100</p><p>Destination filename? myrouter-config</p></pre><h2>Conclusion</h2><p>Configuring a Cisco router step by step is a manageable process when approached systematically. Starting from physical connection setup, securing access, assigning IP addresses, and configuring routing lays a solid foundation for your network. As you gain confidence, you can explore advanced features such as VPNs, QoS, security policies, and more. Remember, always document your configuration changes and keep backups to ensure smooth network operations. With this comprehensive guide, you now have the knowledge to set up your Cisco router efficiently and securely.</p>
+<!-- ads -->
+
+<hr/>
+<p>Cisco Router Step-by-Step Configuration Guide: Your Comprehensive Roadmap</p><p>Configuring a Cisco router is a critical skill for network administrators and IT professionals. Proper setup ensures reliable network performance, security, and scalability. This guide provides a detailed, step-by-step approach to configuring Cisco routers, covering everything from initial setup to advanced configurations. Whether you're a beginner or an experienced network engineer, this comprehensive walkthrough will help you master Cisco router configuration.</p><hr/><h2>Understanding Cisco Router Basics</h2><p>Before diving into configuration steps, it's essential to understand the fundamental components and concepts related to Cisco routers.</p><h3>What Is a Cisco Router?</h3><ul><li>A device that connects different networks, directing data packets based on routing tables.</li><li>Supports various interfaces such as Ethernet, serial, and wireless.</li><li>Provides features like NAT, DHCP, ACLs, VPN, and routing protocols.</li></ul><h3>Common Cisco Router Models</h3><ul><li>Cisco ISR (Integrated Services Router)</li><li>Cisco ASR (Aggregation Services Router)</li><li>Cisco 800 Series</li><li>Cisco Catalyst Series (for switching but often integrated)</li></ul><h3>Prerequisites for Configuration</h3><ul><li>Console access via console cable or SSH.</li><li>Basic understanding of networking concepts (IP addressing, subnetting, routing protocols).</li><li>Access to Cisco IOS command-line interface (CLI).</li></ul><hr/><h2>Initial Setup and Basic Configuration</h2><p>Starting with the basics sets a strong foundation for further configuration. The initial steps include connecting to the router, configuring interfaces, and securing access.</p><h3>Step 1: Connect to the Router</h3><ul><li>Use a console cable to connect your PC to the router’s console port.</li><li>Use terminal emulation software like PuTTY, Tera Term, or SecureCRT.</li><li>Set terminal parameters: 9600 baud rate, 8 data bits, no parity, 1 stop bit, no flow control.</li></ul><h3>Step 2: Enter Privileged EXEC Mode</h3><p>```plaintext</p><p>Router&gt; enable</p><p>Password: [enter password if prompted]</p><p>Router</p><p>```</p><ul><li>The `enable` command grants privileged access necessary for configuration.</li></ul><h3>Step 3: Enter Global Configuration Mode</h3><p>```plaintext</p><p>Router configure terminal</p><p>Router(config)</p><p>```</p><ul><li>This mode allows configuration commands to be applied globally.</li></ul><h3>Step 4: Set a Hostname and Enable Passwords</h3><p>```plaintext</p><p>Router(config) hostname MyRouter</p><p>MyRouter(config) enable secret MySecurePassword</p><p>```</p><ul><li>The hostname identifies your device.</li><li>The enable secret secures privileged EXEC access.</li></ul><h3>Step 5: Configure Console and VTY Passwords</h3><p>```plaintext</p><p>MyRouter(config) line con 0</p><p>MyRouter(config-line) password ConsolePass</p><p>MyRouter(config-line) login</p><p>MyRouter(config-line) exit</p><p>MyRouter(config) line vty 0 4</p><p>MyRouter(config-line) password VTYPass</p><p>MyRouter(config-line) login</p><p>MyRouter(config-line) exit</p><p>```</p><ul><li>Console access for local management.</li><li>VTY (Virtual Teletype) lines for remote SSH or Telnet access.</li></ul><h3>Step 6: Generate RSA Keys for SSH (Recommended)</h3><p>```plaintext</p><p>MyRouter(config) crypto key generate rsa</p><p>The key modulus size in bits [default 2048]: 2048</p><p>```</p><ul><li>Enables secure SSH access instead of Telnet.</li></ul><h3>Step 7: Configure a Management Interface (e.g., VLAN 1)</h3><p>```plaintext</p><p>MyRouter(config) interface vlan 1</p><p>MyRouter(config-if) ip address 192.168.1.1 255.255.255.0</p><p>MyRouter(config-if) no shutdown</p><p>```</p><ul><li>Assigns an IP address for management and remote access.</li></ul><h3>Step 8: Save Your Configuration</h3><p>```plaintext</p><p>MyRouter write memory</p><p>OR</p><p>MyRouter copy running-config startup-config</p><p>```</p><hr/><h2>Configuring Network Interfaces</h2><p>Interfaces connect your router to the network. Proper configuration ensures connectivity and proper routing.</p><h3>Assigning IP Addresses to Physical Interfaces</h3><ul><li>Example for GigabitEthernet0/0:</li></ul><p>```plaintext</p><p>MyRouter(config) interface GigabitEthernet0/0</p><p>MyRouter(config-if) ip address 10.0.0.1 255.255.255.0</p><p>MyRouter(config-if) no shutdown</p><p>```</p><h3>Configuring Multiple Interfaces</h3><ul><li>Repeat similar steps for additional interfaces (e.g., GigabitEthernet0/1):</li></ul><p>```plaintext</p><p>MyRouter(config) interface GigabitEthernet0/1</p><p>MyRouter(config-if) ip address 192.168.2.1 255.255.255.0</p><p>MyRouter(config-if) no shutdown</p><p>```</p><h3>Verifying Interface Status</h3><p>```plaintext</p><p>MyRouter show ip interface brief</p><p>```</p><ul><li>Displays all interfaces, their IP addresses, and operational status.</li></ul><hr/><h2>Routing Configuration</h2><p>Routing enables data to find its way through different networks. Cisco routers support several routing protocols.</p><h3>Static Routing</h3><ul><li>Suitable for small networks or simple setups.</li></ul><p>```plaintext</p><p>MyRouter(config) ip route [destination_network] [subnet_mask] [next_hop_ip]</p><p>```</p><ul><li>Example:</li></ul><p>```plaintext</p><p>MyRouter(config) ip route 192.168.2.0 255.255.255.0 10.0.0.2</p><p>```</p><h3>Dynamic Routing Protocols</h3><ul><li>Allow routers to learn routes automatically.</li><li>Common protocols:</li><li>RIP (Routing Information Protocol)</li><li>OSPF (Open Shortest Path First)</li><li>EIGRP (Enhanced Interior Gateway Routing Protocol)</li></ul><h3>Configuring OSPF (Example)</h3><p>```plaintext</p><p>MyRouter(config) router ospf 1</p><p>MyRouter(config-router) network 10.0.0.0 0.0.0.255 area 0</p><p>MyRouter(config-router) network 192.168.1.0 0.0.0.255 area 0</p><p>```</p><ul><li>Advertises networks in area 0.</li></ul><h3>Verifying Routing</h3><p>```plaintext</p><p>MyRouter show ip route</p><p>```</p><hr/><h2>Security Configurations</h2><p>Security is paramount. Proper configuration of passwords, access control lists (ACLs), and encryption safeguards your network.</p><h3>Setting Strong Passwords</h3><ul><li>Already demonstrated with `enable secret`, console, and VTY passwords.</li></ul><h3>Configuring Access Control Lists (ACLs)</h3><ul><li>Blocks unauthorized access or filters traffic.</li></ul><p>```plaintext</p><p>MyRouter(config) access-list 100 permit ip any any</p><p>MyRouter(config) interface GigabitEthernet0/0</p><p>MyRouter(config-if) ip access-group 100 in</p><p>```</p><h3>Implementing NAT (Network Address Translation)</h3><ul><li>Translates private IP addresses to public IPs for internet access.</li></ul><p>```plaintext</p><p>MyRouter(config) access-list 1 permit 192.168.1.0 0.0.0.255</p><p>MyRouter(config) ip nat inside source list 1 interface GigabitEthernet0/1 overload</p><p>MyRouter(config) interface GigabitEthernet0/0</p><p>MyRouter(config-if) ip nat inside</p><p>MyRouter(config) interface GigabitEthernet0/1</p><p>MyRouter(config-if) ip nat outside</p><p>```</p><h3>Enabling SSH for Secure Remote Access</h3><ul><li>Already generated RSA keys.</li><li>Configure VTY lines:</li></ul><p>```plaintext</p><p>MyRouter(config) line vty 0 4</p><p>MyRouter(config-line) login local</p><p>MyRouter(config-line) transport input ssh</p><p>```</p><h3>Creating Local User Accounts</h3><p>```plaintext</p><p>MyRouter(config) username admin privilege 15 secret AdminPass</p><p>```</p><hr/><h2>Advanced Configuration Aspects</h2><p>For larger or more complex networks, additional features enhance performance and security.</p><h3>Configuring VLANs and Inter-VLAN Routing</h3><ul><li>Assign VLANs on switches and configure sub-interfaces on routers for inter-VLAN routing.</li></ul><p>```plaintext</p><p>MyRouter(config) interface gigabitEthernet0/0.10</p><p>MyRouter(config-if) encapsulation dot1Q 10</p><p>MyRouter(config-if) ip address 192.168.10.1 255.255.255.0</p><p>```</p><h3>Implementing Redundancy with HSRP (Hot Standby Router Protocol)</h3><ul><li>Provides high availability.</li></ul><p>```plaintext</p><p>MyRouter(config) interface GigabitEthernet0/0</p><p>MyRouter(config-if) standby 1 ip 192.168.1.254</p><p>MyRouter(config-if) standby 1 priority 100</p><p>MyRouter(config-if) standby 1 preempt</p><p>```</p><h3>Configuring VPNs (Virtual Private Networks)</h3><ul><li>For secure remote access.</li><li>Use Cisco EasyVPN or IPsec configurations.</li></ul><h3>Monitoring and Troubleshooting</h3><ul><li>Use commands like:</li></ul><p>```plaintext</p><p>MyRouter show running-config</p><p>MyRouter show ip protocols</p><p>MyRouter show ip route</p><p>MyRouter debug ip packet</p><p>```</p><hr/><h2>Best Practices for Cisco Router Configuration</h2><ul><li>Always back up your configuration before making changes.</li><li>Use descriptive hostnames and interface descriptions.</li><li>Implement secure passwords and SSH access.</li><li>Regularly update IOS to patch vulnerabilities.</li><li>Document your configurations for future reference</li></ul>
+<!-- ads -->
+
+<blockquote>
+<table border="1" cellpadding="5" cellspacing="0" width="100%">
+<tr><th>Question</th><th>Answer</th></tr>
+<tr>
+<td>What are the basic steps to configure a Cisco router for the first time?</td>
+<td>The basic steps include connecting to the router via console cable, entering privileged EXEC mode, configuring the hostname, setting up interfaces with IP addresses, enabling routing protocols if needed, and saving the configuration. This ensures the router is accessible and properly networked.</td>
+</tr>
+<tr>
+<td>How do I configure an IP address on a Cisco router interface?</td>
+<td>Enter global configuration mode with 'configure terminal', then select the interface with 'interface [interface name]', e.g., 'interface GigabitEthernet0/0'. Assign an IP address with 'ip address [IP] [Subnet Mask]', and enable the interface with 'no shutdown'.</td>
+</tr>
+<tr>
+<td>What is the command to save the configuration on a Cisco router?</td>
+<td>Use the command 'write memory' or 'copy running-config startup-config' in privileged EXEC mode to save your current configuration to startup configuration, ensuring it persists after reboot.</td>
+</tr>
+<tr>
+<td>How do I configure routing protocols like OSPF on a Cisco router?</td>
+<td>Enter global configuration mode with 'configure terminal', then type 'router ospf [process ID]'. Configure networks with 'network [network address] [wildcard mask] area [area ID]'. This enables OSPF routing on specified interfaces.</td>
+</tr>
+<tr>
+<td>How can I secure access to my Cisco router during configuration?</td>
+<td>Set up passwords for privileged EXEC mode ('enable secret'), console access ('line con 0'), and vty lines ('line vty 0 4'). Use 'login' and 'password' commands, and consider enabling SSH for secure remote access.</td>
+</tr>
+<tr>
+<td>What are common troubleshooting steps if the Cisco router isn't connecting to the network?</td>
+<td>Check physical connections, verify interface statuses with 'show ip interface brief', ensure correct IP configurations, confirm routing protocols are properly configured, and test connectivity with 'ping' and 'traceroute' commands.</td>
+</tr>
+</table>
+</blockquote>
+<p><b>Related keywords:</b> Cisco router configuration, router setup tutorial, Cisco router CLI commands, Cisco router initial configuration, Cisco router security setup, Cisco router management, Cisco router IP configuration, Cisco router interface setup, Cisco router troubleshooting, Cisco router firmware update</p>
+            </div>
+
+            <!-- Tags -->
+            
+            <div class="border-t-4 border-zinc-900 dark:border-rose-600 pt-6 mt-12 mb-12">
+                <h4 class="text-sm font-bold uppercase tracking-widest text-zinc-900 dark:text-white mb-4">Tags</h4>
+                <div class="flex flex-wrap gap-2">
+                    
+                        <a href="/tag/cisco" class="inline-flex items-center px-3 py-1 border border-zinc-300 dark:border-zinc-700 text-sm font-serif text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                            cisco
+                        </a>
+                    
+                        <a href="/tag/router" class="inline-flex items-center px-3 py-1 border border-zinc-300 dark:border-zinc-700 text-sm font-serif text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                            router
+                        </a>
+                    
+                        <a href="/tag/step" class="inline-flex items-center px-3 py-1 border border-zinc-300 dark:border-zinc-700 text-sm font-serif text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                            step
+                        </a>
+                    
+                        <a href="/tag/by" class="inline-flex items-center px-3 py-1 border border-zinc-300 dark:border-zinc-700 text-sm font-serif text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                            by
+                        </a>
+                    
+                        <a href="/tag/step" class="inline-flex items-center px-3 py-1 border border-zinc-300 dark:border-zinc-700 text-sm font-serif text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                            step
+                        </a>
+                    
+                        <a href="/tag/configuration" class="inline-flex items-center px-3 py-1 border border-zinc-300 dark:border-zinc-700 text-sm font-serif text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                            configuration
+                        </a>
+                    
+                        <a href="/tag/guide" class="inline-flex items-center px-3 py-1 border border-zinc-300 dark:border-zinc-700 text-sm font-serif text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                            guide
+                        </a>
+                    
+                </div>
+            </div>
+            
+            
+            <!-- Middle Ad -->
+            <div class="mb-12 flex justify-center border-y border-zinc-200 dark:border-zinc-800 py-8">
+                <!-- Adsterra 728x90 Placeholder -->
+<div
+  class="flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-sm w-full max-w-[728px] h-[90px] mx-auto overflow-hidden text-center"
+>
+  <script>
+    atOptions = {
+      key: "2a38aa3290e83ddfd9543f30e517e31e",
+      format: "iframe",
+      height: 90,
+      width: 728,
+      params: {},
+    };
+  </script>
+  <script src="https://frecklessfrecklessnestdeny.com/2a38aa3290e83ddfd9543f30e517e31e/invoke.js"></script>
+</div>
+
+            </div>
+
+        </article>
+
+        <!-- Right Column: Sidebar -->
+        <aside class="w-full lg:w-1/3 space-y-8">
+    <!-- Ad Space 300x250 -->
+    <div class="bg-white dark:bg-zinc-800 p-4 border border-zinc-200 dark:border-zinc-700 shadow-sm flex justify-center sticky top-24">
+        <!-- Adsterra 300x250 Placeholder -->
+<div
+  class="flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-sm w-[300px] h-[250px] mx-auto overflow-hidden"
+>
+  <script>
+    atOptions = {
+      key: "7de51b54055ea6496fe334915ce74a0b",
+      format: "iframe",
+      height: 250,
+      width: 300,
+      params: {},
+    };
+  </script>
+  <script src="https://frecklessfrecklessnestdeny.com/7de51b54055ea6496fe334915ce74a0b/invoke.js"></script>
+</div>
+
+    </div>
+
+    <!-- Random Posts Widget -->
+    <div class="bg-white dark:bg-zinc-800 p-6 border-t-4 border-rose-600 shadow-sm mt-8">
+        <h3 class="text-xl font-serif font-bold text-zinc-900 dark:text-white mb-4 uppercase tracking-widest">Discover</h3>
+        
+        <ul class="space-y-5">
+            
+                
+                    <li class="group">
+                        <a href="/support/bart-simpson-comics-sb-1-das-grosse-bart-simpson" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                bart simpson comics sb 1 das grosse bart simpson
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/the-truth-with-jokes" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                the truth with jokes
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/harlem-renaissance-quiz-answer-key" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                harlem renaissance quiz answer key
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/unleash-the-power-of-storytelling-win-hearts-chang" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                unleash the power of storytelling win hearts chang
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/the-trouble-with-goats-and-sheep-english-edition" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                the trouble with goats and sheep english edition
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/worterbuch-wirtschaftsungarisch-2-bde-ungarisch-d" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                worterbuch wirtschaftsungarisch 2 bde ungarisch d
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/caregiver-questionnaire-full-report" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                caregiver questionnaire full report
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/increase-your-vocabulary-algebra-2-answer-key" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                increase your vocabulary algebra 2 answer key
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/messages-1-test" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                messages 1 test
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/functional-skills-qualifications-3748-city-guilds" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                functional skills qualifications 3748 city guilds
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/the-what-s-happening-to-my-body-book-for-girls" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                the what s happening to my body book for girls
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/single-handed-spey-casting-solutions-to-casts-obst" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                single handed spey casting solutions to casts obst
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/perberjet-organike-kryesore" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                perberjet organike kryesore
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/shivaji-sawant-mrutyunjay" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                shivaji sawant mrutyunjay
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/motorino-avviamento-briggs-e-stratton" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                motorino avviamento briggs e stratton
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/atlas-de-poche-a-c-chographie-imagerie-normale" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                atlas de poche a c chographie imagerie normale
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/the-world-trade-organization-law-practice-and-pol" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                the world trade organization law practice and pol
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/weaving-it-together-1-exam" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                weaving it together 1 exam
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/pathophysiology-exam-questions-masaryk-university" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                pathophysiology exam questions masaryk university
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/catalina-c-30002-u-manufactured" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                catalina c 30002 u manufactured
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/the-bear-and-the-nightingale" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                the bear and the nightingale
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/introduction-teaching-tips-the-nursery-class" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                introduction teaching tips the nursery class
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/white-fang-question-answers" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                white fang question answers
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/das-grosse-pc-internet-lexikon-video-edition" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                das grosse pc internet lexikon video edition
+                            </h4>
+                        </a>
+                    </li>
+                
+                    <li class="group">
+                        <a href="/support/manufactured-home-purchase-agreement-california" class="flex flex-col gap-1">
+                            <!-- Judul Artikel -->
+                            <h4 class="text-base font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug line-clamp-2">
+                                manufactured home purchase agreement california
+                            </h4>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+    </div>
+
+    <!-- Newsletter Widget -->
+    <div class="bg-zinc-100 dark:bg-zinc-900 p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+        <h3 class="text-xl font-serif font-bold text-zinc-900 dark:text-white mb-2 uppercase tracking-widest">Newsletter</h3>
+        <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-4">Get the best tech content delivered straight to your inbox.</p>
+        <form action="#" class="space-y-2">
+            <input type="email" placeholder="Email address" class="w-full bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-4 py-2 text-zinc-900 dark:text-white focus:outline-none focus:border-rose-500 transition-colors">
+            <button type="button" class="w-full bg-zinc-900 dark:bg-rose-600 text-white font-bold uppercase tracking-widest py-2 hover:bg-rose-600 dark:hover:bg-rose-700 transition-colors">Subscribe</button>
+        </form>
+    </div>
+</aside>
+
+        
+    </div>
+
+    <!-- Related Posts (Full Width at Bottom) -->
+    
+    <aside class="mt-16 pt-12 border-t-4 border-zinc-900 dark:border-rose-600">
+        <h2 class="text-3xl font-serif font-black text-zinc-900 dark:text-white uppercase tracking-tighter mb-8">Related Stories</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+                <div class="group">
+                    
+                    <a href="/support/tes-masuk-fakultas-keperawatan">
+                        <h3 class="text-xl font-serif font-bold text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 line-clamp-2">
+                            tes masuk fakultas keperawatan
+                        </h3>
+                    </a>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 font-serif mt-1">July 20, 2026</p>
+                    <p class="text-sm text-zinc-700 dark:text-zinc-300 font-serif mt-2 line-clamp-3">uhkan untuk lolos tes masuk keperawatan? Skor minimal bervariasi tergantung universitas, namun biasanya berada di atas 70-75 dari total nilai yang berlaku. Kapan waktu terbaik untuk mengikuti tes masuk faku</p>
+                </div>
+            
+                <div class="group">
+                    
+                    <a href="/support/introduction-to-molecular-symmetry-oxford-chemistr">
+                        <h3 class="text-xl font-serif font-bold text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 line-clamp-2">
+                            introduction to molecular symmetry oxford chemistr
+                        </h3>
+                    </a>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 font-serif mt-1">July 19, 2026</p>
+                    <p class="text-sm text-zinc-700 dark:text-zinc-300 font-serif mt-2 line-clamp-3">sulfur hexafluoride. Group Theory and Its Application in Molecular Symmetry Group theory provides a mathematical framework to analyze molecular symmetry systematically. It uses the principles of algebra to</p>
+                </div>
+            
+                <div class="group">
+                    
+                    <a href="/support/rereading-america-9th-edition">
+                        <h3 class="text-xl font-serif font-bold text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 line-clamp-2">
+                            rereading america 9th edition
+                        </h3>
+                    </a>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 font-serif mt-1">July 20, 2026</p>
+                    <p class="text-sm text-zinc-700 dark:text-zinc-300 font-serif mt-2 line-clamp-3">but rereading America itself, with a more critical and reflective eye. In sum, for educators and students committed to understanding the multifaceted nature of the United States, Rereading America 9th Edition remain</p>
+                </div>
+            
+                <div class="group">
+                    
+                    <a href="/support/i-leoni-di-sicilia-la-saga-dei-florio">
+                        <h3 class="text-xl font-serif font-bold text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 line-clamp-2">
+                            i leoni di sicilia la saga dei florio
+                        </h3>
+                    </a>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 font-serif mt-1">July 21, 2026</p>
+                    <p class="text-sm text-zinc-700 dark:text-zinc-300 font-serif mt-2 line-clamp-3">le. La loro influenza si estende oltre i confini dell’isola, contribuendo a scrivere una delle pagine più affascinanti della storia siciliana e italiana. Se si desidera comprendere l’anima di Sicilia, n</p>
+                </div>
+            
+                <div class="group">
+                    
+                    <a href="/support/scopro-creo-progetto-a-6-anni-ediz-a-colori">
+                        <h3 class="text-xl font-serif font-bold text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 line-clamp-2">
+                            scopro creo progetto a 6 anni ediz a colori
+                        </h3>
+                    </a>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 font-serif mt-1">July 21, 2026</p>
+                    <p class="text-sm text-zinc-700 dark:text-zinc-300 font-serif mt-2 line-clamp-3">atite colorate, pennarelli, pastelli e acquerelli Fogli di carta di varie dimensioni e tipi Materiali di riciclo come cartoncino, bottoni, stoffe Stampe di figure, mappe e schede didattiche Spazi dedicati alla creazione e alla visualizzazione dei lavori</p>
+                </div>
+            
+                <div class="group">
+                    
+                    <a href="/support/seppenko-monogatari-t04-hangul-express-part-2-gri">
+                        <h3 class="text-xl font-serif font-bold text-zinc-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 line-clamp-2">
+                            seppenko monogatari t04 hangul express part 2 gri
+                        </h3>
+                    </a>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 font-serif mt-1">July 21, 2026</p>
+                    <p class="text-sm text-zinc-700 dark:text-zinc-300 font-serif mt-2 line-clamp-3">The setting offers a vibrant blend of traditional Korean architecture, bustling cityscapes, and mystical landscapes, allowing for a rich storytelling environment. Main Plot Points The Journey Begins: The story kicks off with the main characters boarding the Hangul Express, eac</p>
+                </div>
+            
+        </div>
+    </aside>
+    
+</main>
+ <footer class="bg-zinc-900 text-white py-12 mt-auto border-t-4 border-rose-600">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div
+      class="pt-8 border-t border-zinc-800 text-center text-zinc-500 text-sm flex flex-col md:flex-row justify-between items-center"
+    >
+      <p>
+        &copy; 2026 Solid Tribune. All rights
+        reserved.
+      </p>
+      <p class="mt-2 md:mt-0">Discover What&#39;s Next</p>
+    </div>
+    <!-- Footer Ad -->
+    <div class="flex justify-center"><!-- Adsterra 320x50 Placeholder -->
+<div
+  class="flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-sm w-[320px] h-[50px] mx-auto overflow-hidden text-center"
+>
+  <script>
+    atOptions = {
+      key: "82b72f912aeb426edeb783bc78b54c51",
+      format: "iframe",
+      height: 50,
+      width: 320,
+      params: {},
+    };
+  </script>
+  <script src="https://frecklessfrecklessnestdeny.com/82b72f912aeb426edeb783bc78b54c51/invoke.js"></script>
+</div>
+</div>
+  </div>
+</footer>
+
+<!-- Floating Ad (Desktop Only) -->
+<div
+  id="floatingAd"
+  class="hidden lg:flex fixed left-4 top-1/2 -translate-y-1/2 z-50"
+>
+  <div
+    class="relative w-64 bg-white dark:bg-slate-800 shadow-xl rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700"
+  >
+    <!-- Close Button -->
+    <button
+      onclick="closeAd()"
+      class="absolute top-2 right-2 bg-black/70 hover:bg-black text-white rounded-full w-7 h-7 flex items-center justify-center text-sm"
+    >
+      ✕
+    </button>
+
+    <!-- Ad Content -->
+    <div class="p-4"><!-- Adsterra 160x600 Placeholder -->
+<div
+  class="flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-sm w-[160px] h-[600px] mx-auto overflow-hidden text-center"
+>
+  <script>
+    atOptions = {
+      key: "187b7be7ea16d172499ae21cda5d3236",
+      format: "iframe",
+      height: 600,
+      width: 160,
+      params: {},
+    };
+  </script>
+  <script src="https://frecklessfrecklessnestdeny.com/187b7be7ea16d172499ae21cda5d3236/invoke.js"></script>
+</div>
+</div>
+  </div>
+</div>
+<script>
+  function closeAd() {
+    const ad = document.getElementById("floatingAd");
+    if (ad) {
+      ad.style.display = "none";
+      localStorage.setItem("hideFloatingAd", "true");
+    }
+  }
+</script>
+<!-- Stats -->
+<!-- Histats.com  START  (aync)-->
+<script type="text/javascript">
+  var _Hasync = _Hasync || [];
+  _Hasync.push(["Histats.start", "1,4942029,4,0,0,0,00010000"]);
+  _Hasync.push(["Histats.fasi", "1"]);
+  _Hasync.push(["Histats.track_hits", ""]);
+  (function () {
+    var hs = document.createElement("script");
+    hs.type = "text/javascript";
+    hs.async = true;
+    hs.src = "//s10.histats.com/js15_as.js";
+    (
+      document.getElementsByTagName("head")[0] ||
+      document.getElementsByTagName("body")[0]
+    ).appendChild(hs);
+  })();
+</script>
+<noscript
+  ><a href="/" target="_blank"
+    ><img
+      src="//sstatic1.histats.com/0.gif?4942029&101"
+      alt="free webpage counters"
+      border="0" /></a
+></noscript>
+<!-- Histats.com  END  -->
+
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+    ym(53047492, 'init', {clickmap:true, referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/53047492" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+  </body>
+</html>

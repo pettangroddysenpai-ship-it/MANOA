@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transmission Concepts Report - Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+h4 { color: #a5b4fc; margin: 15px 0 8px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+.problem-box { background: #1e293b; border-left: 4px solid #f87171; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.problem-box strong { color: #f87171; }
+.solution-box { background: #1e293b; border-left: 4px solid #34d399; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.solution-box strong { color: #34d399; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+th, td { padding: 10px 12px; text-align: left; border: 1px solid #1e293b; }
+th { background: #1e293b; color: #60a5fa; }
+td { background: #0f172a; color: #cbd5e1; }
+.page-break { page-break-after: always; border-bottom: 2px dashed #1e293b; margin: 40px 0; }
+.objectives { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.objectives strong { color: #8b5cf6; }
+.image-placeholder { background: #1e293b; border: 2px dashed #3b82f6; border-radius: 8px; padding: 40px; text-align: center; margin: 15px 0; color: #64748b; font-style: italic; }
+.image-placeholder i { display: block; font-size: 0.9em; margin-top: 8px; }
+.toc { background: #1e293b; border-radius: 8px; padding: 20px; margin: 20px 0; }
+.toc a { color: #60a5fa; text-decoration: none; display: block; padding: 4px 0; }
+.toc a:hover { color: #93c5fd; text-decoration: underline; }
+.toc .toc-h2 { font-weight: bold; margin-top: 8px; }
+.toc .toc-h3 { padding-left: 20px; font-size: 0.95em; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>Transmission Concepts — Internship Report</h1>
+<a class="back" href="index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<p style="text-align:center; font-size:1.1em; margin-bottom:5px;"><strong>NAME:</strong> PETTANG FEUMBA RODDY ALANN</p>
+<p style="text-align:center; font-size:1.1em; margin-bottom:5px;"><strong>Internship Report — Transmission</strong></p>
+<p style="text-align:center; color:#94a3b8;">DATE: Friday, July 10, 2026</p>
+
+<div class="toc">
+<h3 style="color:#60a5fa; margin-bottom:10px; border:none; padding:0;">Table of Contents</h3>
+<a class="toc-h2" href="#sec1">1. GPS &amp; Google Earth for the Network</a>
+<a class="toc-h3" href="#sec1-1">1.1 Introduction</a>
+<a class="toc-h3" href="#sec1-2">1.2 Objectives</a>
+<a class="toc-h3" href="#sec1-3">1.3 Research Summary</a>
+<a class="toc-h3" href="#sec1-4">1.4 Application at Matrix Telecom</a>
+<a class="toc-h3" href="#sec1-5">1.5 Other Necessary Information</a>
+<a class="toc-h3" href="#sec1-6">1.6 Problems Encountered and Solutions</a>
+<a class="toc-h3" href="#sec1-7">1.7 Conclusion</a>
+<a class="toc-h2" href="#sec2">2. Internet Access Technologies</a>
+<a class="toc-h3" href="#sec2-1">2.1 Introduction</a>
+<a class="toc-h3" href="#sec2-2">2.2 Objectives</a>
+<a class="toc-h3" href="#sec2-3">2.3 Research Summary</a>
+<a class="toc-h3" href="#sec2-4">2.4 Application at Matrix Telecom</a>
+<a class="toc-h3" href="#sec2-5">2.5 Other Necessary Information</a>
+<a class="toc-h3" href="#sec2-6">2.6 Problems Encountered and Solutions</a>
+<a class="toc-h3" href="#sec2-7">2.7 Conclusion</a>
+<a class="toc-h2" href="#sec3">3. Fiber Optic — FTTH</a>
+<a class="toc-h3" href="#sec3-1">3.1 Introduction</a>
+<a class="toc-h3" href="#sec3-2">3.2 Objectives</a>
+<a class="toc-h3" href="#sec3-3">3.3 Research Summary</a>
+<a class="toc-h3" href="#sec3-4">3.4 Application at Matrix Telecom</a>
+<a class="toc-h3" href="#sec3-5">3.5 Other Necessary Information</a>
+<a class="toc-h3" href="#sec3-6">3.6 Problems Encountered and Solutions</a>
+<a class="toc-h3" href="#sec3-7">3.7 Conclusion</a>
+<a class="toc-h2" href="#conclusion">Overall Conclusion</a>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: GPS & GOOGLE EARTH -->
+<!-- ============================================================ -->
+<h2 id="sec1">1. GPS &amp; Google Earth for the Network</h2>
+
+<h3 id="sec1-1">1.1 Introduction</h3>
+
+<p>GPS (Global Positioning System) is a satellite navigation system that precisely determines the geographic coordinates of a point on Earth. It uses a constellation of 31 satellites orbiting at approximately 20,200 km altitude, each continuously emitting a signal containing its position and precise time via atomic clocks. A GPS receiver calculates its distance from at least 4 satellites by measuring signal propagation time, then determines its 3D position (latitude, longitude, altitude) with 2 to 5 meter accuracy under normal conditions.</p>
+
+<p>Google Earth is a virtual globe application that uses satellite imagery, aerial photography, and GIS (Geographic Information System) data to create a 3D model of the Earth. KML/KMZ files allow importing points, lines, and polygons to overlay network information on the map. At Matrix Telecom, GPS and Google Earth are used for tower positioning, fiber optic route mapping, customer cartography, and network deployment optimization in the neighborhoods of Yaound&eacute;.</p>
+
+<div class="image-placeholder">
+[Image: GPS satellite constellation diagram or Google Earth interface showing fiber route mapping]
+<i>Fig 1.1: GPS constellation and Google Earth network mapping overview — <em>image to be added</em></i>
+</div>
+
+<h3 id="sec1-2">1.2 Objectives</h3>
+
+<div class="objectives">
+<p><strong>Learning Objectives (after theoretical research):</strong></p>
+<ul>
+<li>Explain the GPS coordinate systems: Decimal Degrees (DD), Degrees Minutes Seconds (DMS), and UTM (Universal Transverse Mercator).</li>
+<li>Describe how GPS triangulation works using satellite signals and time-of-flight measurement.</li>
+<li>Survey a fiber route with a handheld GPS device or smartphone app and export waypoints to Google Earth.</li>
+<li>Measure and validate GPS coordinates for a new site survey, including accuracy verification using HDOP.</li>
+<li>Create and organize KML/KMZ files with placemarks, paths, and polygons for network infrastructure mapping.</li>
+<li>Use Google Earth Pro tools: ruler for distance measurement, elevation profile for line-of-sight verification, and historical imagery.</li>
+<li>Perform coordinate conversion between DD, DMS, and UTM formats and calculate distances using the Haversine formula.</li>
+<li>Standardize placemark naming conventions for organized network documentation (e.g., FIB-BASTOS-ODF-01).</li>
+</ul>
+</div>
+
+<h3 id="sec1-3">1.3 Research Summary</h3>
+
+<h4>How It Works</h4>
+
+<p>GPS operates on the principle of trilateration. Each satellite transmits a signal containing its orbital position (ephemeris) and the exact transmission time. The receiver compares the transmission time to its own internal clock to calculate the distance to each satellite. With signals from at least four satellites, the receiver can solve for four unknowns: latitude, longitude, altitude, and time offset. Accuracy is influenced by satellite geometry (DOP — Dilution of Precision), atmospheric conditions, and multipath effects from buildings.</p>
+
+<h4>Coordinate Systems</h4>
+
+<p><strong>Latitude and Longitude:</strong> Latitude measures north-south position relative to the equator (0&deg; to 90&deg; N/S). Longitude measures east-west position relative to the Greenwich meridian (0&deg; to 180&deg; E/W). For Yaound&eacute;, the approximate coordinates are 3&deg;52&prime;N 11&deg;31&prime;E.</p>
+
+<p><strong>UTM (Universal Transverse Mercator):</strong> Divides the Earth into 60 zones of 6&deg; longitude each. Yaound&eacute; is in UTM zone 33N. UTM coordinates are expressed in meters (Easting, Northing), facilitating distance and area calculations.</p>
+
+<p><strong>Coordinate Formats:</strong></p>
+<ul>
+<li><strong>DD (Decimal Degrees):</strong> 3.8667&deg;N, 11.5167&deg;E — ideal for Google Earth</li>
+<li><strong>DMS (Degrees Minutes Seconds):</strong> 3&deg;52&prime;00&Prime;N, 11&deg;31&prime;00&Prime;E — traditional format</li>
+<li><strong>UTM:</strong> 33N 332500E 4275000N — used for field surveys</li>
+</ul>
+
+<h4>Coordinate Conversion DMS &rarr; DD</h4>
+<p>Formula: DD = Degrees + (Minutes / 60) + (Seconds / 3600)</p>
+<pre><code>Yaound&eacute;: 3&deg;52'00"N 11&deg;31'00"E
+Latitude DD = 3 + 52/60 + 00/3600 = 3.8667&deg;N
+Longitude DD = 11 + 31/60 + 00/3600 = 11.5167&deg;E</code></pre>
+
+<h4>Distance Calculation (Haversine Formula)</h4>
+<pre><code>d = 2 &middot; R &middot; arcsin(&radic;(sin&sup2;(&Delta;lat/2) + cos(lat1) &middot; cos(lat2) &middot; sin&sup2;(&Delta;lon/2)))
+Where R = 6371 km (Earth radius)
+
+Between Matrix Bastos (3.85N, 11.50E) and Matrix Mvan (3.78N, 11.53E):
+Distance &asymp; 8.47 km</code></pre>
+
+<div class="image-placeholder">
+[Image: Diagram showing GPS trilateration with 4 satellites, or coordinate system comparison chart]
+<i>Fig 1.2: GPS trilateration principle — <em>image to be added</em></i>
+</div>
+
+<h3 id="sec1-4">1.4 Application at Matrix Telecom</h3>
+
+<div class="matrix-example">
+<strong>Case Study: Fiber Optic Route Mapping in Yaound&eacute;</strong>
+<p>Matrix Telecom deploys fiber optics in the neighborhoods of Yaound&eacute; (Mvan, Nlongkak, Bastos, Mfoundi). The GPS and Google Earth workflow is as follows:</p>
+<ol>
+<li><strong>Field survey:</strong> The transmission team walks the neighborhood with a Garmin GPS or smartphone in survey mode. At each intersection, they record a waypoint.</li>
+<li><strong>Import into Google Earth:</strong> The waypoints are exported as GPX or KML files, then imported into Google Earth Pro.</li>
+<li><strong>Route tracing:</strong> By connecting the points, a path is created representing the exact cable route. The total distance can be measured.</li>
+<li><strong>Infrastructure addition:</strong> ODF cabinets, connection points, and customers are added as placemarks with their exact coordinates.</li>
+<li><strong>Map export:</strong> The final KMZ map is shared with maintenance and sales teams.</li>
+</ol>
+<p><strong>Result:</strong> A complete map of Matrix's fiber network in Yaound&eacute;, viewable by all technicians on Google Earth.</p>
+</div>
+
+<p><strong>Tower and Antenna Positioning:</strong> To install a new WiFi tower or point-to-point antenna, Matrix technicians verify Line of Sight (LoS) on Google Earth using the elevation tool, document precise coordinates via GPS survey, measure link range using the ruler tool, and create KML overlays with radio links, azimuth angles, and distances.</p>
+
+<h3 id="sec1-5">1.5 Other Necessary Information</h3>
+
+<div class="tool-box">
+<strong>Key Tools:</strong>
+<ul>
+<li><strong>Google Earth Pro</strong> (free) — Create projects, add placemarks, draw paths, measure distances, export to KMZ</li>
+<li><strong>GPS Waypoint Recorder</strong> — Garmin GPS or smartphone app for field surveys (GPX export)</li>
+<li><strong>QGIS</strong> (open-source) — Advanced GIS with GPX import, OpenStreetMap basemaps, vector layer creation, KML export</li>
+<li><strong>GPS Test App</strong> (Android) — View satellite status, HDOP, coordinate formats in real time</li>
+</ul>
+</div>
+
+<h4>KML File Structure Example</h4>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;kml xmlns="http://www.opengis.net/kml/2.2"&gt;
+  &lt;Document&gt;
+    &lt;name&gt;Matrix Fibre Network Yde&lt;/name&gt;
+    &lt;Placemark&gt;
+      &lt;name&gt;ODF Cabinet Bastos&lt;/name&gt;
+      &lt;Point&gt;
+        &lt;coordinates&gt;11.5167,3.8667,0&lt;/coordinates&gt;
+      &lt;/Point&gt;
+    &lt;/Placemark&gt;
+  &lt;/Document&gt;
+&lt;/kml&gt;</code></pre>
+
+<h4>Best Practices</h4>
+<ul>
+<li>Use WGS 84 coordinate system (EPSG:4326) for all surveys</li>
+<li>Save surveys in GPX format (standard) rather than proprietary</li>
+<li>Back up KML/KMZ files in the cloud</li>
+<li>When tracing fiber routes, follow roads and sidewalks for a realistic path</li>
+<li>Name placemarks consistently: SITE-DISTRICT-TYPE-NUMBER (e.g., FIB-BASTOS-ODF-01)</li>
+</ul>
+
+<div class="image-placeholder">
+[Image: Google Earth Pro interface showing fiber route with placemarks and elevation profile]
+<i>Fig 1.3: Google Earth Pro with Matrix fiber route mapping — <em>image to be added</em></i>
+</div>
+
+<h3 id="sec1-6">1.6 Problems Encountered and Solutions</h3>
+
+<div class="problem-box">
+<strong>Problem 1: Understanding GPS Accuracy and HDOP</strong>
+<p>I initially did not understand why GPS readings varied when standing in the same location. The concept of HDOP (Horizontal Dilution of Precision) was unclear. I thought a GPS fix was simply "on" or "off."</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>Researching Dilution of Precision revealed that satellite geometry directly affects accuracy. When satellites are clustered together (poor geometry), HDOP is high and accuracy degrades. When they are spread across the sky, HDOP is low. Using a GPS test app on my smartphone, I observed real-time HDOP values and satellite positions. I learned that an HDOP &lt; 1 is excellent, &lt; 2 is good, and &gt; 5 is poor. Waiting for more satellites (at least 6) and better geometry before recording coordinates became standard practice. This explained the variation I observed.</p>
+</div>
+
+<div class="problem-box">
+<strong>Problem 2: Confusion Between Coordinate Formats</strong>
+<p>I initially mixed up Decimal Degrees (DD) and Degrees Minutes Seconds (DMS), entering coordinates in the wrong format into Google Earth. For example, entering 3.8667 as if it were DMS (3&deg;86&prime;) produced a location in the wrong continent.</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>I created a reference card comparing the three formats (DD, DMS, UTM) with conversion formulas. Practicing conversions between formats using the formula DD = Degrees + Minutes/60 + Seconds/3600 helped internalize the relationship. I also learned that Google Earth accepts coordinates in DD format directly in the search bar, while handheld GPS devices typically display DMS. Knowing which format each tool expects eliminated the entry errors.</p>
+</div>
+
+<div class="problem-box">
+<strong>Problem 3: Understanding the Haversine Formula</strong>
+<p>The Haversine formula with trigonometric functions seemed complex, and I struggled to see why a simple Euclidean distance wouldn't work on a spherical Earth.</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>Studying the derivation showed that on a sphere, the straight-line distance through the Earth (Euclidean) differs from the great-circle distance along the surface. The Haversine formula accounts for Earth's curvature. I worked through the calculation for two points in Yaound&eacute; step by step on paper, then verified the result using Google Earth's ruler tool. The calculated distance of 8.47 km between Bastos and Mvan matched Google Earth's measurement, confirming my understanding.</p>
+</div>
+
+<h3 id="sec1-7">1.7 Conclusion</h3>
+
+<p>GPS and Google Earth are indispensable tools for network deployment at Matrix Telecom. Understanding coordinate systems, GPS accuracy factors, and Google Earth's mapping capabilities forms the foundation for all field survey work. The ability to collect precise waypoints, create organized KML maps, and measure distances and elevation profiles enables Matrix technicians to plan fiber routes, position antennas, and document the network infrastructure systematically. Standardized naming conventions and consistent use of the WGS 84 system ensure data quality across the entire team.</p>
+
+<h4>YouTube Resources</h4>
+<div class="video-link">
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=google+earth+network+mapping" target="_blank">Search: Google Earth Network Mapping</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=how+to+use+gps+for+network+planning" target="_blank">Search: GPS for Network Planning</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=QGIS+fibre+optic+mapping" target="_blank">Search: QGIS Fibre Optic Mapping</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=how+to+read+UTM+coordinates" target="_blank">Search: How to Read UTM Coordinates</a>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: INTERNET ACCESS TECHNOLOGIES -->
+<!-- ============================================================ -->
+<h2 id="sec2">2. Internet Access Technologies</h2>
+
+<h3 id="sec2-1">2.1 Introduction</h3>
+
+<p>Internet access technologies are the physical and logical means by which an access provider like Matrix Telecom connects its customers to the global network. Each technology has specific characteristics in terms of speed, distance, cost, and reliability. The choice of technology depends on the customer's location, their needs, and the existing infrastructure.</p>
+
+<p>Matrix Telecom operates in the Yaound&eacute; metropolitan area where different zones have different infrastructure readiness. Business districts like Bastos have extensive fiber coverage, while peripheral neighborhoods like Nkolbisson rely on wireless solutions. Understanding the full range of access technologies — from xDSL and fiber to 4G/5G, microwave, satellite, and WiFi point-to-point — allows Matrix engineers to recommend the optimal solution for each client context.</p>
+
+<div class="image-placeholder">
+[Image: Collage showing different access technologies — fiber, wireless, satellite]
+<i>Fig 2.1: Overview of Internet access technologies — <em>image to be added</em></i>
+</div>
+
+<h3 id="sec2-2">2.2 Objectives</h3>
+
+<div class="objectives">
+<p><strong>Learning Objectives (after theoretical research):</strong></p>
+<ul>
+<li>Compare the major Internet access technologies (xDSL, Fiber, LTE/4G/5G, Microwave, Satellite, WiFi PtP) in terms of speed, range, cost, and reliability.</li>
+<li>Explain how each technology works at the physical and data link layer, including modulation, frequency bands, and signal propagation.</li>
+<li>Perform real-world throughput comparison between fiber and radio links using iperf3, measuring latency, jitter, and packet loss.</li>
+<li>Select the appropriate transmission technology for a client based on distance, bandwidth requirements, budget, and line of sight.</li>
+<li>Use spectrum analyzers and signal meters to verify channel cleanliness and antenna alignment.</li>
+<li>Configure QoS policies on MikroTik routers to prioritize critical traffic on different link types.</li>
+<li>Understand legal frequency regulations in Cameroon (ART — Telecommunications Regulatory Agency).</li>
+<li>Calculate link budgets for microwave and WiFi PtP links using the Free Space Path Loss formula.</li>
+</ul>
+</div>
+
+<h3 id="sec2-3">2.3 Research Summary</h3>
+
+<h4>How It Works — Technology Comparison</h4>
+
+<table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Max Speed</th>
+<th>Range</th>
+<th>Cost</th>
+<th>Reliability</th>
+<th>Main Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xDSL (ADSL/VDSL)</td>
+<td>ADSL: 20 Mb/s<br>VDSL: 100 Mb/s</td>
+<td>ADSL: &lt; 5 km<br>VDSL: &lt; 1.2 km</td>
+<td>Low</td>
+<td>Medium</td>
+<td>Existing residential</td>
+</tr>
+<tr>
+<td>Fiber Optic (FTTH)</td>
+<td>1 Gb/s to 10 Gb/s</td>
+<td>Up to 20+ km</td>
+<td>High</td>
+<td>Very High</td>
+<td>Residential + Business</td>
+</tr>
+<tr>
+<td>LTE / 4G</td>
+<td>150 Mb/s (theoretical)</td>
+<td>Up to 10 km per cell</td>
+<td>Medium</td>
+<td>Good</td>
+<td>Mobile / areas without fiber</td>
+</tr>
+<tr>
+<td>5G</td>
+<td>1-10 Gb/s</td>
+<td>Up to 1-2 km (high freq.)</td>
+<td>High</td>
+<td>Very High</td>
+<td>Mobile / FWA</td>
+</tr>
+<tr>
+<td>Microwave</td>
+<td>1 Gb/s+</td>
+<td>Up to 50+ km (LoS)</td>
+<td>Medium-High</td>
+<td>High (LoS)</td>
+<td>Inter-site links</td>
+</tr>
+<tr>
+<td>Satellite</td>
+<td>100-500 Mb/s (Starlink)</td>
+<td>Global</td>
+<td>High</td>
+<td>Medium (latency)</td>
+<td>Remote / rural areas</td>
+</tr>
+<tr>
+<td>WiFi Point-to-Point</td>
+<td>150-450 Mb/s</td>
+<td>Up to 15+ km (LoS)</td>
+<td>Low</td>
+<td>Good (LoS)</td>
+<td>Short distance links</td>
+</tr>
+</tbody>
+</table>
+
+<h4>xDSL (ADSL, VDSL)</h4>
+<p>xDSL uses the copper pairs of the existing telephone network. The DSL signal uses higher frequencies than voice (25 kHz to 1 MHz for ADSL, up to 30 MHz for VDSL). The DSL modem modulates data onto these frequencies. Attenuation increases with distance and frequency, limiting speed. VDSL reaches 100 Mb/s downstream but over less than 1.2 km from the central office.</p>
+
+<h4>LTE / 4G / 5G</h4>
+<p>Mobile networks use frequency bands: 4G LTE at 800 MHz, 1800 MHz, 2600 MHz; 5G NR at 3.5 GHz (mid-band) and 26 GHz (high-band). The lower the frequency, the greater the range and wall penetration. Matrix uses 4G/5G routers with external antennas as backup or temporary solutions.</p>
+
+<h4>Microwave</h4>
+<p>Microwave links connect sites without fiber infrastructure and require Line of Sight (LoS). Typical frequencies are 5 GHz, 11 GHz, 23 GHz. The Free Space Path Loss formula is: FSPL = 32.45 + 20&times;log10(d) + 20&times;log10(f) where d is distance in km and f is frequency in MHz.</p>
+
+<h4>Detailed Comparison Table</h4>
+<table>
+<thead>
+<tr><th>Criteria</th><th>Fiber</th><th>4G</th><th>Microwave</th><th>xDSL</th><th>Satellite</th></tr>
+</thead>
+<tbody>
+<tr><td>Latency</td><td>&lt; 5 ms</td><td>20-50 ms</td><td>&lt; 3 ms</td><td>10-30 ms</td><td>20-600 ms</td></tr>
+<tr><td>Symmetric bandwidth</td><td>Yes</td><td>No</td><td>Yes</td><td>No (ADSL)</td><td>Variable</td></tr>
+<tr><td>Weather sensitivity</td><td>None</td><td>Low</td><td>High (rain)</td><td>None</td><td>Medium</td></tr>
+<tr><td>Installation time</td><td>1-4 weeks</td><td>1-3 days</td><td>1-2 weeks</td><td>1-2 weeks</td><td>1-7 days</td></tr>
+<tr><td>Equipment cost</td><td>High</td><td>Medium</td><td>High</td><td>Low</td><td>High</td></tr>
+<tr><td>Maintenance</td><td>Low</td><td>Low</td><td>Medium</td><td>Medium</td><td>Low</td></tr>
+</tbody>
+</table>
+
+<div class="image-placeholder">
+[Image: Comparison chart or infographic showing the different access technologies]
+<i>Fig 2.2: Technology comparison overview — <em>image to be added</em></i>
+</div>
+
+<h3 id="sec2-4">2.4 Application at Matrix Telecom</h3>
+
+<div class="matrix-example">
+<strong>Choosing the Right Technology According to the Customer</strong>
+
+<p><strong>Scenario 1:</strong> Professional customer in Bastos (business district) needs 100 Mb/s symmetric with guaranteed SLA.</p>
+<p><strong>Solution:</strong> Fiber optic FTTH. Matrix deploys from the nearest ODF cabinet (&lt; 500 m). Gigabit ONT. SLA 99.9%.</p>
+
+<p><strong>Scenario 2:</strong> Residential customer in Nkolbisson (peripheral neighborhood) without fiber.</p>
+<p><strong>Solution:</strong> Ubiquiti NanoStation point-to-point link from a POP on a nearby hill. If no direct LoS, 4G with external antenna.</p>
+
+<p><strong>Scenario 3:</strong> Connect two Matrix offices 8 km apart, no possibility of running fiber.</p>
+<p><strong>Solution:</strong> MikroTik or Mimosa microwave link, 60 cm parabolic antennas, 5 GHz, actual throughput 300 Mb/s.</p>
+
+<p><strong>Scenario 4:</strong> Temporary customer (construction site, event) for 3 months.</p>
+<p><strong>Solution:</strong> 4G router with external antenna and data plan. Installation in 1 day, no long-term commitment.</p>
+</div>
+
+<h3 id="sec2-5">2.5 Other Necessary Information</h3>
+
+<div class="tool-box">
+<strong>Key Tools:</strong>
+<ul>
+<li><strong>Spectrum Analyzer</strong> — Check radio interference, identify clear channels (Rohde &amp; Schwarz FSH, Anritsu Spectrum Master, WiFi Analyzer app)</li>
+<li><strong>Signal Meter (RSSI Meter)</strong> — Measure received signal strength in dBm. Good signal &gt; -60 dBm, acceptable &gt; -75 dBm</li>
+<li><strong>iperf3</strong> — Measure TCP/UDP throughput, latency, jitter, packet loss between two points</li>
+<li><strong>Ekahau HeatMapper / NetSpot</strong> — WiFi mapping, coverage visualization, dead zone identification</li>
+<li><strong>Link.ubnt.com</strong> — Ubiquiti link simulator (enter coordinates of both points to check feasibility)</li>
+</ul>
+</div>
+
+<h4>Example Commands</h4>
+<pre><code># Test latency and packet loss on a link
+ping -n 100 10.0.0.1
+
+# Measure throughput with iperf3
+iperf3 -c 10.0.0.1 -t 30 -i 5
+
+# Check signal quality on a NanoStation (SSH)
+ssh admin@192.168.1.20
+# airOS: Main tab - Signal Strength
+
+# Trace route to a client
+tracert -d 8.8.8.8</code></pre>
+
+<h4>Tip for the Intern</h4>
+<div class="tip">
+<strong>Tip:</strong>
+<ul>
+<li>Do not rely solely on theoretical speeds. Always test actual throughput with iperf3 or speedtest.net.</li>
+<li>For a radio link, verifying direct Line of Sight (LoS) is crucial. A tree or building can block everything.</li>
+<li>Document each installation with: technology used, GPS coordinates, signal strength, date.</li>
+<li>Know the legal frequencies: in Cameroon, ART regulates frequency usage.</li>
+<li>Always have a backup plan: if fiber is cut, offer 4G as backup.</li>
+<li>For demanding customers, prioritize fiber whenever possible — it is the most sustainable investment.</li>
+</ul>
+</div>
+
+<div class="image-placeholder">
+[Image: Photo of a microwave dish installation or a NanoStation PtP link in the field]
+<i>Fig 2.3: Point-to-point microwave link installation — <em>image to be added</em></i>
+</div>
+
+<h3 id="sec2-6">2.6 Problems Encountered and Solutions</h3>
+
+<div class="problem-box">
+<strong>Problem 1: Confusing Technology Specifications</strong>
+<p>Initially, I memorized the theoretical speeds of each technology without understanding the practical limitations. For example, I thought ADSL could deliver 20 Mb/s at any distance under 5 km, not realizing that speed drops significantly with distance.</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>I studied the relationship between signal attenuation and distance for each technology. Drawing attenuation curves showed that ADSL speed drops exponentially beyond 2 km, and VDSL is only viable within 1.2 km. For wireless technologies, I learned that the Free Space Path Loss increases with both distance and frequency. This understanding shifted my focus from theoretical maximums to realistic throughput given the specific deployment scenario. I also learned to account for environmental factors like rain fade on microwave links and building penetration loss on 4G/5G.</p>
+</div>
+
+<div class="problem-box">
+<strong>Problem 2: Line of Sight Assessment</strong>
+<p>I underestimated the importance of Line of Sight for wireless links. I assumed that if two points were close enough, a radio link would work. I did not consider obstacles like trees, buildings, or terrain elevation.</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>Using Google Earth's elevation profile tool, I learned to draw a path between two candidate points and examine the terrain along the route. I also studied the Fresnel zone concept — the elliptical area around the direct LoS that must be clear of obstacles. The rule is that 60% of the Fresnel zone radius must be clear for reliable operation. Using online tools like Link.ubnt.com and RF calculators, I practiced determining whether a link was feasible given specific coordinates and antenna heights.</p>
+</div>
+
+<div class="problem-box">
+<strong>Problem 3: QoS Configuration for Mixed Traffic</strong>
+<p>I initially thought QoS was simply about setting bandwidth limits. I did not understand how to prioritize real-time traffic (VoIP, video) over bulk data (downloads) on a single link.</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>Studying MikroTik RouterOS queue trees and firewall mangle rules clarified how packet marking works. I learned to identify traffic by protocol (UDP/TCP), port ranges, and DSCP markings, then assign priorities using PCQ and HTB queue types. Creating a lab setup with two clients and bandwidth contention allowed me to test that VoIP traffic (DSCP EF) was prioritized over HTTP downloads during congestion. The key insight was that QoS does not create bandwidth — it ensures important traffic gets through first when bandwidth is limited.</p>
+</div>
+
+<h3 id="sec2-7">2.7 Conclusion</h3>
+
+<p>Internet access technologies form the core of Matrix Telecom's service delivery. Each technology occupies a specific niche: fiber for high-density urban areas requiring maximum performance, wireless (PtP, microwave) for connecting sites without physical infrastructure, 4G/5G for mobility and temporary installations, and satellite for the most remote locations. The skill of selecting the right technology for each client scenario — considering distance, bandwidth, budget, and environmental constraints — is fundamental to the network engineer's role. Practical testing with iperf3, proper LoS verification, and thoughtful QoS configuration transform theoretical knowledge into reliable, real-world connectivity.</p>
+
+<h4>YouTube Resources</h4>
+<div class="video-link">
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=internet+access+technologies+comparison" target="_blank">Search: Internet Access Technologies Comparison</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=LTE+vs+fibre+vs+DSL+explained" target="_blank">Search: LTE vs Fibre vs DSL</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=microwave+point+to+point+link+tutorial" target="_blank">Search: Microwave Point-to-Point Tutorial</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=MikroTik+QoS+queue+tree+setup" target="_blank">Search: MikroTik QoS Queue Tree Setup</a>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: FIBER OPTIC - FTTH -->
+<!-- ============================================================ -->
+<h2 id="sec3">3. Fiber Optic — FTTH</h2>
+
+<h3 id="sec3-1">3.1 Introduction</h3>
+
+<p>Fiber optic is a transmission medium that uses light (laser or LED) to carry data at very high speeds over long distances. It exploits the principle of total internal reflection: the glass core (silica) has a higher refractive index than the optical cladding, so when light is injected at an angle less than the critical angle, it remains trapped inside and propagates through successive reflections.</p>
+
+<p>At Matrix Telecom, fiber optic is the flagship technology for FTTH (Fiber To The Home) connections deployed in the neighborhoods of Yaound&eacute;. It offers symmetric speeds up to 1 Gb/s with unmatched reliability and low latency (&lt; 5 ms). The FTTH network uses GPON (Gigabit Passive Optical Network) technology where a single fiber from the OLT serves up to 64 or 128 subscribers through passive optical splitters, making it cost-effective for dense urban deployments.</p>
+
+<div class="image-placeholder">
+[Image: Fiber optic cable structure diagram showing core, cladding, coating]
+<i>Fig 3.1: Fiber optic cable structure — <em>image to be added</em></i>
+</div>
+
+<h3 id="sec3-2">3.2 Objectives</h3>
+
+<div class="objectives">
+<p><strong>Learning Objectives (after theoretical research):</strong></p>
+<ul>
+<li>Differentiate between Single Mode Fiber (SMF) and Multi Mode Fiber (MMF) in terms of core diameter, wavelength, distance, and application.</li>
+<li>Describe the components of an FTTH network: OLT, ONT/ONU, GPON splitters, ODF, and drop cables.</li>
+<li>Explain the complete FTTH installation process from POP to customer premises in 5 steps.</li>
+<li>Perform an optical power budget calculation including all losses (fiber, splitters, connectors, splices) and verify against ONT sensitivity.</li>
+<li>Splice a fiber optic pigtail using a fusion splicer and test the splice with an OTDR.</li>
+<li>Use an OTDR to analyze fiber traces, identify reflective and non-reflective events, and measure cumulative loss.</li>
+<li>Use a power meter and laser source to measure end-to-end optical attenuation.</li>
+<li>Use a VFL (Visual Fault Locator) for continuity checking and fault identification.</li>
+<li>Understand GPON operation: downstream (1490 nm broadcast) and upstream (1310 nm TDMA) transmission.</li>
+<li>Plan a power budget with a minimum 3 dB safety margin for future degradation.</li>
+</ul>
+</div>
+
+<h3 id="sec3-3">3.3 Research Summary</h3>
+
+<h4>Types of Fiber Optic</h4>
+
+<table>
+<thead>
+<tr><th>Characteristic</th><th>Single Mode (SMF)</th><th>Multi Mode (MMF)</th></tr>
+</thead>
+<tbody>
+<tr><td>Core diameter</td><td>9 &micro;m</td><td>50 &ndash; 62.5 &micro;m</td></tr>
+<tr><td>Cladding diameter</td><td>125 &micro;m</td><td>125 &micro;m</td></tr>
+<tr><td>Light source</td><td>Laser (1310 nm, 1550 nm)</td><td>LED or laser (850 nm, 1300 nm)</td></tr>
+<tr><td>Maximum distance</td><td>Up to 100+ km</td><td>Up to 2 km (OM4)</td></tr>
+<tr><td>Typical speed</td><td>1-100 Gb/s</td><td>1-10 Gb/s</td></tr>
+<tr><td>Connector color</td><td>Blue / Yellow</td><td>Beige / Aqua</td></tr>
+<tr><td>Usage at Matrix</td><td>FTTH, backbone</td><td>Datacenter, LAN</td></tr>
+</tbody>
+</table>
+
+<h4>Components of an FTTH Network</h4>
+
+<p><strong>OLT (Optical Line Terminal):</strong> Active equipment at Matrix's POP. Central point of GPON, managing up to 64 or 128 ONU/ONT. Emits laser at 1490 nm downstream, receives at 1310 nm upstream.</p>
+
+<p><strong>ONU / ONT (Optical Network Unit / Terminal):</strong> Customer premises equipment converting optical to electrical (Ethernet). Common models: Huawei HG8245, Nokia G-240W-A, Ubiquiti UFiber.</p>
+
+<p><strong>GPON (Gigabit Passive Optical Network):</strong> Point-to-multipoint using passive splitters. Typical distribution: Splitter 1:4 at POP (1st stage), Splitter 1:8 or 1:16 at distribution point (2nd stage). Total 1:32 or 1:64 per OLT port. Bandwidth: 2.5 Gb/s downstream, 1.25 Gb/s upstream (shared).</p>
+
+<p><strong>ODF (Optical Distribution Frame):</strong> Patching cabinet at POP and distribution points connecting fibers from customers to OLT ports via pigtails and SC/APC or SC/UPC adapters.</p>
+
+<h4>How Light Transmission Works</h4>
+<p>Wavelengths used:</p>
+<ul>
+<li><strong>1310 nm</strong>: upstream (client &rarr; POP), attenuation ~0.35 dB/km</li>
+<li><strong>1490 nm</strong>: downstream (POP &rarr; client), attenuation ~0.25 dB/km</li>
+<li><strong>1550 nm</strong>: long distance links, attenuation ~0.20 dB/km</li>
+</ul>
+
+<h4>Complete FTTH Installation Process</h4>
+<ol>
+<li><strong>Planning:</strong> Identify neighborhood, map infrastructure, size OLT ports, choose ODF cabinet locations</li>
+<li><strong>Backbone Deployment:</strong> Run 12-144 fiber cables (G.652D) from POP to distribution points, fusion splice, test with OTDR</li>
+<li><strong>Distribution Network:</strong> Install splitters (1:8 or 1:16) in ODF cabinets, run drop cables to homes</li>
+<li><strong>Customer Installation:</strong> Position fiber entry, splice SC/APC pigtail, test with VFL, connect ONT, configure WiFi router</li>
+<li><strong>Service Activation:</strong> ONT registers with OLT via serial number/LOID, DBA assigns bandwidth, traffic in GPON GEM frames</li>
+</ol>
+
+<div class="image-placeholder">
+[Image: FTTH network architecture diagram showing OLT, splitters, ODF, ONT]
+<i>Fig 3.2: FTTH network architecture — <em>image to be added</em></i>
+</div>
+
+<h4>Optical Power Budget Calculation</h4>
+<table>
+<thead>
+<tr><th>Element</th><th>Loss (dB)</th><th>Quantity</th><th>Subtotal (dB)</th></tr>
+</thead>
+<tbody>
+<tr><td>OLT transmit power</td><td>+5 dBm</td><td>1</td><td>+5.0</td></tr>
+<tr><td>ONT sensitivity</td><td>-27 dBm</td><td>1</td><td>-27.0</td></tr>
+<tr><td><strong>Total available budget</strong></td><td></td><td></td><td><strong>32.0 dB</strong></td></tr>
+<tr><td>Fiber (0.35 dB/km &times; 5 km)</td><td>-1.75</td><td>1</td><td>-1.75</td></tr>
+<tr><td>Splitter 1:8</td><td>-10.5</td><td>1</td><td>-10.5</td></tr>
+<tr><td>Splitter 1:4</td><td>-7.2</td><td>1</td><td>-7.2</td></tr>
+<tr><td>SC/APC connectors (0.25 dB/conn.)</td><td>-0.25</td><td>6</td><td>-1.5</td></tr>
+<tr><td>Fusion splices (0.05 dB/splice)</td><td>-0.05</td><td>8</td><td>-0.4</td></tr>
+<tr><td><strong>Total estimated losses</strong></td><td></td><td></td><td><strong>-21.35 dB</strong></td></tr>
+<tr><td><strong>Remaining margin</strong></td><td></td><td></td><td><strong>10.65 dB</strong></td></tr>
+</tbody>
+</table>
+<p>A minimum margin of 3 dB is recommended. Here we have 10.65 dB, which is excellent.</p>
+
+<h3 id="sec3-4">3.4 Application at Matrix Telecom</h3>
+
+<div class="matrix-example">
+<strong>FTTH Deployment in the Mvan Neighborhood</strong>
+<p>Matrix Telecom fiberized the Mvan neighborhood in Yaound&eacute; (dense residential area):</p>
+<ul>
+<li><strong>POP:</strong> 1 rack OLT Huawei MA5800-X15 with 4 GPON cards (64 ports each)</li>
+<li><strong>Backbone:</strong> 48-fiber G.652D cable from POP to 4 street cabinets (AME-01 to AME-04)</li>
+<li><strong>Distribution:</strong> Each cabinet contains 2 splitters 1:8 + 1 splitter 1:4 at the input</li>
+<li><strong>Connection:</strong> Drop cables of 100-300m from cabinets to villas</li>
+<li><strong>ONT:</strong> Huawei HG8245Q (triple play: Internet + TV + VoIP)</li>
+<li><strong>OTDR tests:</strong> Average total loss of 18 dB for farthest customers (3.5 km from POP)</li>
+<li><strong>Result:</strong> 256 customers connected with guaranteed speed of 100 Mb/s symmetric</li>
+</ul>
+</div>
+
+<h3 id="sec3-5">3.5 Other Necessary Information</h3>
+
+<div class="tool-box">
+<strong>Key Tools:</strong>
+<ul>
+<li><strong>OTDR (Optical Time Domain Reflectometer)</strong> — Traces fiber path, measures connector/splice losses, identifies break locations. Models: EXFO FTB-200, Yokogawa AQ1200, Fluke OFP-100</li>
+<li><strong>Power Meter &amp; Laser Source</strong> — Measures end-to-end optical attenuation in dBm</li>
+<li><strong>Fusion Splicer</strong> — Joins fibers with &lt; 0.05 dB loss. Models: Fujikura 70S+, Sumitomo T-600C, Signal Fire AI-9</li>
+<li><strong>VFL (Visual Fault Locator)</strong> — Visible red laser for continuity checking and fault localization</li>
+</ul>
+</div>
+
+<h4>OTDR Parameters for FTTH</h4>
+<pre><code>Wavelength: 1310 nm (or 1550 nm for long distance)
+Pulse duration: 10-100 ns
+Range: 10-20 km
+Refractive index: 1.4682 (G.652D)
+Fault threshold: event &gt; 0.1 dB
+Fiber end threshold: 1.5 dB</code></pre>
+
+<h4>ONT Power Levels</h4>
+<pre><code>Good signal: -8 to -24 dBm
+Limit: -27 dBm
+&lt; -27 dBm: probable loss of synchronization</code></pre>
+
+<h4>Tip for the Intern</h4>
+<div class="tip">
+<strong>Tip:</strong>
+<ul>
+<li>Always clean optical connectors before using them — dirty connectors are the #1 cause of optical loss.</li>
+<li>NEVER look directly at the end of a fiber powered by a laser — it can damage your retina.</li>
+<li>Use a protective cap on every unused connector to prevent dust.</li>
+<li>During cleaving, the cut surface must be perfectly perpendicular (&lt; 0.5&deg;).</li>
+<li>Record all OTDR measurements and fiber references in a log for maintenance traceability.</li>
+<li>Plan a safety margin of 3 dB in the power budget for future connections and component aging.</li>
+<li>Learn to read an OTDR trace: reflective event (peak) = connector or break; non-reflective event (step) = splice or micro-bend.</li>
+<li>The minimum bend radius is 30 mm (10 times the cable diameter).</li>
+</ul>
+</div>
+
+<div class="image-placeholder">
+[Image: OTDR trace screenshot showing events, or photo of fusion splicing in progress]
+<i>Fig 3.3: OTDR trace analysis or fusion splicing — <em>image to be added</em></i>
+</div>
+
+<h3 id="sec3-6">3.6 Problems Encountered and Solutions</h3>
+
+<div class="problem-box">
+<strong>Problem 1: Understanding GPON Architecture</strong>
+<p>I initially had difficulty understanding how a single fiber could serve multiple subscribers simultaneously. The concept of passive optical splitters and the distinction between downstream broadcast and upstream TDMA was confusing.</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>Creating a diagram of the GPON network helped visualize the architecture. Downstream (1490 nm) is broadcast: the OLT sends data in 125 &micro;s frames, and each ONT reads only its assigned timeslots. Upstream (1310 nm) uses Time Division Multiple Access (TDMA): the OLT assigns transmission windows to each ONT to prevent collisions. The splitter is completely passive and simply divides the optical power. I tested this understanding by tracing the path of a single packet from the Internet through the OLT, splitter, and ONT to a customer's laptop, identifying the protocol state at each step.</p>
+</div>
+
+<div class="problem-box">
+<strong>Problem 2: Optical Power Budget Calculation</strong>
+<p>I found the power budget calculation overwhelming with multiple loss elements. I was not sure how to account for connector losses, splice losses, and splitter losses together, and whether the result was acceptable.</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>I broke the calculation into a systematic table with four columns: element, loss per unit, quantity, and subtotal. By calculating each element separately and summing them, the total loss became transparent. I then compared the result to the available budget (OLT transmit power minus ONT sensitivity). Working through the Mvan deployment example — where the farthest customer had 18 dB total loss against a 32 dB budget — confirmed that the methodology produces real-world results. I also learned that a negative remaining margin means the link will not work and requires redesign (reduce distance, use lower-ratio splitters, or choose higher-power optics).</p>
+</div>
+
+<div class="problem-box">
+<strong>Problem 3: Reading OTDR Traces</strong>
+<p>The OTDR trace showed peaks and steps that I could not interpret. I did not know how to distinguish a connector reflection from a fiber break, or a splice from a micro-bend.</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>Studying the physics of OTDR operation clarified the trace elements. The OTDR sends a laser pulse and measures backscattered light over time. A reflective event (sharp peak) occurs at connectors and mechanical splices where the refractive index changes abruptly. A non-reflective event (step loss) occurs at fusion splices where the change is gradual. The fiber end appears as a large reflection followed by noise. I practiced by comparing OTDR traces from known-good and known-bad fibers in the lab, identifying each event type. I learned that the launch cable is essential to measure the first connector correctly, and that the event dead zone limits how close two events can be distinguished.</p>
+</div>
+
+<div class="problem-box">
+<strong>Problem 4: Handling and Cleaning Fibers</strong>
+<p>Initially, I handled fiber connectors casually, not realizing how sensitive they are to contamination. After testing a patch cord that showed 3 dB loss, I assumed the equipment was faulty.</p>
+</div>
+<div class="solution-box">
+<strong>Solution:</strong>
+<p>I learned that a single dust particle on a fiber core can cause 1-5 dB of loss or even damage the connector end-face. Using a fiber inspection microscope revealed visible contamination on the connector. Cleaning with isopropyl alcohol and lint-free wipes, or using a click-cleaner, restored the loss to 0.2 dB. I adopted the practice of always inspecting and cleaning connectors before mating them, and capping unused connectors immediately. This reduced measurement errors and equipment damage significantly.</p>
+</div>
+
+<h3 id="sec3-7">3.7 Conclusion</h3>
+
+<p>Fiber optic technology is the cornerstone of Matrix Telecom's high-speed Internet service. The FTTH architecture — from the OLT at the POP through passive splitters to the ONT at the customer premises — delivers reliable, high-bandwidth connectivity that no copper-based technology can match. Mastering the optical power budget calculation, OTDR trace analysis, fusion splicing technique, and proper connector handling provides the practical skills needed for FTTH deployment and maintenance. The GPON standard's efficiency in serving multiple subscribers over a single fiber makes fiber deployment economically viable in dense urban areas like the neighborhoods of Yaound&eacute;.</p>
+
+<h4>YouTube Resources</h4>
+<div class="video-link">
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=fiber+optic+FTTH+explained" target="_blank">Search: Fiber Optic FTTH Explained</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=OTDR+tutorial+fiber+optic" target="_blank">Search: OTDR Tutorial</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=fusion+splicing+technique" target="_blank">Search: Fusion Splicing Technique</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=GPON+network+architecture" target="_blank">Search: GPON Network Architecture</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=ftth+installation+step+by+step" target="_blank">Search: FTTH Installation Step by Step</a>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- OVERALL CONCLUSION -->
+<!-- ============================================================ -->
+<h2 id="conclusion">Overall Conclusion</h2>
+
+<p>This research has provided a comprehensive theoretical and practical foundation for three fundamental transmission concepts at Matrix Telecom: GPS &amp; Google Earth for network mapping, Internet access technologies for customer connectivity, and Fiber Optic FTTH for high-speed broadband deployment.</p>
+
+<p><strong>GPS and Google Earth</strong> form the spatial intelligence layer of Matrix's operations. The ability to precisely locate infrastructure, measure distances, verify line of sight, and create shareable KML maps enables efficient network planning and documentation. Coordinate system literacy and accuracy awareness prevent costly field errors.</p>
+
+<p><strong>Internet Access Technologies</strong> represent the toolbox from which Matrix engineers select the right solution for each client. The comparison of fiber, wireless, mobile, and satellite technologies — each with its speed, range, cost, and reliability profile — provides a structured decision framework. Practical skills in throughput testing, LoS verification, and QoS configuration transform technology knowledge into reliable service delivery.</p>
+
+<p><strong>Fiber Optic FTTH</strong> is the premium technology that powers Matrix's growth in urban areas. From the physics of total internal reflection to the practicalities of fusion splicing and OTDR testing, the complete FTTH workflow — planning, backbone deployment, distribution, customer installation, and service activation — represents the end-to-end engineering process that delivers gigabit connectivity to subscribers.</p>
+
+<p>Together, these three concepts form a coherent body of knowledge: GPS tells us <em>where</em> to build, access technologies tell us <em>how</em> to connect, and fiber tells us <em>how to build it best</em>. Mastery of these foundations equips any engineer to contribute effectively to Matrix Telecom's mission of providing reliable, high-quality Internet services across Cameroon.</p>
+
+<div class="image-placeholder">
+[Image: Matrix Telecom network overview or team photo]
+<i>Fig 4.1: Matrix Telecom network operations — <em>image to be added</em></i>
+</div>
+
+</div>
+
+<div class="footer">
+Matrix Telecom &mdash; Internship Report &mdash; Transmission Concepts &mdash; PETTANG FEUMBA RODDY ALANN &mdash; July 2026
+</div>
+
+</body>
+</html>

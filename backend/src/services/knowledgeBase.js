@@ -2,8 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import pdfParse from 'pdf-parse/lib/pdf-parse.js';
-import { config, hasOpenAIKey } from '../config/index.js';
+import { config, hasOpenAIKey, hasGeminiKey } from '../config/index.js';
 import { embed } from './openai.js';
+import { geminiEmbed } from './geminiService.js';
 
 const indexFile = path.join(config.paths.data, 'knowledge_index.json');
 const kbDir = config.paths.knowledge;
@@ -118,19 +119,33 @@ let indexPromise = null;
 export async function getKnowledgeIndex() {
   if (indexPromise) return indexPromise;
   indexPromise = (async () => {
-    const cached = loadCachedIndex();
-    if (cached && cached.version === 1 && cached.chunks.length > 0) return cached;
+    let cached = loadCachedIndex();
+    if (cached && cached.version === 2 && cached.chunks.length > 0 && (cached.embedded || !canEmbedNow())) {
+      return cached;
+    }
+    if (cached && cached.version !== 2) cached = null;
 
     const chunks = await buildChunks();
-    const index = { version: 1, embedded: false, chunks };
+    const index = { version: 2, embedded: false, embedder: null, chunks };
 
     if (hasOpenAIKey()) {
       try {
         const vectors = await embed(chunks.map((c) => c.content.slice(0, 8000)));
         index.chunks = chunks.map((c, i) => ({ ...c, vector: vectors[i] }));
         index.embedded = true;
+        index.embedder = 'openai';
       } catch (err) {
-        console.warn('[kb] Embedding failed, using keyword search fallback:', err.message);
+        console.warn('[kb] OpenAI embedding failed, trying Gemini:', err.message);
+      }
+    }
+    if (!index.embedded && hasGeminiKey()) {
+      try {
+        const vectors = await geminiEmbed(chunks.map((c) => c.content.slice(0, 8000)));
+        index.chunks = chunks.map((c, i) => ({ ...c, vector: vectors[i] }));
+        index.embedded = true;
+        index.embedder = 'gemini';
+      } catch (err) {
+        console.warn('[kb] Gemini embedding failed, using keyword search:', err.message);
       }
     }
     saveIndex(index);
@@ -139,16 +154,25 @@ export async function getKnowledgeIndex() {
   return indexPromise;
 }
 
+function canEmbedNow() {
+  return hasOpenAIKey() || hasGeminiKey();
+}
+
+async function embedQuery(query, embedder) {
+  if (embedder === 'gemini') return (await geminiEmbed([query]))?.[0];
+  return (await embed([query]))?.[0];
+}
+
 export async function searchKnowledge(query, topK = 5) {
   const index = await getKnowledgeIndex();
   const scored = [];
 
   if (index.embedded) {
-    const qv = (await embed([query]))?.[0];
+    const qv = await embedQuery(query, index.embedder);
     if (qv) {
       for (const c of index.chunks) scored.push({ ...c, score: cosine(qv, c.vector) });
       scored.sort((a, b) => b.score - a.score);
-      return { results: scored.slice(0, topK), embedded: true };
+      return { results: scored.slice(0, topK), embedded: true, embedder: index.embedder };
     }
   }
 

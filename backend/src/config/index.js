@@ -14,6 +14,7 @@ export const config = {
   gemini: {
     apiKey: process.env.GEMINI_API_KEY || '',
     model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+    embedModel: process.env.GEMINI_EMBED_MODEL || 'embedding-001',
   },
   firebase: {
     serviceAccountPath: process.env.FIREBASE_SERVICE_ACCOUNT || process.env.GOOGLE_APPLICATION_CREDENTIALS || '',

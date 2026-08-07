@@ -4,7 +4,9 @@ const MODEL = 'gemini-1.5-flash';
 const BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 export function getGemini() {
-  return hasGeminiKey() ? { apiKey: config.gemini.apiKey, model: config.gemini.model || MODEL } : null;
+  return hasGeminiKey()
+    ? { apiKey: config.gemini.apiKey, model: config.gemini.model || MODEL, embedModel: config.gemini.embedModel }
+    : null;
 }
 
 export async function geminiGenerate({ system, context = '', question, json = false }) {
@@ -45,4 +47,32 @@ export async function geminiGenerate({ system, context = '', question, json = fa
     }
   }
   return text.trim();
+}
+
+export async function geminiEmbed(texts) {
+  const g = getGemini();
+  if (!g) return null;
+  const BATCH = 100;
+  const out = [];
+  for (let i = 0; i < texts.length; i += BATCH) {
+    const batch = texts.slice(i, i + BATCH);
+    const res = await fetch(`${BASE}/${g.model}:batchEmbedContents?key=${g.apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        requests: batch.map((text) => ({ model: `models/${g.embedModel}`, content: { parts: [{ text }] } })),
+      }),
+    });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '');
+      throw new Error(`Gemini embed ${res.status}: ${detail.slice(0, 200)}`);
+    }
+    const data = await res.json();
+    const vectors = (data.embeddings || []).map((e) => e.values);
+    if (vectors.length !== batch.length) {
+      throw new Error('Gemini embed: nombre de resultats inattendu');
+    }
+    out.push(...vectors);
+  }
+  return out;
 }
