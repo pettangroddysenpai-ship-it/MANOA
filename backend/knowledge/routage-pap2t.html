@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cisco PAP2T (ATA VoIP) - ROUTING Guide | Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Cisco PAP2T - ATA Telephone Adapter</h1>
+<a class="back" href="../index.html">&larr; Back to Routing Guide</a>
+</div>
+
+<div class="container">
+
+<h2>Definition</h2>
+<p>The <strong>Cisco PAP2T</strong> (Phone Adapter with 2 Ports) is an analog telephone adapter (ATA - Analog Telephone Adapter) that allows connecting standard analog telephones (RJ11) to a VoIP (Voice over IP) network. It converts analog voice signals into IP packets transported over the Ethernet network. The PAP2T has two phone ports (FXS) and one Ethernet port (10/100 Mbps).</p>
+
+<img src="https://source.unsplash.com/600x400/?telephone,voip,adapter" alt="VoIP Telephone Adapter">
+
+<h2>What is the PAP2T used for at Matrix Telecom?</h2>
+<p>Matrix Telecom offers <strong>VoIP telephony services</strong> to its professional clients. The PAP2T is used for:</p>
+<ul>
+<li><strong>VoIP Migration</strong>: Allow clients to keep their existing analog phones while switching to IP telephony.</li>
+<li><strong>Cost Reduction</strong>: VoIP calls are cheaper than traditional telephony (especially for international calls).</li>
+<li><strong>Flexibility</strong>: Easy addition of phone lines without new cabling.</li>
+<li><strong>Integration</strong>: The PAP2T works with any compatible SIP server (Asterisk, FreePBX, 3CX) that Matrix hosts for its clients.</li>
+</ul>
+
+<h2>How It Works</h2>
+
+<h3>ATA Principle</h3>
+<p>The ATA bridges the Public Switched Telephone Network (PSTN) and the IP network. The analog phone is plugged into the FXS (Foreign eXchange Subscriber) port of the PAP2T. When the user picks up and dials a number, the PAP2T:</p>
+<ol>
+<li>Detects the hook-off.</li>
+<li><strong>Dialing</strong>: Collects the dialed digits (DTMF).</li>
+<li><strong>SIP Registration</strong>: Authenticates with Matrix's SIP server (registrar) using the account credentials (username, password, SIP domain).</li>
+<li><strong>Call Establishment</strong>: Sends a SIP INVITE request to the server with the called number.</li>
+<li><strong>Audio Codec</strong>: Negotiates the codec (G.711, G.729, G.726) and encapsulates voice in RTP (Real-time Transport Protocol) packets.</li>
+<li><strong>Conversation</strong>: RTP packets travel between the two parties via the SIP server (or peer-to-peer if supported).</li>
+<li><strong>Hang-up</strong>: Sends a SIP BYE to end the call.</li>
+</ol>
+
+<h3>Technical Specifications</h3>
+<ul>
+<li>2 FXS ports (RJ11) for analog phones or fax.</li>
+<li>1 Ethernet port 10/100Base-T (RJ45).</li>
+<li>Power: 5V DC, 2A (power adapter included).</li>
+<li>Supported codecs: G.711 (a-law/&mu;-law), G.726, G.729a, G.723.1.</li>
+<li>Protocols: SIP (RFC 3261), TCP/UDP, TFTP, HTTP, HTTPS.</li>
+<li>Features: Caller ID, Call Waiting, Call Transfer, Three-Way Calling, Fax Pass-through (T.38).</li>
+<li>Quality of Service (QoS): VLAN tagging (802.1p/q), DiffServ.</li>
+<li>Configuration: Built-in web interface (HTTP/HTTPS) or via TFTP (automatic deployment).</li>
+</ul>
+
+<h2>Step-by-Step Configuration</h2>
+
+<h3>Step 1: Physical Connection</h3>
+<ol>
+<li>Plug the analog phone into the <strong>Phone 1</strong> (or Phone 2) port of the PAP2T with an RJ11 cable.</li>
+<li>Connect the Ethernet cable (RJ45) from the PAP2T to the local network (switch or router).</li>
+<li>Plug the 5V power supply into the PAP2T.</li>
+<li>Wait for the "Power" and "Phone 1" LEDs to light up (green).</li>
+</ol>
+
+<h3>Step 2: Obtain the PAP2T IP Address</h3>
+<p>By default, the PAP2T obtains an IP address via DHCP. To find its IP:</p>
+<ul>
+<li>Pick up the phone connected to the PAP2T.</li>
+<li>Dial <strong>****</strong> (4 presses on the star key) to access the voice menu.</li>
+<li>Dial <strong>110#</strong> to hear the IP address (e.g., "192.168.1.100"). Write it down.</li>
+<li>Hang up. You can also check your router's DHCP table.</li>
+</ul>
+
+<h3>Step 3: Accessing the Web Interface</h3>
+<ol>
+<li>Open a web browser (Chrome, Firefox, Edge).</li>
+<li>Type the URL: <code>http://192.168.1.100</code> (replace with the found IP).</li>
+<li>Default credentials: <strong>admin</strong> / <strong>admin</strong> (user) or blank / <strong>admin</strong> (depending on firmware).</li>
+<li>If default credentials do not work, try:
+   <ul>
+     <li>User: <code>admin</code> / Password: (blank)</li>
+     <li>User: <code>cisco</code> / Password: <code>cisco</code></li>
+   </ul>
+</li>
+</ol>
+
+<h3>Step 4: SIP Account Configuration (Line 1)</h3>
+<pre><code>1. In the web interface, click on the "Voice" tab then "Line 1".
+2. Configure the following parameters:
+
+   - Line Enable: Yes
+   - NAT Mapping Enable: Yes
+   - NAT Keep Alive Enable: Yes
+
+   - SIP Port: 5060 (default)
+   - SIP Transport: UDP
+
+   - Proxy and Registration:
+        Proxy: sip.matrix.cm (or the Matrix SIP server IP)
+        Outbound Proxy: (leave blank unless specified)
+        Register: Yes
+        Register Expires: 3600 (1 hour)
+
+   - Subscriber Information:
+        Display Name: John Doe
+        User ID: 237691234567 (Matrix phone number)
+        Password: SIPPassword
+        Auth ID: 237691234567 (or the provided identifier)
+
+3. Click "Submit All Changes" at the bottom of the page.</code></pre>
+
+<h3>Step 5: Network Settings Configuration</h3>
+<pre><code>1. Go to the "System" tab &gt; "Internet Connection Type".
+   - Connection Type: DHCP (or Static IP if fixed IP address).
+   - If Static IP: fill in IP Address, Subnet Mask, Gateway, DNS.
+
+2. "System" tab &gt; "Network Settings":
+   - Enable Web Server: Yes
+   - Web Server Port: 80
+   - Enable NAT Keep Alive: Yes
+
+3. To improve voice quality (QoS):
+   - DiffServ: 46 (EF - Expedited Forwarding for RTP packets)
+   - VLAN ID: (set the voice VLAN ID if used)
+   - VLAN Priority: 5 (Audio/Video)</code></pre>
+
+<h3>Step 6: Advanced Configuration (Audio)</h3>
+<pre><code>"Voice" tab &gt; "Line 1" &gt; "Audio Configuration" section:
+
+- Preferred Codec: G.711u (best quality) or G.729a (reduced bandwidth)
+- Use Pref Codec Only: No (allows negotiation)
+- DTMF Tx Method: Auto (important for interactive voice servers)
+- Fax Passthru: Yes (for fax)
+- Fax Codec: G.711u
+
+"Call Feature Settings" section:
+- Call Waiting Serv: Yes
+- Three Way Call: Yes
+- Call Transfer: Yes
+- Conference: Yes</code></pre>
+
+<h3>Step 7: Save and Test</h3>
+<pre><code>1. After "Submit All Changes", the PAP2T reboots (about 30 seconds).
+2. Verify that the "Phone 1" LED is solid (registered).
+3. Pick up the phone: you should hear a dial tone.
+4. Dial a test number (e.g., the Matrix voice server or your mobile).
+5. If it rings and the call is established, the configuration is successful.</code></pre>
+
+<h3>Automatic Deployment via TFTP (for multiple PAP2Ts)</h3>
+<pre><code>1. Set up a TFTP server on the network (e.g., SolarWinds TFTP, tftpd64).
+2. Create an XML configuration file (e.g., SPAP2T.cfg):
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;flat-profile&gt;
+  &lt;Proxy_1_&gt;sip.matrix.cm&lt;/Proxy_1_&gt;
+  &lt;Display_Name_1_&gt;Matrix Client&lt;/Display_Name_1_&gt;
+  &lt;User_ID_1_&gt;237691234567&lt;/User_ID_1_&gt;
+  &lt;Password_1_&gt;secret&lt;/Password_1_&gt;
+  &lt;Auth_ID_1_&gt;237691234567&lt;/Auth_ID_1_&gt;
+  &lt;Use_Pref_Codec_Only_1_&gt;No&lt;/Use_Pref_Codec_Only_1_&gt;
+  &lt;Preferred_Codec_1_&gt;G711u&lt;/Preferred_Codec_1_&gt;
+  &lt;Enable_Web_Server_&gt;Yes&lt;/Enable_Web_Server_&gt;
+&lt;/flat-profile&gt;
+
+3. On the PAP2T, go to "System" &gt; "Provisioning":
+   - Profile Rule: tftp://tftp-server-ip/SPAP2T.cfg
+   - Resync Trigger: 1 (on reboot)
+   - Click "Submit All Changes" to apply.</code></pre>
+
+<h2>Practical Example at Matrix Telecom</h2>
+
+<div class="matrix-example">
+<strong>Use Case:</strong> Installing 20 PAP2Ts for a SME client in Yaound&eacute;.<br><br>
+<strong>Context:</strong> The company "Com&eacute;tro SARL" switches from analog telephony (Orange Cameroun) to Matrix VoIP to reduce its bills. It has 20 existing analog handsets and a virtual PBX hosted at Matrix.<br><br>
+<strong>Deployment:</strong>
+<ol>
+<li>Matrix installs a FreePBX (Asterisk) server in its datacenter to host the VoIP solution.</li>
+<li>20 PAP2Ts are pre-configured in the workshop via a TFTP provisioning file with extension numbers (201, 202, ..., 220).</li>
+<li>A technician goes to the client, plugs each PAP2T next to an analog phone.</li>
+<li>Each PAP2T automatically retrieves the configuration via TFTP (Profile Rule) and registers with the FreePBX server.</li>
+<li>Internal calls (between extensions 201-220) are free.</li>
+<li>Outbound calls (local, national, international) are routed through the Matrix SIP gateway.</li>
+</ol>
+<br>
+<strong>Result:</strong>
+<ul>
+<li>60% savings on the monthly phone bill.</li>
+<li>Short-dialing between extensions.</li>
+<li>Auto-attendant with voice menu (reception, sales, technical support).</li>
+<li>Unified voicemail with email notification.</li>
+<li>Ability to add extensions without new telephone cabling.</li>
+</ul>
+<br>
+<strong>Network diagram:</strong>
+<pre><code>[Analog phones] -- (RJ11) -- [PAP2T] -- (RJ45) -- [Client switch] -- [Matrix router] -- [Internet] -- [FreePBX Matrix DC]</code></pre>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>PAP2T Web Interface</strong> - Individual configuration via browser.<br>
+<em>Access:</em> <code>http://&lt;pap2t-ip-address&gt;</code> (user: admin, password: admin).<br><br>
+
+<strong>TFTP Server</strong> - Automatic configuration deployment to multiple PAP2Ts.<br>
+<em>Recommended:</em> SolarWinds TFTP Server, Tftpd64, or atftpd (Linux).<br>
+<em>Usage:</em> Place the .cfg file in the TFTP directory, configure the "Profile Rule" on the PAP2T.<br><br>
+
+<strong>PAP2T Voice Menu</strong> - Access information without web interface:<br>
+<pre><code>Voice menu:
+****         : Enter menu (long press on *)
+110#         : Read IP address
+111#         : Read subnet mask
+112#         : Read gateway
+113#         : Read MAC address
+150#         : Reboot device
+732668#      : Reset (Factory Default)</code></pre><br>
+
+<strong>FreePBX / Asterisk</strong> - Open-source SIP server / PBX used by Matrix for telephone account management.<br>
+<em>Access:</em> FreePBX web interface (https://pbx.matrix.cm:443) or Asterisk CLI (<code>asterisk -r</code>).<br><br>
+
+<strong>Wireshark</strong> - Network packet analysis. Useful for debugging SIP/RTP issues.<br>
+<em>Usage:</em> Capture traffic on the network interface, filter with <code>sip</code> or <code>rtp</code>.<br><br>
+
+<strong>VoIP test tool (SIPp)</strong> - SIP traffic generator for testing server performance.<br>
+<em>Usage:</em> <code>sipp sip.matrix.cm -sn uac -l 50</code>
+</div>
+
+<h2>Recommended Videos</h2>
+<div class="video-link">
+<strong>YouTube - PAP2T and VoIP Tutorials</strong><br>
+<a href="https://www.youtube.com/results?search_query=cisco+PAP2T+ATA+configuration" target="_blank">Cisco PAP2T ATA Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=voip+basics+sip+protocol+explained" target="_blank">VoIP Basics and SIP Protocol Explained</a><br>
+<a href="https://www.youtube.com/results?search_query=freepbx+installation+and+configuration" target="_blank">FreePBX Installation and Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=asterisk+sip+trunk+setup" target="_blank">SIP Trunk Configuration on Asterisk</a><br>
+<a href="https://www.youtube.com/results?search_query=cisco+ata+provisioning+tftp" target="_blank">PAP2T Automatic Deployment via TFTP</a>
+</div>
+
+<h2>Tip for the Intern</h2>
+<div class="tip">
+<strong>Good to know:</strong>
+<ul>
+<li>The PAP2T is a simple but temperamental device. The SIP configuration must be exact (Proxy, User ID, Password). One typo and registration fails.</li>
+<li>To find the PAP2T IP address without a screen, use the voice menu (**** then 110#).</li>
+<li>If the "Phone 1" LED is blinking, the SIP account is not registered. Check credentials and network connectivity.</li>
+<li>The G.711u codec offers the best audio quality but consumes 64 kbps per call. G.729a reduces to 8 kbps (useful for limited Internet connections).</li>
+<li>For fax, use G.711u and reduce the fax speed to 9600 bps in fax settings.</li>
+<li>The PAP2T supports VLAN tagging. Use it if the local network separates voice and data (voice VLAN).</li>
+<li>In case of problems, check that SIP port (5060) and RTP ports (16384-16482) are not blocked by the firewall.</li>
+<li>Factory reset is done by holding the Reset button for 10 seconds (or via code 732668# on the phone).</li>
+</ul>
+</div>
+
+<h2>Troubleshooting</h2>
+<ul>
+<li><strong>No dial tone:</strong> Check that the phone is plugged into the "Phone 1" port (not "Line"). Check the PAP2T power supply.</li>
+<li><strong>Phone LED blinking:</strong> The SIP account is not registered. Check:
+   <ul>
+     <li>That the SIP proxy is reachable (ping sip.matrix.cm).</li>
+     <li>The SIP credentials (User ID, Password, Auth ID) are correct.</li>
+     <li>The firewall is not blocking port 5060/UDP.</li>
+   </ul>
+</li>
+<li><strong>Call established but no sound:</strong> Check RTP ports (16384-16482) in the firewall. Check that the chosen codec is supported on both ends.</li>
+<li><strong>Echo or crackling:</strong> Reduce the microphone volume in the web interface ("Voice" &gt; "Line 1" &gt; "Audio Settings" &gt; "Rx Gain" and "Tx Gain").</li>
+<li><strong>Fax not working:</strong> Switch to "Fax Passthru" mode with G.711u codec. Reduce fax speed to 9600 bps. Disable ECM (Error Correction Mode) on the fax if possible.</li>
+<li><strong>Cannot access web interface:</strong> Check that your PC is on the same network as the PAP2T. Use the voice menu to verify the IP. If the port was changed, try <code>http://ip:8080</code>.</li>
+<li><strong>DTMF dialing not recognized (voice server):</strong> Change "DTMF Tx Method" from "Auto" to "InBand" or "AVT" (RFC 2833) in the audio configuration.</li>
+</ul>
+
+<h2>Best Practices</h2>
+<ul>
+<li>Use a strong password for PAP2T web interface admin access.</li>
+<li>Configure the PAP2T in HTTPS if possible to avoid interception.</li>
+<li>Tag voice packets with a voice VLAN (802.1p = 5) for priority.</li>
+<li>Use TFTP provisioning for batch deployments - avoids manual errors.</li>
+<li>Maintain a centralized Excel file with the serial number (MAC), phone number, and location of each PAP2T.</li>
+<li>Test each PAP2T before deploying it at the client site (in workshop).</li>
+<li>Ensure the client's local network is properly dimensioned for VoIP (latency &lt; 100 ms, loss &lt; 1%, jitter &lt; 30 ms).</li>
+<li>Update the PAP2T firmware to the latest available version.</li>
+</ul>
+
+<h2>Additional Resources</h2>
+<ul>
+<li><a href="https://www.cisco.com/c/en/us/support/unified-communications/ata-191-analog-telephone-adapter/tsd-products-support-series-home.html" target="_blank" style="color:#60a5fa;">Cisco Support - PAP2T / ATA 191</a></li>
+<li><a href="https://www.asterisk.org/" target="_blank" style="color:#60a5fa;">Asterisk - Open Source PBX</a></li>
+<li><a href="https://www.freepbx.org/" target="_blank" style="color:#60a5fa;">FreePBX - Asterisk Management Interface</a></li>
+<li><a href="https://wiki.asterisk.org/wiki/display/AST/Home" target="_blank" style="color:#60a5fa;">Asterisk Wiki</a></li>
+<li><a href="https://sipp.sourceforge.net/" target="_blank" style="color:#60a5fa;">SIPp - SIP Test Tool</a></li>
+</ul>
+
+</div>
+
+<div class="footer">
+Matrix Telecom Yaound&eacute; - ROUTING Internship Guide - July 2026
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Acc&egrave;s Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

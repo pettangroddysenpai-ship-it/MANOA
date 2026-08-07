@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolarWinds - Monitoring | Matrix Telecom Internship</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>SolarWinds — Enterprise Network Monitoring Platform</h1>
+  <a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<h2>Definition &amp; Overview</h2>
+<p>SolarWinds is a comprehensive enterprise-grade network monitoring and management platform widely adopted by ISPs, telecom operators, and large enterprises. It provides deep visibility into network infrastructure through SNMP polling, flow analysis, alerting, performance monitoring, and network topology mapping. The platform is modular, built on the Orion framework, allowing organizations to purchase and deploy only the modules they need.</p>
+<p>At Matrix Telecom Yaoundé, SolarWinds (or similar Orion-based tools) can be used to monitor the health and performance of core routers, switches, firewalls, and client CPEs across the network. The platform's ability to poll thousands of devices from a single console makes it ideal for an ISP managing a growing base of residential and business clients.</p>
+<p>SolarWinds uses SNMP (Simple Network Management Protocol) to collect data from network devices, stores historical performance data in a SQL database, and presents it through a web-based dashboard with customizable views, alerts, and reports.</p>
+
+<img src="https://source.unsplash.com/600x400/?network,infrastructure,server" alt="Network Infrastructure Monitoring">
+
+<h2>How It Works — Technical Deep Dive</h2>
+
+<h3>1. SNMP Polling Engine</h3>
+<p>SolarWinds uses a polling engine that sends SNMP GET requests to monitored devices at configurable intervals (typically every 5 minutes). The engine collects data from OIDs (Object Identifiers) defined in MIBs (Management Information Bases). For example, interface bandwidth utilization is derived from the <code>ifInOctets</code> and <code>ifOutOctets</code> OIDs (1.3.6.1.2.1.2.2.1.10 and 1.3.6.1.2.1.2.2.1.16).</p>
+<p>The polling engine stores collected data in the Orion database (SQL Server). SolarWinds calculates delta values between polls to compute utilization percentages, then renders these as line graphs in the web console.</p>
+
+<h3>2. Alerting Engine</h3>
+<p>SolarWinds includes a sophisticated alerting engine that triggers actions based on thresholds. Alerts can be configured for:</p>
+<ul>
+  <li>Interface down/discarding packets</li>
+  <li>High CPU or memory utilization on routers/switches</li>
+  <li>Bandwidth saturation (e.g., WAN link exceeds 90% utilization)</li>
+  <li>Device unreachable (ICMP ping failure)</li>
+  <li>Temperature or power supply anomalies on enterprise switches</li>
+</ul>
+<p>Alert actions include email notifications, SMS (via email-to-SMS gateways), syslog messages, or executing external scripts (e.g., bouncing a port).</p>
+
+<h3>3. Network Performance Monitor (NPM)</h3>
+<p>NPM is the core SolarWinds module for monitoring network devices. It provides:</p>
+<ul>
+  <li>Availability monitoring (ping, SNMP status)</li>
+  <li>Bandwidth utilization graphs (real-time and historical)</li>
+  <li>Packet loss, latency, and jitter monitoring via IP SLA</li>
+  <li>Wireless network monitoring (AP status, client counts)</li>
+  <li>Custom dashboards and reporting</li>
+</ul>
+
+<h3>4. Server &amp; Application Monitor (SAM)</h3>
+<p>SAM extends SolarWinds beyond networking into server and application monitoring. It can monitor Windows/Linux servers, databases (MySQL, SQL Server), web services, and custom applications. SAM uses WMI, PowerShell, SSH, and SNMP to gather metrics.</p>
+
+<h3>5. Network Topology Mapper</h3>
+<p>SolarWinds automatically discovers network devices using Layer 2 and Layer 3 discovery protocols (CDP, LLDP, ARP tables). It generates dynamic network topology maps that update as the network changes. This is invaluable at Matrix for visualizing the entire infrastructure from core to client edge.</p>
+
+<h3>6. Orion Platform Architecture</h3>
+<p>SolarWinds runs on the Orion platform, which consists of:</p>
+<ul>
+  <li><strong>Orion Web Console:</strong> The central web interface for configuration, monitoring, and reporting</li>
+  <li><strong>Polling Engines:</strong> Dedicated servers (Additional Pollers) that distribute the polling load</li>
+  <li><strong>SQL Server Database:</strong> Stores all configuration, historical performance data, and alerts</li>
+  <li><strong>Additional Modules:</strong> NTA (NetFlow Traffic Analyzer), IPAM, UDT (User Device Tracker), and more</li>
+</ul>
+
+<h2>Configuring SNMP on Routers for SolarWinds</h2>
+<p>For SolarWinds to poll a device, SNMP must be enabled and configured on the target router or switch. Below are sample configurations for Cisco IOS and MikroTik RouterOS — both commonly found at Matrix Telecom.</p>
+
+<h3>Cisco IOS SNMP Configuration</h3>
+<pre><code>! Enable SNMPv2c with a read-only community string
+!
+snmp-server community matrix_ro RO
+snmp-server community matrix_rw RW
+snmp-server location "Matrix_CORE_SiteA"
+snmp-server contact "noc@matrixtelecom.cm"
+snmp-server enable traps snmp linkdown linkup
+snmp-server host 192.168.10.50 version 2c matrix_ro
+!
+! Restrict SNMP access to the SolarWinds poller only
+access-list 10 permit 192.168.10.50
+snmp-server community matrix_ro RO 10</code></pre>
+
+<h3>MikroTik RouterOS SNMP Configuration</h3>
+<pre><code>/snmp community set [find] address=192.168.10.50/32
+/snmp community set [find] name=matrix_ro
+/snmp set enabled=yes contact="noc@matrixtelecom.cm" \
+  location="Matrix_ClientSite_01" trap-community=matrix_ro \
+  trap-version=2
+/snmp community add name=matrix_ro address=192.168.10.50/32</code></pre>
+
+<h2>Practical Example at Matrix Telecom Yaoundé</h2>
+
+<div class="matrix-example">
+<strong>Matrix Context:</strong> Monitoring Client CPEs and Core Infrastructure<br><br>
+<p>Matrix Telecom manages hundreds of client CPEs (router/AP combos) across Yaoundé. Each CPE is configured with a unique IP address and SNMP community string. The SolarWinds Orion NPM polls each CPE every 5 minutes for:</p>
+<ul>
+  <li><strong>Availability:</strong> ICMP ping check — if a CPE goes offline, an alert is sent to the NOC within 60 seconds</li>
+  <li><strong>Bandwidth Usage:</strong> Per-interface traffic graphs for the WAN port (to client) and LAN port (to customer equipment)</li>
+  <li><strong>Signal Strength (Wireless CPEs):</strong> Using vendor-specific MIB OIDs for RSSI and SNR values</li>
+  <li><strong>Uptime:</strong> Device uptime via sysUpTime OID (1.3.6.1.2.1.1.3.0)</li>
+</ul>
+<p>The NOC team uses a large-screen dashboard showing a heat map of client CPE status by arrondissement (neighborhood), enabling rapid response to outages. Weekly reports are generated for the operations manager showing average bandwidth utilization and top talkers per zone.</p>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>SolarWinds Orion Web Console</strong><br>
+<strong>Access:</strong> https://solarwinds.matrixtelecom.cm (internal)<br>
+<strong>Purpose:</strong> Central interface for all monitoring, alert configuration, dashboard creation, and reporting.<br>
+<strong>Usage:</strong> Log in with AD credentials. Navigate to "Nodes" to view all monitored devices. Use "Alerts" to configure threshold-based notifications. Use "Reports" to schedule weekly bandwidth reports.<br>
+<strong>Common tasks:</strong>
+<ul>
+  <li>Adding a new device: Go to Settings &rarr; Add Node. Enter IP address, SNMP community, and polling interval.</li>
+  <li>Creating a dashboard: Use the Dashboard Editor to drag-and-drop widgets (graphs, gauges, alert lists).</li>
+  <li>Acknowledging alerts: Click the bell icon, select alert, click Acknowledge.</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>SolarWinds SAM (Server &amp; Application Monitor)</strong><br>
+<strong>Purpose:</strong> Monitor Matrix's internal servers (DHCP, DNS, billing, RADIUS).<br>
+<strong>Usage:</strong> SAM templates are available for Windows Server, Linux (SSH), MySQL, and Apache. Assign templates to nodes for automatic monitoring of services.
+</div>
+
+<div class="tool-box">
+<strong>SolarWinds NPM (Network Performance Monitor)</strong><br>
+<strong>Purpose:</strong> Core module for all network device monitoring — bandwidth, CPU, memory, interface errors.<br>
+<strong>Usage:</strong> NPM automatically calculates baseline thresholds after 30 days of data collection. Custom threshold profiles can be applied per device group.
+</div>
+
+<h2>Video Tutorials</h2>
+
+<div class="video-link">
+<strong>Recommended YouTube Searches:</strong><br>
+<ul>
+  <li><a href="https://www.youtube.com/results?search_query=solarwinds+network+monitoring+tutorial" target="_blank">SolarWinds Network Monitoring Tutorial</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=solarwinds+orion+installation+and+configuration" target="_blank">SolarWinds Orion Installation and Configuration</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=solarwinds+npm+snmp+configuration+step+by+step" target="_blank">SolarWinds NPM SNMP Configuration Step by Step</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=solarwinds+alert+configuration+tutorial" target="_blank">SolarWinds Alert Configuration</a></li>
+</ul>
+</div>
+
+<h2>Tips for the Intern</h2>
+
+<div class="tip">
+<strong>Intern Tip:</strong><br>
+<ul>
+  <li>Always verify that SNMP is reachable from the SolarWinds poller before adding a node. Use <code>snmpwalk -v2c -c matrix_ro 192.168.x.x</code> from a Linux jump host to test.</li>
+  <li>When adding a new client CPE, group it by arrondissement or client type (residential vs. business). This makes dashboard filtering and reporting much easier.</li>
+  <li>Spend time learning the Orion "UnDP" (Universal Device Poller). It allows you to poll any custom OID — useful for vendor-specific metrics like signal strength or radio temperature.</li>
+  <li>Do NOT set polling intervals lower than 5 minutes for large deployments — you can overwhelm the polling engine and the devices being monitored, especially if you have 500+ CPEs.</li>
+  <li>Use the "Network Atlas" feature to create geographical maps of the Matrix network in Yaoundé. Import a map background and place nodes by neighborhood.</li>
+  <li>If an alert fires repeatedly, investigate and fix the root cause rather than disabling the alert. Disabled alerts lead to blind spots.</li>
+  <li>Learn the Orion API (REST and PowerShell) — you can automate node additions, bulk configuration changes, and report generation.</li>
+</ul>
+</div>
+
+<h2>Common SNMP OIDs for Network Monitoring</h2>
+<pre><code>.1.3.6.1.2.1.1.3.0        — sysUpTime (device uptime in hundredths of seconds)
+.1.3.6.1.2.1.1.5.0        — sysName (device hostname)
+.1.3.6.1.2.1.2.2.1.2      — ifDescr (interface description)
+.1.3.6.1.2.1.2.2.1.6      — ifPhysAddress (MAC address)
+.1.3.6.1.2.1.2.2.1.10     — ifInOctets (bytes received)
+.1.3.6.1.2.1.2.2.1.16     — ifOutOctets (bytes sent)
+.1.3.6.1.2.1.2.2.1.20     — ifOperStatus (1=up, 2=down)
+.1.3.6.1.2.1.25.3.3.1.2   — hrProcessorLoad (CPU %)
+.1.3.6.1.2.1.25.2.3.1.6   — hrStorageUsed (storage used in bytes)</code></pre>
+
+<h2>Best Practices for SolarWinds Deployment</h2>
+<ul>
+  <li><strong>Use dedicated polling engines:</strong> For networks with 1000+ nodes, deploy Additional Pollers to distribute the load.</li>
+  <li><strong>Implement role-based access:</strong> Restrict alert acknowledgment and node configuration to senior NOC staff only.</li>
+  <li><strong>Set maintenance windows:</strong> Use SolarWinds maintenance schedules to suppress alerts during planned maintenance.</li>
+  <li><strong>Monitor the monitor:</strong> Configure Orion to monitor its own health — database size, polling engine queue depth, and disk space.</li>
+  <li><strong>Back up the Orion database:</strong> Schedule nightly SQL Server backups. A corrupt database means losing all historical data.</li>
+  <li><strong>Use custom properties:</strong> Tag nodes with custom properties like "ClientName", "CircuitID", "BandwidthPlan" for powerful filtering and reporting.</li>
+</ul>
+
+<div class="footer">
+  Matrix Telecom Internship Guide — Monitoring Category — SolarWinds
+</div>
+
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

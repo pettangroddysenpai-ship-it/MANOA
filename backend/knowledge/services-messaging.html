@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Messaging - Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Email Messaging Services</h1>
+<a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+<div class="container">
+
+<img src="https://source.unsplash.com/600x400/?email,communication,message" alt="Email Communication">
+
+<h2>Definition and Detailed Explanation</h2>
+<p>Email messaging is a fundamental service for any business. Matrix Telecom offers professional email hosting solutions for its clients, including dedicated or shared mail servers, domain management, anti-spam/antivirus security, and support for configuring email clients.</p>
+<p>A complete email system consists of several components that interact to enable sending, receiving, and storing emails.</p>
+
+<h2>How It Works</h2>
+
+<h3>Fundamental Protocols</h3>
+<p><strong>SMTP (Simple Mail Transfer Protocol)</strong>: Email sending protocol. It operates on port 25 (unencrypted), 587 (Submission with STARTTLS), or 465 (SMTPS with TLS). SMTP is a push protocol: it pushes the message to the destination server.</p>
+<p>Email sending process:</p>
+<ol>
+<li>The email client (Outlook, Thunderbird) connects to the outgoing SMTP server (port 587) by authenticating.</li>
+<li>The sender's SMTP server (Matrix) queries the destination domain's DNS to find the MX (Mail Exchange) server.</li>
+<li>Matrix's SMTP server transmits the message to the recipient's SMTP server (port 25).</li>
+<li>The recipient's server delivers the message to the user's mailbox.</li>
+</ol>
+
+<p><strong>IMAP (Internet Message Access Protocol)</strong>: Email receiving protocol. It keeps messages on the server and allows access from multiple synchronized devices. Port 143 (unencrypted) or 993 (IMAPS with TLS).</p>
+
+<p><strong>POP3 (Post Office Protocol version 3)</strong>: Older receiving protocol that downloads messages to the client and deletes them from the server (by default). Port 110 (unencrypted) or 995 (POP3S with TLS). Not recommended for professional use as it does not sync between devices.</p>
+
+<table style="width:100%; border-collapse:collapse; margin:15px 0; color:#cbd5e1;">
+<tr style="background:#1e293b;"><th style="padding:10px; border:1px solid #334155; text-align:left;">Criteria</th><th style="padding:10px; border:1px solid #334155; text-align:left;">IMAP</th><th style="padding:10px; border:1px solid #334155; text-align:left;">POP3</th></tr>
+<tr><td style="padding:8px; border:1px solid #334155;">Storage</td><td style="padding:8px; border:1px solid #334155;">Server</td><td style="padding:8px; border:1px solid #334155;">Local client</td></tr>
+<tr><td style="padding:8px; border:1px solid #334155;">Synchronization</td><td style="padding:8px; border:1px solid #334155;">Multiple devices</td><td style="padding:8px; border:1px solid #334155;">Single device</td></tr>
+<tr><td style="padding:8px; border:1px solid #334155;">Offline access</td><td style="padding:8px; border:1px solid #334155;">Partial (cache)</td><td style="padding:8px; border:1px solid #334155;">Full</td></tr>
+<tr><td style="padding:8px; border:1px solid #334155;">Port</td><td style="padding:8px; border:1px solid #334155;">143 / 993 (SSL)</td><td style="padding:8px; border:1px solid #334155;">110 / 995 (SSL)</td></tr>
+</table>
+
+<h3>Email Security Protocols</h3>
+<p><strong>SPF (Sender Policy Framework)</strong>: DNS TXT record listing servers authorized to send emails for a domain. Example: <code>v=spf1 mx ip4:192.168.1.0/24 ~all</code></p>
+<p><strong>DKIM (DomainKeys Identified Mail)</strong>: Cryptographic email signing. The server signs each message with a private key, and the recipient server verifies the signature with a public key published in DNS.</p>
+<p><strong>DMARC (Domain-based Message Authentication, Reporting & Conformance)</strong>: Policy telling the recipient server what to do if SPF and/or DKIM fail: <code>none</code> (nothing), <code>quarantine</code> (mark as spam), <code>reject</code> (reject).</p>
+
+<h3>Microsoft Exchange</h3>
+<p>Microsoft Exchange is the most widespread enterprise email solution. It offers:</p>
+<ul>
+<li>Shared mailboxes, calendars, contacts, tasks</li>
+<li>ActiveSync: mobile synchronization</li>
+<li>OWA (Outlook Web Access): browser access</li>
+<li>Archiving and retention</li>
+<li>Server-side rules (Transport Rules)</li>
+</ul>
+<p>Microsoft 365 (Exchange Online) is the cloud version. Some Matrix clients prefer on-premises Exchange for compliance or latency reasons.</p>
+
+<h3>Antispam</h3>
+<p>Anti-spam solutions protect mailboxes against unwanted emails, phishing, and malware:</p>
+<ul>
+<li>DNSBL filtering (DNS-based Blackhole List): blacklists of servers known to send spam (Spamhaus, Barracuda).</li>
+<li>Bayesian filtering: statistical analysis of email content.</li>
+<li>Greylisting: the server temporarily refuses the first delivery from an unknown sender. Legitimate servers retry, spammers do not.</li>
+<li>RBL (Real-time Blackhole Lists) and SURBL (Spam URI Realtime Blocklists).</li>
+<li>Dedicated anti-spam gateway: physical or virtual appliance (e.g., Barracuda, SpamTitan, Proxmox Mail Gateway).</li>
+</ul>
+
+<h2>Practical Example at Matrix Telecom</h2>
+<div class="matrix-example">
+<strong>Example:</strong> Matrix sets up an email solution for a client clinic with 15 employees. The client wants addresses in <code>@clinique-yaounde.cm</code>, access via Outlook and phone, and anti-spam protection.<br><br>
+<strong>Architecture:</strong><br>
+<pre><code>  Email client         Matrix Server
+  (Outlook, Mobile)     (Hosting)
+       |                      |
+       |--- IMAP/993 ------->|  Reception
+       |<-- SMTP/587 ---------|  Sending (authenticated)
+       |                      |
+       |              +-------+-------+
+       |              |  Antispam     |
+       |              |  (Rspamd)     |
+       |              +-------+-------+
+       |                      |
+       |              +-------+-------+
+       |              |  Dovecot      |
+       |              |  (IMAP/POP3)  |
+       |              +---------------+
+       |                      |
+       |              +-------+-------+
+       |              |  Postfix      |
+       |              |  (SMTP)       |
+       |              +---------------+</code></pre>
+<strong>Client DNS Configuration:</strong><br>
+<pre><code>; DNS zone clinique-yaounde.cm
+@   MX  10 mail.clinique-yaounde.cm.
+@   TXT "v=spf1 mx include:_spf.matrix.cm ~all"
+mail    A   10.10.10.5
+_dmarc  TXT "v=DMARC1; p=quarantine; rua=mailto:admin@clinique-yaounde.cm"
+
+; DKIM
+dkim._domainkey TXT "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC..."</code></pre>
+<strong>Client Outlook Configuration:</strong><br>
+<pre><code>Manual account:
+- Your name: Dr. Nkwi
+- Email address: dr.nkwi@clinique-yaounde.cm
+- Account type: IMAP
+- Incoming server: mail.matrix.cm (port 993, SSL/TLS)
+- Outgoing server: mail.matrix.cm (port 587, STARTTLS)
+- Username: dr.nkwi@clinique-yaounde.cm
+- Password: *********</code></pre>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>Microsoft Outlook</strong> — Professional email client<br>
+The most widely used email client in enterprises. Manual or automatic configuration (Autodiscover).<br>
+<strong>Usage:</strong><br>
+<pre><code># Outlook troubleshooting
+1. Check connection status at bottom right
+   "Connected" or "Disconnected"
+
+2. Safe mode:
+   outlook.exe /safe
+
+3. Test email configuration:
+   File > Account Settings > Test Account Settings
+   - Log on to incoming mail server: OK
+   - Send test email message: OK
+
+4. Microsoft Support and Recovery Assistant (SaRA)
+   https://aka.ms/sara
+
+5. Check Outlook profile file
+   Control Panel > Mail > Show Profiles</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Mozilla Thunderbird</strong> — Open source email client<br>
+Free alternative to Outlook. Simple, lightweight, and compatible with all IMAP/SMTP servers.<br>
+<strong>Usage:</strong><br>
+<pre><code># Manual configuration
+File > New > Existing Mail Account
+- Your name: Matrix Employee
+- Email address: employe@matrix.cm
+- Password: ******
+
+Click "Configure manually":
+- Incoming: IMAP, mail.matrix.cm, port 993, SSL/TLS
+- Outgoing: SMTP, mail.matrix.cm, port 587, STARTTLS
+
+# Verify settings
+Click "Re-test"
+
+# Useful extensions
+- Enigmail / OpenPGP (encryption)
+- Lightning (integrated calendar)</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Postfix (SMTP server)</strong> — Open source SMTP server<br>
+The most widely used SMTP server on Linux. Handles email routing and delivery.<br>
+<strong>Usage:</strong><br>
+<pre><code># Installation
+apt install postfix
+
+# Main configuration (/etc/postfix/main.cf)
+myhostname = mail.matrix.cm
+mydomain = matrix.cm
+myorigin = $mydomain
+inet_interfaces = all
+mydestination = $myhostname, localhost.$mydomain, $mydomain
+
+# TLS security
+smtpd_tls_cert_file = /etc/ssl/certs/matrix.cm.pem
+smtpd_tls_key_file = /etc/ssl/private/matrix.cm.key
+smtpd_tls_security_level = may
+smtpd_sasl_auth_enable = yes
+
+# Verification
+postfix status
+postfix reload
+tail -f /var/log/mail.log</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Dovecot (IMAP/POP3 server)</strong> — IMAP/POP3 server<br>
+High-performance and secure IMAP server. Manages mailbox access.<br>
+<strong>Usage:</strong><br>
+<pre><code># Installation
+apt install dovecot-imapd dovecot-pop3d
+
+# Configuration (/etc/dovecot/dovecot.conf)
+protocols = imap pop3
+listen = *
+ssl = required
+ssl_cert = &lt;/etc/ssl/certs/matrix.cm.pem
+ssl_key = &lt;/etc/ssl/private/matrix.cm.key
+
+# Authentication
+auth_mechanisms = plain login
+!include auth-passwdfile.conf.ext
+
+# Verification
+doveadm user *
+telnet localhost 143
+  01 LOGIN employee password
+  02 LIST "" "*"
+  03 LOGOUT</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Rspamd / SpamAssassin</strong> — Anti-spam filter<br>
+Analyzes incoming emails and assigns them a spam score. If the score exceeds a threshold, the email is marked as spam or rejected.<br>
+<strong>Usage:</strong><br>
+<pre><code># Rspamd - web interface
+https://mail.matrix.cm:11334
+User: admin
+Password: *******
+
+# Default scores
+- &lt; 4: clean email
+- 4 - 8: suspicious (marked as spam)
+- &gt; 8: rejected
+
+# Useful commands
+rspamadm stat                    # Statistics
+rspamadm configwizard            # Configuration wizard
+tail -f /var/log/rspamd/rspamd.log
+
+# Test SPF/DKIM/DMARC rules
+rspamadm dkim_keygen -d matrix.cm -s 2024
+rspamadm sigtest -m message.eml</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>telnet / openssl s_client</strong> — Manual SMTP test<br>
+Allows manually testing the SMTP server to diagnose sending or delivery issues.<br>
+<strong>Usage:</strong><br>
+<pre><code># Unencrypted SMTP test (without TLS)
+telnet mail.matrix.cm 25
+EHLO test.matrix.cm
+MAIL FROM:&lt;test@matrix.cm&gt;
+RCPT TO:&lt;client@domain.com&gt;
+DATA
+Subject: Test from Matrix
+This is a test.
+.
+QUIT
+
+# SMTP test with TLS
+openssl s_client -connect mail.matrix.cm:587 -starttls smtp
+EHLO test.matrix.cm
+AUTH LOGIN
+[base64 username]
+[base64 password]
+MAIL FROM:&lt;test@matrix.cm&gt;
+RCPT TO:&lt;client@domain.com&gt;
+DATA
+Subject: Test
+Message body
+.
+QUIT</code></pre>
+</div>
+
+<div class="video-link">
+<strong>Recommended Videos:</strong><br>
+<a href="https://www.youtube.com/results?search_query=SMTP+IMAP+POP3+explained" target="_blank">SMTP, IMAP, POP3 Explained</a><br>
+<a href="https://www.youtube.com/results?search_query=how+email+works+smtp+mx+dns" target="_blank">How Email Works</a><br>
+<a href="https://www.youtube.com/results?search_query=Postfix+server+setup+step+by+step" target="_blank">Postfix Server Setup</a><br>
+<a href="https://www.youtube.com/results?search_query=SPF+DKIM+DMARC+explained" target="_blank">SPF, DKIM, DMARC Explained</a>
+</div>
+
+<div class="tip">
+<strong>Tip for the Intern:</strong><br>
+1. Email is a critical service. An email that does not go out or arrive can paralyze a business. Take the time to understand each step of the SMTP flow.<br>
+2. The most frequent errors at Matrix are DNS-related: incorrect MX record, missing SPF, unconfigured DKIM. Always check these three points.<br>
+3. Learn to read email headers. That is where the cause of delivery issues is found. In Outlook: File > Properties > Internet Headers.<br>
+4. Use online tools like <a href="https://mxtoolbox.com/" style="color:#60a5fa;">MXToolbox</a> to diagnose DNS/MX/SPF/DKIM configuration issues.<br>
+5. Never configure Outlook with POP3 for professional use. Insist on IMAP (but remember that some Cameroonian clients have unstable connections and prefer POP3).<br>
+6. At Matrix, ask which mail server is used, how mailbox backups are handled, and what the email retention policy is.<br>
+7. For quick troubleshooting: check if port 993 (IMAP SSL) and 587 (SMTP SSL) are accessible from the client's network. A simple Telnet or Test-NetConnection is sufficient.
+</div>
+
+</div>
+<div class="footer">
+<p>Matrix Telecom &mdash; Internship Guide &mdash; Messaging Services</p>
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

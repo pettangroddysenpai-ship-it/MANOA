@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CISCO - ROUTING Guide | Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>CISCO - Routing and Switching</h1>
+<a class="back" href="../index.html">&larr; Back to Routing Guide</a>
+</div>
+
+<div class="container">
+
+<h2>Definition</h2>
+<p>Cisco Systems is the global leader in network equipment for enterprises and service providers. Its operating system <strong>Cisco IOS</strong> (Internetwork Operating System) is the benchmark in routing and switching. Cisco equipment is recognized for its robustness, security, and functional richness (OSPF, BGP, EIGRP, VLANs, ACLs, VPN, etc.).</p>
+
+<img src="https://source.unsplash.com/600x400/?router,network,cisco" alt="Cisco Network Equipment">
+
+<h2>What is Cisco used for at Matrix Telecom?</h2>
+<p>At Matrix Telecom Yaound&eacute;, Cisco is used in two main contexts:</p>
+<ul>
+<li><strong>Core Network</strong>: Cisco routers (ISR 4000 series, ASR 1000) handle IP/MPLS routing at Matrix's backbone.</li>
+<li><strong>Enterprise Clients</strong>: For business clients with advanced needs (multi-site, VPN, VLANs, high availability), Cisco is deployed with Catalyst 2960/3560/3750 switches and ISR routers.</li>
+</ul>
+
+<h2>How It Works</h2>
+
+<h3>Cisco IOS - Execution Modes</h3>
+<ul>
+<li><strong>User mode (&gt;)</strong>: Basic commands, information display. Limited access.</li>
+<li><strong>Privileged mode (#)</strong>: Configuration and diagnostic commands. Access with <code>enable</code>.</li>
+<li><strong>Global configuration mode (config)#</strong>: Device configuration changes. Access with <code>configure terminal</code>.</li>
+<li><strong>Specific modes</strong>: <code>interface</code>, <code>router</code>, <code>line</code>, <code>vlan</code> to configure specific elements.</li>
+</ul>
+
+<h3>Key Features</h3>
+<ul>
+<li><strong>VLANs (802.1Q)</strong>: Network segmentation into isolated broadcast domains. Configuration on Catalyst switches.</li>
+<li><strong>STP (Spanning Tree Protocol)</strong>: Prevents network loops at layer 2 by blocking redundant ports.</li>
+<li><strong>Inter-VLAN Routing</strong>: Routing between different VLANs via a router or a layer 3 switch (SVIs).</li>
+<li><strong>OSPF (Open Shortest Path First)</strong>: Link-state dynamic routing protocol. Widely used in enterprise networks.</li>
+<li><strong>ACLs (Access Control Lists)</strong>: Packet filtering based on IP addresses, protocols, ports. Used for perimeter security.</li>
+<li><strong>NAT (Network Address Translation)</strong>: Translation of private IP addresses to public addresses.</li>
+<li><strong>DHCP Server/Relay</strong>: IP address assignment or relay to a central DHCP server.</li>
+<li><strong>VPN (IPSec, DMVPN, FlexVPN)</strong>: Secure tunnels to interconnect remote sites.</li>
+</ul>
+
+<h2>Step-by-Step Configuration</h2>
+
+<h3>Step 1: Console Connection</h3>
+<p>Use a console cable (RJ45 to DB9 or USB to serial) and a tool like PuTTY (9600 baud, 8 bits, no parity, 1 stop bit).</p>
+
+<h3>Step 2: Basic Router Configuration</h3>
+<pre><code>Router&gt; enable
+Router# configure terminal
+Router(config)# hostname Matrix-Core-Router
+Matrix-Core-Router(config)# enable secret StrongPassword
+
+Matrix-Core-Router(config)# line console 0
+Matrix-Core-Router(config-line)# password consolePass
+Matrix-Core-Router(config-line)# login
+Matrix-Core-Router(config-line)# exit
+
+Matrix-Core-Router(config)# line vty 0 4
+Matrix-Core-Router(config-line)# password sshPass
+Matrix-Core-Router(config-line)# transport input ssh
+Matrix-Core-Router(config-line)# login local
+Matrix-Core-Router(config-line)# exit
+
+Matrix-Core-Router(config)# username admin secret Admin123!
+Matrix-Core-Router(config)# ip domain-name matrix.cm
+Matrix-Core-Router(config)# crypto key generate rsa modulus 2048</code></pre>
+
+<h3>Step 3: Interface Configuration</h3>
+<pre><code>Matrix-Core-Router(config)# interface GigabitEthernet0/0
+Matrix-Core-Router(config-if)# description Matrix WAN Link
+Matrix-Core-Router(config-if)# ip address 10.10.10.1 255.255.255.252
+Matrix-Core-Router(config-if)# no shutdown
+Matrix-Core-Router(config-if)# exit
+
+Matrix-Core-Router(config)# interface GigabitEthernet0/1
+Matrix-Core-Router(config-if)# description Client LAN
+Matrix-Core-Router(config-if)# ip address 192.168.1.1 255.255.255.0
+Matrix-Core-Router(config-if)# no shutdown
+Matrix-Core-Router(config-if)# exit</code></pre>
+
+<h3>Step 4: VLAN Configuration on a Switch</h3>
+<pre><code>Switch&gt; enable
+Switch# configure terminal
+Switch(config)# hostname Matrix-SW-Core
+Matrix-SW-Core(config)# vlan 10
+Matrix-SW-Core(config-vlan)# name Management
+Matrix-SW-Core(config-vlan)# exit
+Matrix-SW-Core(config)# vlan 20
+Matrix-SW-Core(config-vlan)# name Sales
+Matrix-SW-Core(config-vlan)# exit
+Matrix-SW-Core(config)# vlan 30
+Matrix-SW-Core(config-vlan)# name Technical
+Matrix-SW-Core(config-vlan)# exit
+
+Matrix-SW-Core(config)# interface FastEthernet0/1
+Matrix-SW-Core(config-if)# switchport mode access
+Matrix-SW-Core(config-if)# switchport access vlan 10
+Matrix-SW-Core(config-if)# exit
+
+Matrix-SW-Core(config)# interface FastEthernet0/2
+Matrix-SW-Core(config-if)# switchport mode access
+Matrix-SW-Core(config-if)# switchport access vlan 20
+Matrix-SW-Core(config-if)# exit
+
+Matrix-SW-Core(config)# interface FastEthernet0/24
+Matrix-SW-Core(config-if)# switchport mode trunk
+Matrix-SW-Core(config-if)# switchport trunk allowed vlan 10,20,30
+Matrix-SW-Core(config-if)# exit</code></pre>
+
+<h3>Step 5: Inter-VLAN Routing (Router-on-a-stick)</h3>
+<pre><code>Matrix-Core-Router(config)# interface GigabitEthernet0/1.10
+Matrix-Core-Router(config-subif)# encapsulation dot1Q 10
+Matrix-Core-Router(config-subif)# ip address 10.10.10.1 255.255.255.0
+Matrix-Core-Router(config-subif)# exit
+
+Matrix-Core-Router(config)# interface GigabitEthernet0/1.20
+Matrix-Core-Router(config-subif)# encapsulation dot1Q 20
+Matrix-Core-Router(config-subif)# ip address 10.10.20.1 255.255.255.0
+Matrix-Core-Router(config-subif)# exit
+
+Matrix-Core-Router(config)# interface GigabitEthernet0/1.30
+Matrix-Core-Router(config-subif)# encapsulation dot1Q 30
+Matrix-Core-Router(config-subif)# ip address 10.10.30.1 255.255.255.0
+Matrix-Core-Router(config-subif)# exit</code></pre>
+
+<h3>Step 6: OSPF Configuration</h3>
+<pre><code>Matrix-Core-Router(config)# router ospf 1
+Matrix-Core-Router(config-router)# router-id 1.1.1.1
+Matrix-Core-Router(config-router)# network 10.10.10.0 0.0.0.3 area 0
+Matrix-Core-Router(config-router)# network 192.168.0.0 0.0.255.255 area 0
+Matrix-Core-Router(config-router)# default-information originate
+Matrix-Core-Router(config-router)# exit</code></pre>
+
+<h3>Step 7: Basic ACL</h3>
+<pre><code>Matrix-Core-Router(config)# access-list 100 permit ip 192.168.0.0 0.0.255.255 any
+Matrix-Core-Router(config)# access-list 100 deny ip any any
+Matrix-Core-Router(config)# interface GigabitEthernet0/0
+Matrix-Core-Router(config-if)# ip access-group 100 in</code></pre>
+
+<h2>Practical Example at Matrix Telecom</h2>
+
+<div class="matrix-example">
+<strong>Use Case:</strong> Configuring a Cisco ISR 4331 router for a multi-site enterprise client in Yaound&eacute;.<br><br>
+<strong>Scenario:</strong> A client company with 3 sites (Headquarters, Branch A, Branch B) needs to interconnect its networks via IPSec VPN tunnels. Matrix deploys a Cisco ISR 4331 at the head office and CISCO 892F at the branches.<br><br>
+<strong>Head office configuration:</strong>
+<ul>
+<li>WAN interface: Static public IP 197.159.0.10/30.</li>
+<li>LAN interface: 192.168.0.1/24 in VLAN 10 (Management).</li>
+<li>Sub-interfaces: VLAN 20 (Accounting), VLAN 30 (Production).</li>
+<li>OSPF area 0 for internal routing.</li>
+<li>Site-to-Site IPSec VPN to both branches.</li>
+<li>ACL to filter inter-VLAN traffic (restricted accounting).</li>
+</ul>
+<br>
+<strong>Verification:</strong>
+<pre><code>show ip route
+show ip ospf neighbor
+show crypto isakmp sa
+show crypto ipsec sa
+show interfaces
+show vlan brief
+show access-lists
+ping 192.168.10.1
+traceroute 8.8.8.8</code></pre>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>PuTTY</strong> - SSH/Telnet/Serial console client. Used to access the Cisco command line via console cable or SSH.<br>
+<em>Usage:</em> Select Serial (console) or SSH (remote), enter the IP address or COM port (e.g., COM3, speed 9600).<br><br>
+
+<strong>Packet Tracer</strong> - Free Cisco network simulator for learning. Allows creating virtual network topologies and configuring Cisco devices.<br>
+<em>Usage:</em> Download from NetAcad, create a topology via drag-and-drop, configure via CLI.<br><br>
+
+<strong>GNS3</strong> - Advanced network simulator that uses real Cisco IOS images. Allows complex topologies and integration with virtual machines.<br>
+<em>Usage:</em> Install GNS3, import a Cisco IOS image, create topology projects.<br><br>
+
+<strong>EVE-NG</strong> - Professional simulation platform (free Community edition). Web interface, multi-vendor support (Cisco, Juniper, etc.).<br>
+<em>Usage:</em> Deploy on VMware or bare-metal, connect via browser to build labs.<br><br>
+
+<strong>Cisco Configuration Professional (CCP)</strong> - Graphical tool for configuring Cisco ISR routers. Used more on older models, replaced by Cisco Network Assistant / DNA Center.<br><br>
+
+<strong>SecureCRT / Tera Term</strong> - Alternatives to PuTTY with more features (session management, scripts).</div>
+
+<h2>Essential Commands (Cisco IOS)</h2>
+<pre><code>show running-config          # Active configuration
+show startup-config          # Startup configuration
+show ip interface brief      # IP interface summary
+show ip route                # Routing table
+show vlan brief              # VLAN list (on switch)
+show interfaces trunk        # Trunk ports
+show mac address-table       # MAC address table
+show spanning-tree           # STP status
+show cdp neighbors           # Discovered neighbors (CDP)
+show logging                 # System logs
+debug ip packet              # Packet debugging (CPU intensive)
+write memory                 # Save config (or copy running-config startup-config)
+copy running-config tftp:    # Backup to TFTP server
+reload                       # Reboot device
+ping 8.8.8.8 source 192.168.0.1  # Connectivity test
+traceroute 8.8.8.8           # Traceroute</code></pre>
+
+<h2>Recommended Videos</h2>
+<div class="video-link">
+<strong>YouTube - CISCO Tutorials</strong><br>
+<a href="https://www.youtube.com/results?search_query=cisco+CCNA+beginners+tutorial" target="_blank">CCNA Playlist - Beginner</a><br>
+<a href="https://www.youtube.com/results?search_query=cisco+switch+vlan+configuration+step+by+step" target="_blank">VLAN Configuration on Cisco Switch</a><br>
+<a href="https://www.youtube.com/results?search_query=cisco+ospf+configuration+example" target="_blank">OSPF on Cisco - Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=cisco+inter+vlan+routing+router+on+a+stick" target="_blank">Inter-VLAN Routing (Router-on-a-stick)</a><br>
+<a href="https://www.youtube.com/results?search_query=cisco+site+to+site+vpn+ipsec+configuration" target="_blank">Site-to-Site IPSec VPN Cisco</a><br>
+<a href="https://www.youtube.com/results?search_query=cisco+packet+tracer+full+course" target="_blank">Full Packet Tracer Course</a>
+</div>
+
+<h2>Tip for the Intern</h2>
+<div class="tip">
+<strong>Good to know:</strong>
+<ul>
+<li>The CCNA certification is an excellent goal. It will teach you Cisco fundamentals that are also applicable to other brands.</li>
+<li>Always do <code>write memory</code> or <code>copy running-config startup-config</code> after a modification.</li>
+<li>Use Packet Tracer at home to practice. It is free and very comprehensive.</li>
+<li>In production, never do <code>reload</code> without verifying the configuration (<code>show running-config</code>).</li>
+<li>Master <code>show</code> and <code>debug</code>: they are your best diagnostic tools.</li>
+<li>STP can block ports if misconfigured. Use <code>spanning-tree portfast</code> on access ports.</li>
+<li>ACLs have an "implicit deny" at the end. Place your rules in the correct order.</li>
+<li>At Matrix, Cisco equipment is mostly used in the network core or for Premium clients. You will see them less often than MikroTik.</li>
+</ul>
+</div>
+
+<h2>Troubleshooting</h2>
+<ul>
+<li><strong>No connectivity:</strong> Check <code>show ip interface brief</code>, <code>show ip route</code> and logs (<code>show logging</code>).</li>
+<li><strong>VLAN issue:</strong> Check the trunk, access port modes, native VLAN.</li>
+<li><strong>OSPF not converging:</strong> Check neighbor relationships, area IDs, declared networks.</li>
+<li><strong>ACL too restrictive:</strong> Check <code>show access-lists</code>, rule order, interface application (in/out).</li>
+<li><strong>Network loop:</strong> CPU at 100%, check STP, use <code>show spanning-tree</code>.</li>
+<li><strong>Lost password:</strong> Recovery procedure via ROMmon mode (boot interrupt, configuration register modification).</li>
+</ul>
+
+<h2>Best Practices</h2>
+<ul>
+<li>Document all configurations (topology, IP addressing, VLANs, ACLs).</li>
+<li>Use strong passwords for enable and SSH access.</li>
+<li>Configure banners (legal notice): <code>banner motd % Authorized access only %</code></li>
+<li>Use NTP to synchronize device clocks.</li>
+<li>Enable AAA (TACACS+/RADIUS) for centralized access management if possible.</li>
+<li>Regularly backup configuration to a TFTP/SCP server.</li>
+<li>Limit SSH access to specific administration IPs.</li>
+</ul>
+
+<h2>Additional Resources</h2>
+<ul>
+<li><a href="https://learningnetwork.cisco.com/" target="_blank" style="color:#60a5fa;">Cisco Learning Network</a></li>
+<li><a href="https://www.cisco.com/c/en/us/support/ios-technologies.html" target="_blank" style="color:#60a5fa;">Cisco IOS Technical Documentation</a></li>
+<li><a href="https://www.netacad.com/" target="_blank" style="color:#60a5fa;">Cisco Networking Academy</a></li>
+<li><a href="https://packettracer.net/" target="_blank" style="color:#60a5fa;">Packet Tracer</a></li>
+</ul>
+
+</div>
+
+<div class="footer">
+Matrix Telecom Yaound&eacute; - ROUTING Internship Guide - July 2026
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Acc&egrave;s Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

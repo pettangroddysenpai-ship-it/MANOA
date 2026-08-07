@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRTG — All-in-One Monitoring | Matrix Telecom Internship</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>PRTG Network Monitor (Paessler)</h1>
+  <a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<h2>Definition &amp; Overview</h2>
+<p>PRTG (Paessler Router Traffic Grapher) is an all-in-one network monitoring solution developed by Paessler AG. It is designed to be easy to set up and operate while still providing deep monitoring capabilities. PRTG uses a sensor-based architecture where each metric being monitored is represented as an individual sensor. A single device (e.g., a router) is monitored by multiple sensors: one for ping, one for CPU load, one for each interface's bandwidth, one for memory, and so on.</p>
+<p>For an ISP like Matrix Telecom, PRTG offers a compelling balance of ease of use and power. It supports auto-discovery via SNMP scans, integrated alerting (email, SMS, push notifications), customizable dashboards, map views, and distributed monitoring via remote probes. The freeware edition supports up to 100 sensors — enough to monitor a small network. Larger deployments require a commercial license.</p>
+
+<img src="https://source.unsplash.com/600x400/?dashboard,analytics,network" alt="Network Monitoring Dashboard">
+
+<h2>How It Works — Technical Deep Dive</h2>
+
+<h3>1. Sensor-Based Architecture</h3>
+<p>In PRTG, everything is a sensor. A sensor is a monitoring component that collects a specific metric from a device. PRTG includes over 200 pre-built sensor types:</p>
+<ul>
+  <li><strong>Ping Sensor (ICMP):</strong> Checks device availability and response time.</li>
+  <li><strong>SNMP Traffic Sensor:</strong> Monitors interface bandwidth using ifHCInOctets/ifHCOutOctets.</li>
+  <li><strong>SNMP CPU Load Sensor:</strong> Monitors CPU utilization hrProcessorLoad.</li>
+  <li><strong>SNMP Memory Sensor:</strong> Monitors memory usage (hrStorageUsed).</li>
+  <li><strong>HTTP Sensor:</strong> Checks if a website is responding and optionally validates content.</li>
+  <li><strong>Port Sensor:</strong> Checks if a specific TCP port is open (e.g., port 22 for SSH).</li>
+  <li><strong>WMI Sensor:</strong> Monitors Windows servers using WMI.</li>
+  <li><strong>SSH Script Sensor:</strong> Executes a script on a Linux device via SSH and parses the output.</li>
+  <li><strong>NetFlow / sFlow / IPFIX Sensor:</strong> Collects flow data for traffic analysis by application and conversation.</li>
+</ul>
+
+<h3>2. Auto-Discovery</h3>
+<p>PRTG's auto-discovery feature scans an IP range using SNMP. It identifies each device, determines its type (router, switch, server, printer), and automatically creates the appropriate sensors. For example, for a router, PRTG creates a Ping sensor, SNMP system health sensors (CPU, memory), and an SNMP Traffic sensor for each active interface. This drastically reduces setup time.</p>
+
+<h3>3. Monitoring Core (Server) and Remote Probes</h3>
+<p>PRTG follows a client-server architecture:</p>
+<ul>
+  <li><strong>PRTG Core Server:</strong> The central server that manages configuration, stores data in an internal database, and hosts the web interface. Runs on Windows.</li>
+  <li><strong>Remote Probes:</strong> Lightweight agents deployed at remote sites (e.g., the Douala PoP). The probe collects data locally and sends it back to the core server. If the WAN link to the core goes down, the probe caches data and forwards it when connectivity is restored.</li>
+</ul>
+
+<h3>4. Alerting and Notifications</h3>
+<p>PRTG's notification system is flexible and supports:</p>
+<ul>
+  <li>Email (SMTP)</li>
+  <li>SMS (via email-to-SMS or HTTP gateway)</li>
+  <li>Push Notifications (PRTG mobile app)</li>
+  <li>Slack / Microsoft Teams / Discord webhooks</li>
+  <li>Execute a program or script</li>
+  <li>Syslog message</li>
+  <li>SNMP trap</li>
+</ul>
+<p>Each sensor can have multiple triggers: "up" to "down" transition, threshold exceeded, and recovery.</p>
+
+<h3>5. Dashboards and Maps</h3>
+<p>PRTG provides a drag-and-drop dashboard editor. Users can create custom dashboards with gauges, graphs, tables, and maps. The "PRTG Maps" feature allows drawing network topology diagrams with live status indicators — green for up, red for down.</p>
+
+<h2>Practical Example at Matrix Telecom Yaoundé</h2>
+
+<div class="matrix-example">
+<strong>Matrix Context:</strong> Real-Time Monitoring of All Network Equipment<br><br>
+<p>If Matrix Telecom uses PRTG (or a similar tool), the NOC team relies on it for real-time visibility into the entire network. Here is a typical PRTG setup:</p>
+<ul>
+  <li><strong>Core Routers:</strong> Two core routers (Yaoundé and Douala) each have 15–20 sensors: Ping (100ms interval), CPU load, memory usage, temperature (if available via SNMP), and one traffic sensor per interface (WAN, client aggregation, internal backbone).</li>
+  <li><strong>Client CPEs:</strong> Each active CPE has a minimum of 4 sensors: Ping, SNMP Traffic on the WAN interface, SNMP Traffic on the LAN interface, and a custom sensor for signal strength (SNR) if wireless. That is 1600 sensors for 400 CPEs — easily within a commercial PRTG license.</li>
+  <li><strong>Server Infrastructure:</strong> The RADIUS server, DHCP server, DNS resolver, and billing server each have HTTP/HTTPS sensors checking service availability, plus WMI sensors for disk space and memory.</li>
+  <li><strong>Alerts:</strong> When a core router's WAN interface exceeds 90% utilization, PRTG sends a push notification to the NOC engineer's mobile phone. When a client CPE's ping sensor goes down, PRTG escalates: email within 5 minutes, SMS to the on-call engineer after 15 minutes if unacknowledged.</li>
+</ul>
+</div>
+
+<h2>Sensor Configuration Example: Monitoring a Router</h2>
+
+<h3>Adding a Router to PRTG</h3>
+<ol>
+  <li>Open the PRTG web interface (http://prtg.matrixtelecom.local or https://prtg.paessler.com).</li>
+  <li>Go to <strong>Devices</strong> > <strong>Add Device</strong>.</li>
+  <li>Enter:
+    <ul>
+      <li>Device Name: "Core-RTR-Yaounde"</li>
+      <li>IP Address/DNS Name: "10.200.10.1"</li>
+      <li>SNMP Community (v2c): "matrix_ro"</li>
+    </ul>
+  </li>
+  <li>Click <strong>Add Device</strong>. PRTG runs auto-discovery and suggests sensors.</li>
+  <li>Check the following sensors to create:
+    <ul>
+      <li><strong>Ping</strong> — availability, response time, packet loss</li>
+      <li><strong>SNMP CPU Load</strong> — 5 seconds average, 1 minute average</li>
+      <li><strong>SNMP Memory</strong> — percent used</li>
+      <li><strong>SNMP Traffic</strong> — for each interface: WAN (1 Gbps), LAN Aggregation (1 Gbps), Management (100 Mbps)</li>
+      <li><strong>SNMP Uptime</strong> — device uptime in days</li>
+    </ul>
+  </li>
+  <li>Click <strong>Create Sensors</strong>. PRTG begins polling immediately.</li>
+  <li>Configure alert thresholds:
+    <ul>
+      <li>Ping: Down if >5 consecutive timeouts, trigger email to NOC</li>
+      <li>CPU: Warning at 80%, Critical at 95%, trigger push notification</li>
+      <li>Traffic on WAN: Warning at 80% (800 Mbps), Critical at 95% (950 Mbps)</li>
+    </ul>
+  </li>
+</ol>
+
+<h3>Sensor Configuration Details (for a Router WAN Interface)</h3>
+<pre><code>Sensor Type:        SNMP Traffic
+Sensor Name:        WAN Traffic (GigabitEthernet0/0/0)
+OID (Inbound):      .1.3.6.1.2.1.31.1.1.1.6.1  (ifHCInOctets)
+OID (Outbound):     .1.3.6.1.2.1.31.1.1.1.10.1 (ifHCOutOctets)
+Speed:              1,000,000,000 (1 Gbps)
+Scan Interval:      60 seconds
+Trigger thresholds:
+  - Warning: 80 Mbps/s (80% of 1 Gbps)
+  - Error:   950 Mbps/s (95% of 1 Gbps)
+  - Trigger actions: Email (Warning), Push (Error)</code></pre>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>PRTG Web Interface (AJAX / HTML5)</strong><br>
+<strong>Access:</strong> http://prtg.matrixtelecom.local/ (internal)<br>
+<strong>Key sections:</strong>
+<ul>
+  <li><strong>Dashboard:</strong> Customizable homepage showing devices, maps, and favorite sensors.</li>
+  <li><strong>Sensors:</strong> Searchable list of all sensors. Click any sensor to view live data and historical graphs.</li>
+  <li><strong>Devices:</strong> Hierarchical view of devices grouped by location or type.</li>
+  <li><strong>Notifications:</strong> Configure triggers, schedules, and escalation chains.</li>
+  <li><strong>Reports:</strong> Scheduled PDF/CSV reports (daily, weekly, monthly).</li>
+  <li><strong>Maps:</strong> Drag-and-drop editor for network topology diagrams with live status overlays.</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>PRTG Mobile App</strong><br>
+<strong>Platform:</strong> iOS and Android<br>
+<strong>Purpose:</strong> Receive push notifications, acknowledge alerts, and view sensor details on the go.<br>
+<strong>Key features:</strong>
+<ul>
+  <li>Real-time push alerts for critical sensors</li>
+  <li>Quick acknowledgement from lock screen</li>
+  <li>View last 24 hours of graph data</li>
+  <li>Access to all device and sensor lists</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>PRTG Remote Probe</strong><br>
+<strong>Purpose:</strong> Distributed monitoring for remote PoPs (Douala, Bafoussam, etc.)<br>
+<strong>Installation:</strong>
+<ol>
+  <li>Download the PRTG Remote Probe installer from the core server.</li>
+  <li>Install on a Windows machine at the remote site (or a Linux machine via Docker).</li>
+  <li>Enter the core server's IP and the probe's authentication key (generated on the core).</li>
+  <li>Assign sensors to the probe in the PRTG web interface.</li>
+</ol>
+<strong>Advantage:</strong> If the WAN link between Yaoundé and Douala fails, the Douala probe continues monitoring local devices and caches data. When the link recovers, the cached data is uploaded to the core server.
+</div>
+
+<h2>Video Tutorials</h2>
+
+<div class="video-link">
+<strong>Recommended YouTube Searches:</strong><br>
+<ul>
+  <li><a href="https://www.youtube.com/results?search_query=PRTG+network+monitoring+full+tutorial" target="_blank">PRTG Network Monitoring Full Tutorial</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=prtg+installation+and+configuration+step+by+step" target="_blank">PRTG Installation and Configuration Step by Step</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=prtg+sensor+configuration+for+routers+snmp" target="_blank">PRTG Sensor Configuration for Routers (SNMP)</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=prtg+auto+discovery+network+monitoring" target="_blank">PRTG Auto-Discovery Feature</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=prtg+maps+dashboards+tutorial" target="_blank">PRTG Maps and Dashboards Tutorial</a></li>
+</ul>
+</div>
+
+<h2>Tips for the Intern</h2>
+
+<div class="tip">
+<strong>Intern Tip:</strong><br>
+<ul>
+  <li><strong>Is PRTG used at Matrix?</strong> Ask the NOC team. If not, the concepts here (sensors, SNMP, auto-discovery, notifications) transfer directly to whatever tool they use.</li>
+  <li><strong>Start with the freeware edition:</strong> The 100-sensor free version is perfect for learning. Install it on a VM, add your home router, and practice configuring sensors and alerts.</li>
+  <li><strong>Learn the sensor types:</strong> PRTG has over 200 sensor types. Spend an afternoon browsing the "Add Sensor" menu to understand what's available.</li>
+  <li><strong>Use the "Auto-Discovery" feature:</strong> When you add a device, let PRTG auto-discover sensors before creating them manually. It often finds metrics you didn't think to monitor.</li>
+  <li><strong>Create a meaningful dashboard:</strong> Add the most important sensors (core routers, DNS, DHCP) to the default dashboard. NOC staff should see the network's pulse at a glance.</li>
+  <li><strong>Set up test notifications:</strong> After configuring a notification trigger, use the "Test Notification" button to verify email/SMS/push works before relying on it during an actual outage.</li>
+  <li><strong>Understand sensor limits:</strong> 1 device = multiple sensors. A router with 8 interfaces can easily consume 10+ sensors. Plan your license accordingly.</li>
+  <li><strong>Use dependencies:</strong> If a switch is down, all devices behind it will appear down too. Configure parent-child dependencies so PRTG only alerts on the root cause (the switch), not the downstream devices.</li>
+</ul>
+</div>
+
+<h2>Notification Escalation Example</h2>
+<pre><code>Trigger: Core-RTR-Douala Ping sensor switches to "Down"
+Action Chain:
+  [0 min]  Email to NOC team: "Core-RTR-Douala is DOWN"
+  [5 min]  Slack #noc-alerts: "@channel Core-RTR-Douala DOWN"
+  [10 min] If still "Down" and unacknowledged: Push to on-call engineer
+  [15 min] If still "Down" and unacknowledged: SMS to senior NOC manager
+  [30 min] If still "Down": Email to Operations Director
+  [60 min] Auto-create ticket in Odoo Helpdesk
+Recovery: When sensor returns to "Up", send "Resolved" email + close ticket</code></pre>
+
+<h2>PRTG Sensor Types for Telecom</h2>
+<table>
+<tr><th>Sensor Type</th><th>What It Monitors</th><th>Typical Use at Matrix</th></tr>
+<tr><td>Ping</td><td>ICMP echo, response time, packet loss</td><td>Availability of every device</td></tr>
+<tr><td>SNMP Traffic</td><td>Interface bandwidth (in/out)</td><td>Client uplinks, core links</td></tr>
+<tr><td>SNMP CPU Load</td><td>CPU utilization %</td><td>Router and server CPU health</td></tr>
+<tr><td>SNMP Memory</td><td>Memory usage %</td><td>Router memory monitoring</td></tr>
+<tr><td>SNMP Uptime</td><td>Device uptime (days/hours)</td><td>Track device reboots</td></tr>
+<tr><td>HTTP Content</td><td>HTTP status code, response time, content match</td><td>Monitoring the billing portal</td></tr>
+<tr><td>TCP Port</td><td>TCP port reachability</td><td>Check SSH (22), HTTPS (443), DNS (53) services</td></tr>
+<tr><td>WMI Service</td><td>Windows service state</td><td>Check RADIUS service is running</td></tr>
+<tr><td>NetFlow</td><td>Flow data (top talkers, protocols)</td><td>Traffic analysis on core router</td></tr>
+</table>
+
+<h2>Best Practices for PRTG at an ISP</h2>
+<ul>
+  <li><strong>Group devices by location:</strong> Create groups for each city (Yaoundé, Douala, Bafoussam) and within each group, subgroups for Core, Client CPEs, and Infrastructure.</li>
+  <li><strong>Set appropriate polling intervals:</strong> Core infrastructure: 60 seconds. Client CPEs: 300 seconds. Reduce overhead by increasing intervals for less critical devices.</li>
+  <li><strong>Use maintenance windows:</strong> When upgrading firmware on a router, schedule a maintenance window in PRTG to suppress alerts during the reboot.</li>
+  <li><strong>Monitor the core server:</strong> Create sensors that monitor the PRTG server's own disk space, memory, and database size.</li>
+  <li><strong>Regularly review sensor health:</strong> Disable or delete sensors that are no longer relevant (decommissioned devices, removed interfaces). Dead sensors clutter the interface and waste polling resources.</li>
+  <li><strong>Backup the PRTG configuration:</strong> Settings > System Backup. Schedule automatic backups to a network share.</li>
+</ul>
+
+<h2>Comparing PRTG to Other Tools</h2>
+<ul>
+  <li><strong>PRTG vs. SolarWinds:</strong> PRTG is easier to set up and has a lower price point. SolarWinds is more scalable for very large enterprises (10,000+ devices).</li>
+  <li><strong>PRTG vs. Cacti:</strong> PRTG has built-in alerting and a modern UI; Cacti has superior long-term graphing with RRDTool but no native alerts.</li>
+  <li><strong>PRTG vs. Zabbix:</strong> Zabbix is open-source and more flexible but has a steeper learning curve. PRTG is more GUI-driven and staff-friendly.</li>
+  <li><strong>PRTG vs. LibreNMS:</strong> LibreNMS is open-source but requires Linux administration skills. PRTG runs on Windows and is easier for non-Linux teams.</li>
+</ul>
+
+</div>
+
+<div class="footer">
+  Matrix Telecom Internship Guide — Monitoring Category — PRTG
+</div>
+
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

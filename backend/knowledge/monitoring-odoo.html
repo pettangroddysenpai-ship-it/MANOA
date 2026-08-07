@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odoo — ERP for Telecom Operations | Matrix Telecom Internship</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Odoo — Enterprise Resource Planning (ERP) for Telecom</h1>
+  <a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<h2>Definition &amp; Overview</h2>
+<p>Odoo is an open-source Enterprise Resource Planning (ERP) platform that provides a full suite of integrated business applications. While not a network monitoring tool in the traditional SNMP sense, Odoo is essential for monitoring the <em>business health</em> of Matrix Telecom: which clients are active, who has unpaid invoices, which CPEs are in inventory, and whether SLAs are being met. It is the system of record for all client-facing operations.</p>
+<p>For a telecom ISP, Odoo typically manages the entire client lifecycle — from lead generation through installation, billing, support, and eventual disconnection. Its modular design lets Matrix install only the needed apps: CRM, Sales, Subscriptions, Invoicing, Inventory, Project, Field Service, Helpdesk, and Accounting.</p>
+
+<img src="https://source.unsplash.com/600x400/?dashboard,business,analytics" alt="Business ERP Dashboard">
+
+<h2>How It Works — Technical Deep Dive</h2>
+
+<h3>Modular Architecture</h3>
+<p>Odoo is built on a Python backend with a PostgreSQL database. Each "app" (module) adds its own data models, views, and business logic. Apps share data through a unified database schema, so a client created in CRM is immediately available in Sales, Invoicing, and Helpdesk. This eliminates data silos.</p>
+
+<h3>Key Telecom Modules and Their Interplay</h3>
+<ul>
+  <li><strong>CRM (Customer Relationship Management):</strong> Captures leads from the website, phone, or walk-in. Tracks communication history and converts leads to opportunities.</li>
+  <li><strong>Sales:</strong> Creates quotations and sales orders. For Matrix, a sales order includes the internet plan, installation fee, and CPE equipment.</li>
+  <li><strong>Subscriptions:</strong> Automates recurring billing. When a sales order is confirmed, a subscription is created that generates invoices monthly on a fixed date.</li>
+  <li><strong>Inventory:</strong> Tracks CPE stock (MikroTik routers, Ubiquiti APs, cables, SFPs). Each item has a serial number and storage location.</li>
+  <li><strong>Project &amp; Field Service:</strong> Creates tasks for installation technicians. Technicians use the Odoo mobile app to view assignments, capture photos, and collect signatures.</li>
+  <li><strong>Helpdesk:</strong> Manages client support tickets. Integrates with the monitoring system — if a CPE goes down, a ticket is auto-created.</li>
+  <li><strong>Invoicing / Accounting:</strong> Generates invoices, tracks payments, manages taxes (TVA in Cameroon), and produces financial reports.</li>
+  <li><strong>Purchase:</strong> Orders equipment from suppliers (MikroTik distributors, fiber optic vendors). Tracks lead times and POs.</li>
+</ul>
+
+<h3>Data Flow: Client Lifecycle in Odoo</h3>
+<ol>
+  <li>A lead enters CRM (via website form, phone call, or walk-in).</li>
+  <li>Sales team qualifies the lead → convert to an opportunity → send a quotation.</li>
+  <li>Client accepts the quotation → sales order is confirmed.</li>
+  <li>Inventory reserves the CPE (a MikroTik hAP ac2). The CPE serial number is linked to the client.</li>
+  <li>A project task is auto-created for the field technician: "Install at Client X, Rue de la Liberté."</li>
+  <li>Technician completes installation → marks task done → Odoo activates the subscription.</li>
+  <li>Recurring invoices are auto-generated on the 1st of each month.</li>
+  <li>If the client reports an issue, a helpdesk ticket is created and tracked with SLAs.</li>
+  <li>If the client cancels, the subscription is closed and the CPE is marked for return in Inventory.</li>
+</ol>
+
+<h2>Practical Example at Matrix Telecom Yaoundé</h2>
+
+<div class="matrix-example">
+<strong>Matrix Context:</strong> Client Management, Subscription Billing, and CPE Inventory Tracking<br><br>
+<p>At Matrix Telecom, Odoo (or a comparable ERP) is the backbone of daily business operations. Here is a typical scenario:</p>
+<ul>
+  <li><strong>Sales:</strong> A new client in the Mvog-Mbi neighborhood calls to subscribe to "Fiber Pro 50 Mbps." The sales agent creates a lead, sends a quotation via WhatsApp (generated by Odoo as PDF), and the client approves.</li>
+  <li><strong>Inventory:</strong> The sales order triggers a delivery order. The warehouse team sees which CPE model is needed (MikroTik SXT LTE kit). They scan the serial number into Odoo's Inventory app, marking it as "Delivered to Installation Team."</li>
+  <li><strong>Project:</strong> The installation task includes the CPE details, client address (with GPS coordinates), and a checklist. The technician uses the Odoo mobile app to navigate to the site, install the CPE, test connectivity, upload a photo of the installed equipment, and mark the task complete.</li>
+  <li><strong>Billing:</strong> On the 1st of the following month, Odoo generates an invoice automatically. Payment is tracked in the Accounting module. Overdue accounts receive automated reminders.</li>
+  <li><strong>Support:</strong> If the client calls to report slow speeds, the helpdesk team creates a ticket. Odoo shows the client's subscription plan, CPE model, and payment history — all in one screen. The engineer checks the monitoring system (SolarWinds/PRTG) and resolves the issue.</li>
+</ul>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>Odoo Web Interface</strong><br>
+<strong>Access:</strong> https://odoo.matrixtelecom.local (internal) or odoo.com (cloud)<br>
+<strong>Purpose:</strong> All business operations — CRM, billing, inventory, helpdesk<br>
+<strong>Navigation tips:</strong>
+<ul>
+  <li>App-switcher menu (grid icon in the top-left) to switch between modules.</li>
+  <li>Each app has a Kanban and a List view. Use the filter/search bar to find records.</li>
+  <li>Click a record name to open the form view. Click Edit to modify.</li>
+  <li>Use the ⋮ icon for actions: Print, Duplicate, Delete, or Send Email.</li>
+  <li>Settings > Technical > Scheduled Actions for automation rules.</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>Odoo Studio (Customization Tool)</strong><br>
+<strong>Access:</strong> Settings > Activate Developer Mode > Technical > Studio<br>
+<strong>Purpose:</strong> Customize fields, views, and reports without writing code<br>
+<strong>Common telecom customizations:</strong>
+<ul>
+  <li>Add a "CPE Serial Number" field to the client form (res.partner).</li>
+  <li>Add a "Circuit ID" field to the subscription model.</li>
+  <li>Add an "SLA Tier" field to the helpdesk ticket model.</li>
+  <li>Modify the invoice report to include the client's circuit ID and CPE serial.</li>
+  <li>Create an automated action: "When a subscription is 45 days overdue, change client status to 'Suspended'."</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>Odoo Mobile App</strong><br>
+<strong>Purpose:</strong> Field technicians access their tasks, update status, upload photos, and collect signatures.<br>
+<strong>Key features:</strong>
+<ul>
+  <li>Push notifications for new assignments</li>
+  <li>Offline mode for areas without internet connectivity</li>
+  <li>GPS tracking to verify site visit</li>
+  <li>Photo capture of installed equipment</li>
+</ul>
+</div>
+
+<h2>Video Tutorials</h2>
+
+<div class="video-link">
+<strong>Recommended YouTube Searches:</strong><br>
+<ul>
+  <li><a href="https://www.youtube.com/results?search_query=odoo+ERP+overview+telecom" target="_blank">Odoo ERP Overview for Telecom</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=odoo+inventory+management+full+tutorial" target="_blank">Odoo Inventory Management Full Tutorial</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=odoo+subscriptions+recurring+billing+setup" target="_blank">Odoo Subscriptions and Recurring Billing Setup</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=odoo+studio+customization+no+code" target="_blank">Odoo Studio Customization — No Code Needed</a></li>
+</ul>
+</div>
+
+<h2>Tips for the Intern</h2>
+
+<div class="tip">
+<strong>Intern Tip:</strong><br>
+<ul>
+  <li><strong>Find out what Matrix uses:</strong> Ask "Which ERP does Matrix use — Odoo, a custom PHP billing system, SAP, or something else?" The concepts are similar even if the tool differs.</li>
+  <li><strong>Explore the client lifecycle:</strong> The most important thing to understand is how a client flows through the ERP: Lead → Quote → Sale → Install → Bill → Support → Cancel. Every action you take in Odoo fits somewhere in this flow.</li>
+  <li><strong>Create a test invoice:</strong> If you have demo access, practice creating a quotation, confirming a sale, and generating an invoice. These are common intern tasks.</li>
+  <li><strong>Learn the Inventory model:</strong> Understanding how CPEs are tracked from purchase → stock → deployment → return is critical for an ISP intern.</li>
+  <li><strong>If Matrix uses Odoo Community (free version):</strong> Note that some features (Studio, Subscriptions) require the Enterprise license. Ask which version is deployed.</li>
+  <li><strong>Integration is key:</strong> The ERP doesn't exist in isolation. It should integrate with the network monitoring system: when a CPE is deployed (Odoo), it should be added to SolarWinds (monitoring). Propose this integration if it doesn't exist yet.</li>
+  <li><strong>Document customizations:</strong> If Matrix has custom Odoo modules, ask for documentation and read it. Knowing the custom business logic sets you apart.</li>
+</ul>
+</div>
+
+<h2>Odoo Automation Rules for Telecom</h2>
+<pre><code># Automated Action Example (configured in Odoo Studio)
+Model: subscription.subscription
+Trigger: On create or write, when status becomes "active"
+Actions:
+  1. Create Invoice (draft, auto-post on due date)
+  2. Send Email (template "Welcome to Matrix Telecom")
+  3. Update Client (x_service_status = "Active")
+  4. Create Project Task (type: "installation")
+  5. If CPE linked, mark inventory as "Deployed"
+
+# Scheduled Action (cron)
+Name: Suspend Subscriptions Over 60 Days Overdue
+Model: subscription.subscription
+Frequency: Every day at 01:00
+Python code:
+  for sub in env['subscription.subscription'].search([
+    ('state', '=', 'active'),
+    ('next_invoice_date', '<', fields.Date.today() - timedelta(days=60))
+  ]):
+    sub.action_suspend()
+    sub.partner_id.x_service_status = 'Suspended'</code></pre>
+
+<h2>Odoo Reports for Telecom Management</h2>
+<ul>
+  <li><strong>Sales Dashboard:</strong> Monthly revenue, top-selling plans, conversion rate by arrondissement.</li>
+  <li><strong>Aging Report:</strong> Clients with outstanding invoices grouped by 30/60/90+ days overdue.</li>
+  <li><strong>Inventory Valuation:</strong> Current stock value of CPEs, cables, SFPs, and spare parts.</li>
+  <li><strong>Helpdesk SLA Report:</strong> Average time to respond, average time to close, ticket volume by priority.</li>
+  <li><strong>Churn Analysis:</strong> Clients who cancelled in the last month, reasons, and subscription duration.</li>
+  <li><strong>Technician Productivity:</strong> Number of installations completed per technician per week.</li>
+</ul>
+
+<h2>Example: Custom Fields for a Telecom Odoo Instance</h2>
+<pre><code>Model: res.partner (Client)
+  Field: x_cpe_model (Many2one → product.product)
+  Field: x_cpe_serial (Char)
+  Field: x_cpe_mac (Char)
+  Field: x_service_address (Text)
+  Field: x_gps_coords (Char)
+  Field: x_service_status (Selection: "Active", "Suspended", "Cancelled")
+  Field: x_circuit_id (Char, unique)
+
+Model: subscription.subscription
+  Field: x_bandwidth_mbps (Integer)
+  Field: x_data_cap_gb (Integer)
+  Field: x_current_usage_gb (Float, updated by API)
+  Field: x_static_ip (Char)
+  Field: x_vlan_id (Integer)
+
+Model: product.product (CPE variant)
+  Field: x_serial_number (Char)
+  Field: x_firmware_version (Char)
+  Field: x_purchase_price (Monetary)
+  Field: x_warranty_expiry (Date)</code></pre>
+
+</div>
+
+<div class="footer">
+  Matrix Telecom Internship Guide — Monitoring Category — Odoo
+</div>
+
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

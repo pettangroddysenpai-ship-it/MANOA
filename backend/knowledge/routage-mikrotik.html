@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MikroTik - ROUTING Guide | Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>MikroTik RouterOS</h1>
+<a class="back" href="../index.html">&larr; Back to Routing Guide</a>
+</div>
+
+<div class="container">
+
+<h2>Definition</h2>
+<p>MikroTik is a Latvian manufacturer of network equipment using its own operating system, <strong>RouterOS</strong>, based on the Linux kernel. It is widely used by ISPs and businesses for its flexibility, affordable cost, and advanced features. RouterOS supports routing, firewall, bandwidth management, VPN, DHCP, VLANs and more.</p>
+
+<h2>What is MikroTik used for at Matrix Telecom?</h2>
+<p>At Matrix Telecom Yaound&eacute;, MikroTik is the most commonly used equipment. It is primarily deployed as <strong>CPE (Customer Premise Equipment)</strong> for residential and professional Internet clients. The most common models are the RB750, RB951, hAP, CCR and Cloud Core Router series.</p>
+
+<img src="https://source.unsplash.com/600x400/?router,wireless,network" alt="MikroTik Wireless Router">
+
+<h2>How It Works</h2>
+<h3>RouterOS Architecture</h3>
+<p>RouterOS is a complete network operating system. It uses <strong>interfaces</strong> (Ethernet, wireless, VLAN, bridges), <strong>routes</strong> (static and dynamic routing tables), <strong>firewall rules</strong> (filter, NAT, mangle), <strong>queues</strong> (bandwidth management) and <strong>services</strong> (DHCP, DNS, PPPoE, VPN).</p>
+
+<h3>Key Features</h3>
+<ul>
+<li><strong>Bridge</strong>: Allows grouping multiple interfaces into a single network segment (virtual switch).</li>
+<li><strong>Firewall</strong>: Packet filtering with chain rules (input, output, forward) and NAT (srcnat, dstnat).</li>
+<li><strong>DHCP Server</strong>: Automatic IP address assignment to clients.</li>
+<li><strong>VLAN</strong>: Layer 2 network segmentation using 802.1Q.</li>
+<li><strong>PPPoE</strong>: Client/server connection for authenticated Internet access.</li>
+<li><strong>Routing</strong>: Static routing, OSPF, BGP, RIP.</li>
+<li><strong>Queue</strong>: Bandwidth management (PCQ, HTB) for QoS.</li>
+<li><strong>IPSec / OpenVPN / WireGuard</strong>: Creation of secure VPN tunnels.</li>
+</ul>
+
+<h2>Step-by-Step Configuration</h2>
+
+<h3>Step 1: Initial Connection via WinBox</h3>
+<p>WinBox is MikroTik's official graphical tool. Download it from the MikroTik website. Connect the router via an Ethernet cable on port 2 (ports are numbered). Launch WinBox, click on the "Neighbors" tab to detect the device, select it and log in with user <code>admin</code> (no password by default).</p>
+
+<h3>Step 2: Basic Configuration (via CLI / Terminal)</h3>
+<pre><code>/interface bridge add name=bridge1
+/interface bridge port add bridge=bridge1 interface=ether2
+/interface bridge port add bridge=bridge1 interface=ether3
+/interface bridge port add bridge=bridge1 interface=ether4
+
+/ip address add address=192.168.88.1/24 interface=bridge1
+/ip dhcp-server setup
+
+/ip pool add name=dhcp_pool ranges=192.168.88.10-192.168.88.200
+/ip dhcp-server add name=dhcp1 interface=bridge1 address-pool=dhcp_pool lease-time=10m
+/ip dhcp-server network add address=192.168.88.0/24 gateway=192.168.88.1 dns-server=8.8.8.8</code></pre>
+
+<h3>Step 3: NAT Configuration (Shared Internet)</h3>
+<pre><code>/ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
+
+/ip dhcp-client add interface=ether1 disabled=no</code></pre>
+
+<h3>Step 4: Basic Firewall Rules</h3>
+<pre><code>/ip firewall filter add chain=input connection-state=established,related action=accept
+/ip firewall filter add chain=input connection-state=invalid action=drop
+/ip firewall filter add chain=input protocol=icmp action=accept
+/ip firewall filter add chain=input src-address=192.168.88.0/24 action=accept
+/ip firewall filter add chain=input action=drop
+
+/ip firewall filter add chain=forward connection-state=established,related action=accept
+/ip firewall filter add chain=forward connection-state=invalid action=drop
+/ip firewall filter add chain=forward action=drop</code></pre>
+
+<h3>Step 5: VLAN Configuration</h3>
+<pre><code>/interface vlan add name=vlan10 vlan-id=10 interface=ether1
+/interface vlan add name=vlan20 vlan-id=20 interface=ether1
+
+/ip address add address=10.10.10.1/24 interface=vlan10
+/ip address add address=10.10.20.1/24 interface=vlan20
+
+/ip dhcp-server add name=dhcp_vlan10 interface=vlan10 address-pool=pool10
+/ip dhcp-server add name=dhcp_vlan20 interface=vlan20 address-pool=pool20</code></pre>
+
+<h3>Step 6: PPPoE Server Configuration</h3>
+<pre><code>/interface pppoe-server server add interface=bridge1 service-name=Matrix-Internet
+
+/ppp profile add name=client-profile local-address=10.0.0.1 remote-address=10.0.0.0/24
+/ppp secret add name=client1 password=pass123 service=pppoe profile=client-profile</code></pre>
+
+<h2>Practical Example at Matrix Telecom</h2>
+
+<div class="matrix-example">
+<strong>Use Case:</strong> MikroTik hAP ac&sup2; as CPE for a residential client.<br><br>
+<strong>Scenario:</strong> A client subscribes to a 50 Mbps Internet offer. Matrix provides a pre-configured MikroTik hAP ac&sup2;.<br><br>
+<strong>Setup:</strong>
+<ol>
+<li>Port ether1 is configured as a DHCP client to obtain the public IP address from Matrix's fiber network.</li>
+<li>Ports ether2-ether4 are bridged on <code>bridge1</code> (LAN) at 192.168.1.1/24.</li>
+<li>The DHCP server assigns IPs to the client's devices (range 192.168.1.100-254).</li>
+<li>NAT (masquerade) translates LAN traffic towards the WAN interface (ether1).</li>
+<li>Firewall rules block unsolicited incoming connections.</li>
+<li>Wi-Fi is configured on the 2.4GHz and 5GHz bands with SSID "Matrix-Client".</li>
+<li>A queue limits downstream bandwidth to 50 Mbps and upstream to 25 Mbps.</li>
+</ol>
+<br>
+<strong>Typical Deployment Script:</strong>
+<pre><code>/interface bridge add name=bridge1
+/interface bridge port add bridge=bridge1 interface=ether2
+/interface bridge port add bridge=bridge1 interface=ether3
+/interface bridge port add bridge=bridge1 interface=ether4
+/ip address add address=192.168.1.1/24 interface=bridge1
+/ip pool add name=pool-client ranges=192.168.1.100-192.168.1.254
+/ip dhcp-server add name=dhcp-client interface=bridge1 address-pool=pool-client
+/ip dhcp-server network add address=192.168.1.0/24 gateway=192.168.1.1 dns-server=8.8.8.8,1.1.1.1
+/ip dhcp-client add interface=ether1 disabled=no
+/ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
+/queue simple add name=client-qos target=bridge1 max-limit=50M/25M</code></pre>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>WinBox</strong> - Native Windows GUI for administering MikroTik routers. Allows full configuration, configuration backup, real-time monitoring (graphs, logs).<br>
+<em>Usage:</em> Download from mikrotik.com, connect by IP or MAC (discovered via Neighbors).<br><br>
+
+<strong>SSH / Terminal</strong> - Command line access via PuTTY or WinBox's integrated terminal. Useful for scripting and automation.<br>
+<em>Usage:</em> <code>ssh admin@192.168.88.1</code><br><br>
+
+<strong>The Dude</strong> - Free network monitoring tool from MikroTik. Allows mapping and monitoring the status of network devices.<br>
+<em>Usage:</em> Install The Dude Server on a Windows or Linux machine, add devices to monitor.<br><br>
+
+<strong>Netinstall</strong> - RouterOS reinstallation utility. Allows restoring a bricked router or changing the firmware version.<br>
+<em>Usage:</em> Boot the router in Netinstall mode (hold the reset button), run Netinstall on a PC connected to port 1.<br><br>
+
+<strong>Backup and Restore</strong> - Configuration export/import.<br>
+<pre><code>/export file=backup-2026-06
+/import file=backup-2026-06.rsc</code></pre>
+</div>
+
+<h2>Essential Commands</h2>
+<pre><code>/interface print                # List interfaces
+/ip address print               # Configured IP addresses
+/ip route print                 # Routing table
+/ip firewall nat print          # NAT rules
+/ip firewall filter print       # Filter rules
+/log print                      # System logs
+/ping 8.8.8.8                   # Connectivity test
+/tool traceroute 8.8.8.8        # Traceroute
+/system resource print          # CPU/RAM resources
+/system routerboard print       # Firmware version
+/interface wireless scan wlan1  # Wi-Fi scan
+/ip dhcp-server lease print     # Active DHCP leases</code></pre>
+
+<h2>Best Practices and Security</h2>
+<ul>
+<li>Always change the default password for the <code>admin</code> user.</li>
+<li>Disable unnecessary services (bandwidth-server, telnet, ftp, www if not used).</li>
+<li>Set an <code>allowed-router-ips</code> to restrict SSH/WinBox access to specific IPs.</li>
+<li>Enable automatic configuration backup to an FTP server or via email.</li>
+<li>Use <code>/system scheduler</code> to schedule recurring tasks.</li>
+<li>Keep RouterOS updated with the latest stable version.</li>
+</ul>
+
+<h2>Recommended Videos</h2>
+<div class="video-link">
+<strong>YouTube - MikroTik Tutorials</strong><br>
+<a href="https://www.youtube.com/results?search_query=mikrotik+router+beginners+tutorial" target="_blank">MikroTik RouterOS - Beginner Playlist</a><br>
+<a href="https://www.youtube.com/results?search_query=mikrotik+nat+configuration+step+by+step" target="_blank">MikroTik NAT Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=mikrotik+pppoe+server+configuration" target="_blank">PPPoE Server on MikroTik</a><br>
+<a href="https://www.youtube.com/results?search_query=mikrotik+vlan+configuration+routeros" target="_blank">VLANs on MikroTik</a><br>
+<a href="https://www.youtube.com/results?search_query=mikrotik+bandwidth+management+queue" target="_blank">Bandwidth Management (Queue)</a>
+</div>
+
+<h2>Tip for the Intern</h2>
+<div class="tip">
+<strong>Good to know:</strong>
+<ul>
+<li>MikroTik represents 80% of the equipment you will handle at Matrix. Master WinBox and the CLI.</li>
+<li>Always test a configuration in a non-client environment or outside peak hours.</li>
+<li>Use <code>/system backup save</code> before any major modification.</li>
+<li>Learn to read logs: <code>/log print where topics~"critical"</code></li>
+<li>In case of remote lockout, the reset button restores the default configuration (hold for 10 seconds).</li>
+<li>Master NAT: <strong>srcnat</strong> for outbound traffic (masquerade), <strong>dstnat</strong> for port forwarding.</li>
+<li>"Safe Mode" in WinBox allows undoing changes if the connection is lost.</li>
+</ul>
+</div>
+
+<h2>Troubleshooting</h2>
+<ul>
+<li><strong>No Internet connection:</strong> Check <code>/ip dhcp-client print</code>, <code>/ip route print</code>, <code>/ping 8.8.8.8</code>.</li>
+<li><strong>NAT not working:</strong> Check rule order and the output interface.</li>
+<li><strong>DHCP not distributing IPs:</strong> Check <code>/ip dhcp-server print</code>, ensure the pool is not exhausted.</li>
+<li><strong>WinBox connection impossible:</strong> Check connectivity, IP address, use MAC discovery (Neighbors).</li>
+<li><strong>Router slow / high CPU load:</strong> Check <code>/tool profile</code> to identify resource-heavy processes.</li>
+</ul>
+
+<h2>Additional Resources</h2>
+<ul>
+<li><a href="https://wiki.mikrotik.com/" target="_blank" style="color:#60a5fa;">Official MikroTik Wiki</a></li>
+<li><a href="https://help.mikrotik.com/" target="_blank" style="color:#60a5fa;">MikroTik Help Center</a></li>
+<li><a href="https://mikrotik.com/download" target="_blank" style="color:#60a5fa;">Downloads (WinBox, firmware)</a></li>
+<li><a href="https://www.youtube.com/@MikroTik" target="_blank" style="color:#60a5fa;">MikroTik YouTube Channel</a></li>
+</ul>
+
+</div>
+
+<div class="footer">
+Matrix Telecom Yaound&eacute; - ROUTING Internship Guide - July 2026
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Acc&egrave;s Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

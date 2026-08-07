@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain Names - Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Domain Name Services</h1>
+<a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+<div class="container">
+
+<img src="https://source.unsplash.com/600x400/?domain,dns,server" alt="DNS Domain Server">
+
+<h2>Definition and Detailed Explanation</h2>
+<p>A domain name is a human-readable address (e.g., matrix.cm) that corresponds to a numeric IP address. DNS (Domain Name System) is the phonebook of the Internet: it translates domain names into IP addresses that computers can understand.</p>
+<p>Matrix Telecom offers domain name registration (registry) and DNS hosting (name servers) services for its professional customers. Matrix can be a domain reseller through AFNIC (.cm, .fr, etc.) or other registries.</p>
+<p>A domain name consists of several parts:</p>
+<ul>
+<li><strong>TLD (Top-Level Domain)</strong>: The rightmost part (.com, .org, .cm, .fr, .net)</li>
+<li><strong>Second-level domain</strong>: The main name (e.g., matrix in matrix.cm)</li>
+<li><strong>Subdomain</strong>: Optional prefix (e.g., mail.matrix.cm, www.matrix.cm)</li>
+</ul>
+
+<h2>How It Works</h2>
+
+<h3>DNS Hierarchy</h3>
+<p>DNS operates in a hierarchical manner:</p>
+<ul>
+<li><strong>Root Servers</strong>: 13 clusters of servers (managed by ICANN, Verisign, etc.) that know the servers for each TLD. Expressed as a.root-servers.net through m.root-servers.net.</li>
+<li><strong>TLD Servers</strong>: Manage a specific TLD (.com is managed by Verisign, .cm by AFNIC). They know the name servers for each registered domain.</li>
+<li><strong>Authoritative Name Servers</strong>: Owned by the registrar or hosting provider. They contain the actual DNS records for a given domain (IP addresses, mail servers, etc.).</li>
+</ul>
+
+<h3>DNS Resolution Step by Step</h3>
+<p>When you type <code>www.google.com</code> in a browser:</p>
+<ol>
+<li>The browser first checks the local operating system cache.</li>
+<li>If not found, the query is sent to the configured <strong>recursive DNS resolver</strong> on the machine (usually the ISP's or Google's 8.8.8.8).</li>
+<li>The resolver queries the root server: "Where is .com?"</li>
+<li>The root server responds with the address of a .com TLD server.</li>
+<li>The resolver queries the .com TLD server: "Where is google.com?"</li>
+<li>The TLD server responds with the authoritative name servers for google.com (ns1.google.com, ns2.google.com).</li>
+<li>The resolver queries an authoritative name server: "What is the IP of www.google.com?"</li>
+<li>The name server responds with the A (IPv4) or AAAA (IPv6) record.</li>
+<li>The resolver returns the IP to the browser, which can now establish the connection.</li>
+</ol>
+
+<h3>DNS Record Types</h3>
+<ul>
+<li><strong>A</strong>: Maps a domain name to an IPv4 address (e.g., 142.250.201.4)</li>
+<li><strong>AAAA</strong>: Maps a domain name to an IPv6 address (e.g., 2a00:1450:4007:80b::2004)</li>
+<li><strong>CNAME</strong>: Alias from one name to another (e.g., www.matrix.cm to matrix.cm)</li>
+<li><strong>MX</strong>: Specifies mail servers for a domain with priority (e.g., mail.matrix.cm priority 10)</li>
+<li><strong>NS</strong>: Defines the authoritative name servers for the domain</li>
+<li><strong>TXT</strong>: Arbitrary text data (used for SPF, DKIM, DMARC, ownership verification)</li>
+<li><strong>SRV</strong>: Location of specific services (SIP, LDAP, XMPP)</li>
+<li><strong>PTR</strong>: Maps an IP address to a domain name (reverse resolution)</li>
+<li><strong>SOA</strong>: Start of Authority - contains administrative information about the DNS zone</li>
+</ul>
+
+<h3>Domain Registration</h3>
+<p>Registration process via Matrix:</p>
+<ol>
+<li>Check domain name availability (via whois or registry API)</li>
+<li>Order through the registry (AFNIC for .cm, Verisign for .com, etc.)</li>
+<li>Define DNS servers (Matrix's or the client's)</li>
+<li>Configure DNS records on authoritative servers</li>
+<li>DNS propagation (can take from a few minutes to 48 hours)</li>
+</ol>
+
+<h3>DNS Hosting</h3>
+<p>Matrix can host DNS zones for its clients. Matrix's authoritative DNS servers respond to recursive queries from internet users. Matrix generally maintains 2 DNS servers for redundancy (ns1.matrix.cm, ns2.matrix.cm).</p>
+
+<h2>Practical Example at Matrix Telecom</h2>
+<div class="matrix-example">
+<strong>Example:</strong> A customer company wants to create a website for their business "Solutions Cameroun". They order the domain <code>solutions-cameroun.cm</code> through Matrix and want their site to be accessible at <code>www.solutions-cameroun.cm</code> with emails at <code>contact@solutions-cameroun.cm</code>.<br><br>
+<strong>Steps:</strong><br>
+<pre><code>1. Check availability:
+   whois solutions-cameroun.cm
+   # Result: "No entries found" - available
+
+2. Registration with AFNIC (.cm)
+   Form: customer information, admin, technical, billing contacts
+   Payment: 25,000 FCFA / year (estimated price)
+
+3. DNS configuration on Matrix's servers:
+   Zone file: solutions-cameroun.cm
+
+   $TTL 3600
+   @   SOA ns1.matrix.cm. admin.matrix.cm. (
+        2025070101  ; Serial (YYYYMMDDNN)
+        3600        ; Refresh
+        1800        ; Retry
+        604800      ; Expire
+        86400       ; Minimum TTL
+   )
+   @   NS  ns1.matrix.cm.
+   @   NS  ns2.matrix.cm.
+   @   A   192.168.1.100     ; Web server IPv4
+   www A   192.168.1.100     ; www subdomain
+   @   MX  10 mail.solutions-cameroun.cm.
+   mail    A   192.168.1.101     ; Mail server
+   @   TXT "v=spf1 mx a ~all"   ; SPF anti-spam
+
+4. Verify deployment:
+   nslookup www.solutions-cameroun.cm
+   dig solutions-cameroun.cm MX</code></pre>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>nslookup</strong> — DNS lookup (Windows/Linux)<br>
+Command-line tool for querying DNS servers and obtaining records.<br>
+<strong>Usage:</strong><br>
+<pre><code># Query A record
+nslookup google.com
+nslookup www.matrix.cm
+
+# Query a specific type
+nslookup -type=MX google.com
+nslookup -type=NS google.com
+nslookup -type=TXT google.com
+nslookup -type=SOA google.com
+nslookup -type=CNAME www.microsoft.com
+
+# Query a specific DNS server
+nslookup google.com 8.8.8.8
+
+# Reverse lookup
+nslookup 8.8.8.8</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>dig</strong> — Domain Information Groper (Linux/Mac)<br>
+More advanced tool than nslookup, widely used by network administrators for DNS troubleshooting.<br>
+<strong>Usage:</strong><br>
+<pre><code># Basic query
+dig google.com
+dig google.com ANY
+
+# Specific record type
+dig google.com MX
+dig google.com NS
+dig google.com TXT
+dig google.com SOA
+
+# Query a specific server
+dig @8.8.8.8 google.com
+
+# Reverse lookup
+dig -x 8.8.8.8
+
+# Follow the resolution path (trace)
+dig +trace google.com
+
+# Short format
+dig google.com +short</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>whois</strong> — Domain information<br>
+Tool that queries the WHOIS database to obtain domain registration information: registrant, expiration date, contacts, DNS servers.<br>
+<strong>Usage:</strong><br>
+<pre><code># Basic information
+whois google.com
+
+# Cameroonian domain (.cm)
+whois matrix.cm
+
+# Check domain availability
+whois domainepris.cm
+# If "NOT FOUND": domain is available
+# If "registrar": domain is already registered
+
+# Additional details
+whois -h whois.verisign-grs.com google.com</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Online DNS Checkers</strong> — Online tools<br>
+Several websites allow checking DNS propagation and records:<br>
+<pre><code># Useful sites:
+https://dnschecker.org/     - Multi-location verification
+https://whatsmydns.net/     - Global DNS propagation
+https://mxtoolbox.com/     - MX analysis, blacklist, SMTP
+https://intodns.com/       - Complete DNS zone analysis
+
+# Usage:
+1. Enter the domain name
+2. Select the record type (A, MX, NS, etc.)
+3. View results from different servers worldwide
+4. Verify that propagation is complete</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>BIND (named)</strong> — Reference DNS server<br>
+If Matrix hosts its own DNS servers, BIND is the most widely used software.<br>
+<strong>Usage:</strong><br>
+<pre><code># Installation (Ubuntu/Debian)
+apt install bind9
+
+# Zone configuration (named.conf.local)
+zone "solutions-cameroun.cm" {
+    type master;
+    file "/etc/bind/zones/solutions-cameroun.cm.db";
+};
+
+# Reload BIND
+rndc reload
+# or
+systemctl reload bind9
+
+# Check logs
+tail -f /var/log/syslog | grep named
+
+# Test the zone
+named-checkzone solutions-cameroun.cm /etc/bind/zones/solutions-cameroun.cm.db</code></pre>
+</div>
+
+<div class="video-link">
+<strong>Recommended Videos:</strong><br>
+<a href="https://www.youtube.com/results?search_query=how+DNS+works" target="_blank">How DNS Works</a><br>
+<a href="https://www.youtube.com/results?search_query=DNS+records+explained+A+MX+CNAME+NS" target="_blank">DNS Record Types Explained</a><br>
+<a href="https://www.youtube.com/results?search_query=dig+nslookup+dns+troubleshooting" target="_blank">DNS Troubleshooting with dig and nslookup</a><br>
+<a href="https://www.youtube.com/results?search_query=Bind9+DNS+server+configuration" target="_blank">BIND DNS Server Configuration</a>
+</div>
+
+<div class="tip">
+<strong>Tip for the Intern:</strong><br>
+1. Master dig and nslookup. They are the most important tools for DNS troubleshooting at Matrix.<br>
+2. Understand DNS propagation: changes are not instantaneous. The TTL in the SOA record indicates cache duration.<br>
+3. To test a new site, use the hosts file before changing DNS: edit <code>C:\Windows\System32\drivers\etc\hosts</code> (Windows) or <code>/etc/hosts</code> (Linux).<br>
+4. Emails are particularly sensitive to DNS: MX, SPF, DKIM, DMARC must be correctly configured for deliverability.<br>
+5. Always check the serial in the SOA zone when modifying a zone. If the serial does not increase, slave servers will not propagate changes.<br>
+6. At Matrix, ask which registrar is used for .cm domains and how automatic renewal works.
+</div>
+
+</div>
+<div class="footer">
+<p>Matrix Telecom &mdash; Internship Guide &mdash; Domain Name Services</p>
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internship Guide - Matrix Telecom Yaoundé</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; }
+    .hero { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 60px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+    .hero h1 { font-size: 2.5em; color: #60a5fa; margin-bottom: 10px; }
+    .hero h2 { font-size: 1.3em; color: #94a3b8; font-weight: 400; }
+    .hero .badge { display: inline-block; background: #3b82f6; color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 0.9em; margin-top: 15px; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+    .intro { text-align: center; margin-bottom: 40px; }
+    .intro p { max-width: 800px; margin: 0 auto; color: #94a3b8; font-size: 1.1em; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 40px; }
+    .card { background: #1e293b; border-radius: 12px; padding: 24px; border-left: 4px solid #3b82f6; transition: transform 0.2s, box-shadow 0.2s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(59,130,246,0.2); }
+    .card h3 { color: #60a5fa; margin-bottom: 8px; font-size: 1.15em; }
+    .card p { color: #94a3b8; font-size: 0.9em; margin-bottom: 12px; }
+    .card .count { color: #64748b; font-size: 0.8em; }
+    .card a { color: #60a5fa; text-decoration: none; font-weight: 500; font-size: 0.9em; }
+    .card a:hover { text-decoration: underline; }
+    .section-title { font-size: 1.8em; color: #60a5fa; margin: 40px 0 20px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; text-align: center; }
+    .footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+    .category-badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 0.75em; font-weight: 600; margin-bottom: 8px; }
+    .cat-services { background: #1e3a5f; color: #60a5fa; }
+    .cat-transmission { background: #1e3a1f; color: #4ade80; }
+    .cat-routage { background: #3a1f1e; color: #f87171; }
+    .cat-monitoring { background: #3a2e1e; color: #fbbf24; }
+    .abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+    .abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Training Guide</h1>
+  <h2>Internship at Matrix Telecom Yaoundé</h2>
+  <div class="badge">Service Delivery & Infrastructure</div>
+</div>
+
+<div class="container">
+
+  <div class="intro">
+    <p>Welcome to your internship guide! This guide covers all the concepts from your tracking sheet, organized into four main categories: <strong>Services</strong>, <strong>Transmission</strong>, <strong>Routing</strong> and <strong>Monitoring</strong>. Each page contains detailed explanations, practical examples at Matrix Telecom, tools, videos, and tips.</p>
+  </div>
+
+  <h2 class="section-title">SERVICES</h2>
+  <div class="grid">
+    <div class="card"><span class="category-badge cat-services">Service</span>
+      <h3>Internet</h3>
+      <p>ISP architecture, NAT, DNS, DHCP, bandwidth, latency. How Matrix provides Internet access.</p>
+      <span class="count">7 topics</span> &middot; <a href="services-internet.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-services">Service</span>
+      <h3>IPLC</h3>
+      <p>International Private Leased Circuit. Dedicated connection between two remote sites. Used by banks, embassies.</p>
+      <a href="services-iplc.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-services">Service</span>
+      <h3>VoIP</h3>
+      <p>Voice over IP. Telephony via Internet. SIP, RTP, PBX, Asterisk, FreePBX, PAP2T.</p>
+      <a href="services-voip.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-services">Service</span>
+      <h3>VPN / MPLS</h3>
+      <p>Virtual Private Networks and MPLS backbone. Site-to-site, Remote Access, GRE, IPSec, VRF.</p>
+      <a href="services-vpn-mpls.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-services">Service</span>
+      <h3>Video Surveillance</h3>
+      <p>IP cameras, NVR, DVR, ONVIF, PoE. Hikvision, Dahua, UniFi Protect solutions.</p>
+      <a href="services-video-surveillance.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-services">Service</span>
+      <h3>Domain Name</h3>
+      <p>DNS, domain registration, hosting, name servers. How DNS resolution works.</p>
+      <a href="services-domain-name.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-services">Service</span>
+      <h3>Video Conference</h3>
+      <p>Teams, Zoom, Google Meet. QoS, bandwidth, codecs, VoIP integration.</p>
+      <a href="services-video-conference.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-services">Service</span>
+      <h3>Messaging</h3>
+      <p>Business email. SMTP, IMAP, POP3, Microsoft Exchange, antispam.</p>
+      <a href="services-messaging.html">Read more &rarr;</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">TRANSMISSION</h2>
+  <div class="grid">
+    <div class="card"><span class="category-badge cat-transmission">Transmission</span>
+      <h3>GPS / Google Earth</h3>
+      <p>Tower positioning, fiber routes, client coordinates. Google Earth for network mapping.</p>
+      <a href="transmission-gps.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-transmission">Transmission</span>
+      <h3>Internet Technologies</h3>
+      <p>xDSL, Fiber, LTE, Microwave, Satellite. Comparison of access technologies.</p>
+      <a href="transmission-technologies.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-transmission">Transmission</span>
+      <h3>Fiber Optic</h3>
+      <p>Single Mode, Multi Mode, OLT, ONU, GPON, ODF, fusion splicing, OTDR.</p>
+      <a href="transmission-fiber-optic.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-transmission">Transmission</span>
+      <h3>Physical Architecture</h3>
+      <p>POP &rarr; Core Router &rarr; Distribution &rarr; Access Switch &rarr; Client. Rack organization.</p>
+      <a href="transmission-architecture.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-transmission">Transmission</span>
+      <h3>POP (Point of Presence)</h3>
+      <p>Relay infrastructure. Routers, switches, fiber, UPS, batteries.</p>
+      <a href="transmission-pop.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-transmission">Transmission</span>
+      <h3>NanoStation (M13, M5)</h3>
+      <p>Ubiquiti point-to-point wireless bridges. airOS, bridge mode, alignment.</p>
+      <a href="transmission-nanostation.html">Read more &rarr;</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">ROUTAGE</h2>
+  <div class="grid">
+    <div class="card"><span class="category-badge cat-routage">Routage</span>
+      <h3>MikroTik</h3>
+      <p>WinBox, bridges, firewall, NAT, DHCP, VLAN, PPPoE, routing. The most used equipment at Matrix.</p>
+      <a href="routage-mikrotik.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-routage">Routage</span>
+      <h3>TP-Link / Linksys</h3>
+      <p>Small business routers. Access Point, NAT, wireless security.</p>
+      <a href="routage-tplink-linksys.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-routage">Routage</span>
+      <h3>CISCO</h3>
+      <p>IOS, VLAN, STP, OSPF, ACL, inter-VLAN routing. The reference for network equipment.</p>
+      <a href="routage-cisco.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-routage">Routage</span>
+      <h3>CheckPoint</h3>
+      <p>Enterprise firewall. Security policies, VPN, Threat Prevention.</p>
+      <a href="routage-checkpoint.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-routage">Routage</span>
+      <h3>Proxy</h3>
+      <p>Squid, forward/reverse proxy, filtering, cache. Traffic security and optimization.</p>
+      <a href="routage-proxy.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-routage">Routage</span>
+      <h3>Server (Windows/Linux)</h3>
+      <p>Windows Server, Linux (Ubuntu/Debian), DNS, DHCP, Active Directory, Apache, Nginx.</p>
+      <a href="routage-server.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-routage">Routage</span>
+      <h3>PAP2T</h3>
+      <p>Cisco ATA adapter. Analog phone to VoIP conversion. Configuration via web interface.</p>
+      <a href="routage-pap2t.html">Read more &rarr;</a>
+    </div>
+  </div>
+
+  <h2 class="section-title">MONITORING</h2>
+  <div class="grid">
+    <div class="card"><span class="category-badge cat-monitoring">Monitoring</span>
+      <h3>SolarWinds</h3>
+      <p>Enterprise monitoring. SNMP, alerts, performance, network maps.</p>
+      <a href="monitoring-solarwinds.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-monitoring">Monitoring</span>
+      <h3>IPPLAN</h3>
+      <p>IP address management. Tracking IPs, VLANs, equipment.</p>
+      <a href="monitoring-iplplan.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-monitoring">Monitoring</span>
+      <h3>RMS</h3>
+      <p>Remote management system. Supervision and administration of equipment.</p>
+      <a href="monitoring-rms.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-monitoring">Monitoring</span>
+      <h3>Odoo</h3>
+      <p>ERP. CRM, billing, inventory, HR. Telecom operations management.</p>
+      <a href="monitoring-odoo.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-monitoring">Monitoring</span>
+      <h3>Cacti</h3>
+      <p>Bandwidth graphs. SNMP, RRDTool, alerts. Open-source.</p>
+      <a href="monitoring-cacti.html">Read more &rarr;</a>
+    </div>
+    <div class="card"><span class="category-badge cat-monitoring">Monitoring</span>
+      <h3>PRTG</h3>
+      <p>All-in-one monitoring. Sensors, notifications, dashboards, maps.</p>
+      <a href="monitoring-prtg.html">Read more &rarr;</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Internship Guide - Matrix Telecom Yaoundé | Tracking Sheet Service Delivery & Infrastructure</p>
+    <p>Created to accompany your learning &mdash; Study each concept, practice on the equipment, and document your progress.</p>
+  </div>
+
+</div>
+
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

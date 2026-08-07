@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Surveillance - Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>IP Video Surveillance</h1>
+<a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+<div class="container">
+
+<img src="https://source.unsplash.com/600x400/?camera,surveillance,security" alt="Security Camera Surveillance">
+
+<h2>Definition and Detailed Explanation</h2>
+<p>An IP video surveillance system uses digital cameras that transmit video streams over an IP network, unlike traditional analog systems (coaxial CCTV). Each IP camera is a full-fledged network device with its own IP address, embedded web server, and processing capability.</p>
+<p>At Matrix Telecom, video surveillance is offered as a complementary service to business customers, including installation, configuration, and remote monitoring via Matrix's network.</p>
+<p>Advantages of IP systems over analog:</p>
+<ul>
+<li><strong>High resolution</strong>: HD (720p), Full HD (1080p), 2K, 4K, even 8K</li>
+<li><strong>PoE power</strong>: Single Ethernet cable for video, control, and power</li>
+<li><strong>Remote access</strong>: Viewing from anywhere via Internet (smartphone, PC)</li>
+<li><strong>Built-in intelligence</strong>: Motion detection, facial recognition, AI video analysis</li>
+<li><strong>Integration</strong>: Can be integrated with access control, alarm, and fire systems</li>
+<li><strong>Scalability</strong>: Adding cameras without additional infrastructure</li>
+</ul>
+
+<h2>How It Works</h2>
+
+<h3>IP Video Surveillance System Architecture</h3>
+<p>A typical system consists of:</p>
+<ul>
+<li><strong>IP Cameras</strong>: Box (dome, bullet, PTZ), variable resolution, with or without microphone, infrared night vision.</li>
+<li><strong>NVR (Network Video Recorder)</strong>: Server that records video streams from cameras. Hikvision, Dahua, and UniFi NVRs manage continuous recording, motion detection, or scheduled recording.</li>
+<li><strong>PoE Switch (Power over Ethernet)</strong>: Network switch that powers cameras via Ethernet cable (IEEE 802.3af/at/bt standard). Delivers up to 30W per port (PoE+) or 60-90W (PoE++).</li>
+<li><strong>Storage</strong>: Specialized hard drives for video surveillance (WD Purple, Seagate SkyHawk) optimized for continuous writing (24/7).</li>
+<li><strong>Network</strong>: Dedicated VLAN for video traffic, QoS to guarantee priority.</li>
+</ul>
+
+<h3>ONVIF Standard</h3>
+<p>ONVIF (Open Network Video Interface Forum) is an open standard that guarantees interoperability between video surveillance equipment from different manufacturers. An ONVIF camera can be connected to any ONVIF NVR.</p>
+<p>Common ONVIF profiles:</p>
+<ul>
+<li><strong>Profile G</strong>: Basic recording and streaming</li>
+<li><strong>Profile Q</strong>: Quick configuration (plug-and-play)</li>
+<li><strong>Profile S</strong>: Standard video streaming</li>
+<li><strong>Profile T</strong>: Advanced streaming, events, two-way audio</li>
+<li><strong>Profile A</strong>: Access control</li>
+</ul>
+
+<h3>Power over Ethernet (PoE)</h3>
+<p>PoE significantly simplifies deployment:</p>
+<ul>
+<li><strong>IEEE 802.3af (PoE)</strong>: Up to 15.4W per port. Sufficient for standard fixed cameras.</li>
+<li><strong>IEEE 802.3at (PoE+)</strong>: Up to 30W per port. For PTZ (Pan/Tilt/Zoom) cameras with heating.</li>
+<li><strong>IEEE 802.3bt (PoE++)</strong>: Up to 60-90W (Type 3/4). For high-performance cameras with advanced features.</li>
+</ul>
+<p>Maximum distance: 100 meters (Cat5e or Cat6 copper cable). Beyond that, use PoE extenders or intermediate switches.</p>
+
+<h3>Storage Calculation</h3>
+<p>Required storage depends on:</p>
+<ul>
+<li>Number of cameras</li>
+<li>Resolution (Megapixels)</li>
+<li>Codec (H.264 vs H.265: H.265 reduces bandwidth by 40-50%)</li>
+<li>FPS (frames per second)</li>
+<li>Desired retention period</li>
+</ul>
+<p>Example: 1 camera at 2MP (1080p) in H.265 at 15 FPS uses ~1-2 GB per day. 16 cameras for 30 days = 16 &times; 1.5 GB &times; 30 = 720 GB.</p>
+
+<h2>Practical Example at Matrix Telecom</h2>
+<div class="matrix-example">
+<strong>Example:</strong> Matrix deploys a surveillance system for a customer company with a warehouse and a showroom. The need is for 8 cameras: 4 for the warehouse (outdoor 4K bullet), 2 for the showroom (indoor 4K dome), 2 for the entrance and exit (PTZ).<br><br>
+<strong>Deployed Architecture:</strong><br>
+<pre><code>          +------------------+
+          |  Internet (ISP)  |
+          +--------+---------+
+                   |
+          +--------+---------+
+          |   NVR Hikvision   |
+          |  DS-7616NI-I2/16P|
+          |  (16 ports PoE)  |
+          +-+--+--+--+--+--+-+
+            |  |  |  |  |  |
+      Camera1 Camera4 Camera8
+       Bullet  Dome    PTZ
+       (4K)    (4K)    (4K)
+
+Network: VLAN 100 - Surveillance
+  Addressing: 10.100.0.0/24
+  Cameras: 10.100.0.10 to 10.100.0.17
+  NVR: 10.100.0.2
+  Gateway: 10.100.0.1 (MikroTik)</code></pre>
+<strong>Basic Configuration:</strong><br>
+<pre><code># Access the NVR web interface
+http://10.100.0.2
+User: admin
+Password: to be set during initialization
+
+# Initialization steps:
+1. Set the admin password
+2. Configure camera IP addresses (DHCP or static)
+3. Enable ONVIF protocol on each camera
+4. Add cameras to the NVR via SADP or network scan
+5. Configure recording: continuous + motion detection
+6. Set retention period: 30 days
+
+# Remote access:
+- Configure port forwarding on the Matrix router
+- Hikvision ports: HTTP 80, RTSP 554, Service 8000
+- Use the Hik-Connect app (mobile)</code></pre>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>Hikvision SADP Tool</strong> — Hikvision camera discovery and configuration<br>
+Windows tool that scans the local network to find all Hikvision cameras and NVRs. Allows resetting passwords, updating firmware, configuring IP addresses.<br>
+<strong>Usage:</strong><br>
+<pre><code>1. Download SADP from hikvision.com
+2. Launch the application (network must be in admin mode)
+3. Click "Refresh" to scan
+4. Select a camera
+5. Configure the IP address in the same subnet as the NVR
+6. Enter the admin password to apply changes
+7. Enable ONVIF protocol in the network settings</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Dahua ConfigTool</strong> — Dahua camera configuration<br>
+Similar to SADP but for the Dahua ecosystem. Allows batch configuration (multiple cameras at once).<br>
+<strong>Usage:</strong><br>
+<pre><code>1. Download ConfigTool from dahua.com
+2. Launch and scan the network
+3. Select cameras to configure
+4. Modify IP, mask, gateway, password
+5. Apply to all selected cameras
+
+# Web access to a Dahua camera
+http://camera-ip:80
+User: admin
+Password: set at activation
+
+# Streams:
+RTSP: rtsp://admin:password@ip:554/cam/realmonitor?channel=1&subtype=0 (main)
+RTSP: rtsp://admin:password@ip:554/cam/realmonitor?channel=1&subtype=1 (secondary)</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>UniFi Protect</strong> — Ubiquiti ecosystem<br>
+Integrated solution with UniFi cameras, Cloud Key or UniFi NVR. Intuitive web interface and mobile application.<br>
+<strong>Usage:</strong><br>
+<pre><code>1. Connect the UniFi Cloud Key+ or NVR to the network
+2. Connect UniFi cameras to the UniFi PoE switch
+3. Adopt cameras via the UniFi Protect interface
+4. Configure recording:
+   - Mode: Continuous (24/7)
+   - Motion detection: Enabled
+   - Retention: 14 days (default)
+5. Create users with restricted access
+
+# Remote access
+https://unifi.ui.com
+Mobile app: UniFi Protect</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>iVMS-4200 / Hikvision</strong> — Surveillance client software<br>
+Hikvision multi-site management Windows application. Allows viewing, recording, exporting videos, and configuring multiple NVRs remotely.<br>
+<strong>Usage:</strong><br>
+<pre><code>1. Install iVMS-4200 from hikvision.com
+2. Add a device: Device > Add
+   - NVR IP: 10.100.0.2
+   - Port: 8000
+   - User: admin
+   - Password: ***
+3. Configure camera groups
+4. Define recording schedules
+5. Set up email alerts for detection events</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>ONVIF Device Manager (ODM)</strong> — Universal tool<br>
+Open-source application for discovering and configuring any ONVIF-compatible equipment.<br>
+<strong>Usage:</strong><br>
+<pre><code>1. Download ODM from sourceforge
+2. Scan the network (Discover)
+3. Select a camera
+4. View the live feed (Live Video)
+5. Configure network settings
+6. Change the password
+7. Enable/disable audio, inputs/outputs
+
+# curl commands to verify RTSP stream
+ffplay rtsp://admin:password@10.100.0.10:554/Streaming/Channels/101</code></pre>
+</div>
+
+<div class="video-link">
+<strong>Recommended Videos:</strong><br>
+<a href="https://www.youtube.com/results?search_query=IP+camera+surveillance+system+explained" target="_blank">IP Camera Surveillance System Explained</a><br>
+<a href="https://www.youtube.com/results?search_query=PoE+Power+over+Ethernet+explained" target="_blank">PoE Explained</a><br>
+<a href="https://www.youtube.com/results?search_query=Hikvision+NVR+setup+complete+guide" target="_blank">Hikvision NVR Setup Guide</a><br>
+<a href="https://www.youtube.com/results?search_query=ONVIF+standard+explained" target="_blank">ONVIF Standard Explained</a>
+</div>
+
+<div class="tip">
+<strong>Tip for the Intern:</strong><br>
+1. Always separate video traffic in a dedicated VLAN to avoid congestion on the main network.<br>
+2. Default camera passwords are a major security vulnerability. Change them systematically.<br>
+3. Calculate required storage BEFORE sizing the NVR. Use online calculators (e.g., Hikvision Storage Calculator).<br>
+4. For outdoor use, check the camera's IP rating (IP67), UV resistance, and operating temperature.<br>
+5. For cabling, prefer Cat6 (up to 10 Gbps) to be compatible with future upgrades.<br>
+6. At Matrix, ask to see existing video surveillance installations. You will see the network infrastructure behind the cameras.<br>
+7. For troubleshooting: first check PoE (is the camera LED on?), then IP (ping), then web access, then the NVR.
+</div>
+
+</div>
+<div class="footer">
+<p>Matrix Telecom &mdash; Internship Guide &mdash; Video Surveillance Services</p>
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

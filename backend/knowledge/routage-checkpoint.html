@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CheckPoint - ROUTING Guide | Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>CheckPoint - Enterprise Firewall</h1>
+<a class="back" href="../index.html">&larr; Back to Routing Guide</a>
+</div>
+
+<div class="container">
+
+<h2>Definition</h2>
+<p>CheckPoint Software Technologies is a global leader in cybersecurity solutions and enterprise firewalls. Its flagship solution, <strong>CheckPoint Firewall</strong>, is a hardware or virtual appliance that ensures network perimeter security. It integrates stateful firewall, VPN, intrusion prevention (IPS), content filtering, anti-bot, and sandboxing (Threat Emulation) features.</p>
+
+<img src="https://source.unsplash.com/600x400/?firewall,security,network" alt="Network Firewall Security">
+
+<h2>What is CheckPoint used for at Matrix Telecom?</h2>
+<p>At Matrix Telecom, CheckPoint is used as a <strong>perimeter security solution</strong> for enterprise clients requiring a high level of protection. CheckPoint appliances (5000 series, 14000 series, or virtual on VMware) are deployed for:</p>
+<ul>
+<li>Protecting clients' internal networks from external threats.</li>
+<li>Creating site-to-site VPN tunnels to interconnect branches.</li>
+<li>Application and web content filtering (URL filtering, Application Control).</li>
+<li>Advanced protection against malware and zero-day attacks (Threat Emulation).</li>
+</ul>
+
+<h2>How It Works</h2>
+
+<h3>CheckPoint Architecture</h3>
+<p>CheckPoint uses a three-component architecture:</p>
+<ul>
+<li><strong>Security Gateway</strong>: The physical or virtual appliance that inspects traffic and enforces security policies.</li>
+<li><strong>Security Management Server</strong>: The central server hosting the policy database, logs, and certificates. It communicates with gateways via the SIC (Secure Internal Communication) protocol.</li>
+<li><strong>SmartConsole</strong>: The graphical management interface (Windows thick client) that allows administrators to configure policies, monitor events, and manage users.</li>
+</ul>
+
+<h3>Key Features</h3>
+<ul>
+<li><strong>Stateful Firewall</strong>: Packet inspection with connection state tracking (INSPECT engine).</li>
+<li><strong>IPSec / SSL VPN</strong>: Secure tunnels for remote access (Remote Access VPN) or site interconnection (Site-to-Site VPN).</li>
+<li><strong>Threat Prevention</strong>: IPS, Anti-Virus, Anti-Bot, Threat Emulation (sandboxing), Threat Extraction.</li>
+<li><strong>Application Control &amp; URL Filtering</strong>: Control of applications (Facebook, WhatsApp, etc.) and website filtering by category.</li>
+<li><strong>Identity Awareness</strong>: Integration with Active Directory to enforce policies based on user identity (not just IP address).</li>
+<li><strong>Mobile Access</strong>: Secure access to internal resources from mobile devices.</li>
+<li><strong>High Availability (HA)</strong>: Active/passive or active/active cluster with state synchronization.</li>
+<li><strong>Logging &amp; Monitoring</strong>: Centralized logs on the management server, event correlation, real-time alerts.</li>
+</ul>
+
+<h2>Step-by-Step Configuration</h2>
+
+<h3>Step 1: Appliance Initialization (First Time Configuration)</h3>
+<pre><code>1. Connect the appliance to the network (management port).
+2. Use a console cable for CLI access (or connect via default IP 192.168.1.1).
+3. Log in with admin / admin (default).
+4. Configure the management IP address:
+   - Run "sysconfig" from the console.
+   - Choose "Configure this gateway as a Security Gateway only" (or Management + Gateway if combined).
+   - Set the IP address, mask, default gateway.
+   - Set the admin password.
+   - Reboot.  </code></pre>
+
+<h3>Step 2: Creating a Security Policy (SmartConsole)</h3>
+<pre><code>1. Open SmartConsole from an administration workstation (Windows).
+2. Connect to the Management Server with the administrator account.
+3. Go to "Security Policies" &gt; "Access Control" &gt; "Policy".
+4. Create rules (order = priority from top to bottom):
+
+   # | Name          | Source              | Destination          | Service        | Action | Track
+   1  | Internet      | Internal_Net (10.0.0.0/8) | Any          | http,https,dns | Accept | Log
+   2  | DMZ           | Internal_Net         | DMZ_Net (172.16.0.0/24) | Any (authorized services) | Accept | Log
+   3  | VPN_SiteA     | SiteA_Net (192.168.1.0/24) | Internal_Net | Any           | Accept | Log
+   4  | Block_Streaming | Internal_Net      | Any              | Applications: Streaming(Netflix,YouTube) | Drop | Log
+   5  | Block_Malware | Any                  | Any              | Threat: Malware site | Drop | Alert
+   6  | Default       | Any                  | Any              | Any           | Drop   | Log
+
+5. Click "Install Policy" to push the policy to the Security Gateway.
+6. Confirm and verify that the status changes to "Installed".</code></pre>
+
+<h3>Step 3: Site-to-Site VPN Configuration</h3>
+<pre><code>1. In SmartConsole, go to "Security Policies" &gt; "VPN" &gt; "Communities".
+2. Create a new "Site-to-Site" community.
+3. Add both partner gateways (in "Gateways").
+4. In "VPN Domains", define the local networks of each site.
+5. Configure IKE parameters (Phase 1):
+   - Encryption: AES-256
+   - Hash: SHA-256
+   - DH Group: Group 14 (2048-bit)
+   - Lifetime: 86400 seconds
+6. Configure IPSec (Phase 2):
+   - Encryption: AES-256
+   - Hash: SHA-256
+   - PFS: DH Group 14
+   - Lifetime: 3600 seconds
+7. Go to "Access Control" and add a rule allowing traffic between the VPN domains.
+8. Install Policy.</code></pre>
+
+<h3>Step 4: Monitoring and Logs</h3>
+<pre><code>1. In SmartConsole, open "Logs &amp; Monitor" &gt; "Logs".
+2. Use filters to search:
+   - "blade: Firewall" - All firewall events
+   - "action: Drop" - Blocked connections
+   - "action: Accept" - Allowed connections
+3. Use "SmartView Monitor" to view real-time traffic, VPN connection status, gateway CPU/RAM load.</code></pre>
+
+<h2>Practical Example at Matrix Telecom</h2>
+
+<div class="matrix-example">
+<strong>Use Case:</strong> CheckPoint deployment for a banking client in Yaound&eacute;.<br><br>
+<strong>Requirements:</strong>
+<ul>
+<li>Protection of the banking network (100 workstations) against external attacks.</li>
+<li>Strict application filtering: only web browsers and authorized banking applications.</li>
+<li>Site-to-site VPN between headquarters and the remote branch (Matrix fiber link).</li>
+<li>SSL VPN for remote employee access while traveling.</li>
+<li>Threat Prevention to block malware and intrusion attempts.</li>
+</ul>
+<br>
+<strong>Configuration implemented:</strong>
+<ul>
+<li>Appliance: CheckPoint 5600 (gateway) + virtual Management Server on Matrix infrastructure.</li>
+<li>Policy: Strict rules, only ports 80, 443, DNS, and banking applications are allowed.</li>
+<li>Identity Awareness integrated with the bank's AD to track connections by user.</li>
+<li>Threat Emulation enabled to analyze downloaded files in a sandbox.</li>
+<li>Logs centralized on the management server with 90-day retention.</li>
+<li>HA configured between two appliances in active/passive mode for maximum availability.</li>
+</ul>
+<br>
+<strong>Result:</strong> The bank benefits from enterprise-level security, with monthly reports provided by Matrix on blocked threats and traffic trends.</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>SmartConsole</strong> - Main management interface (Windows client). Allows complete configuration: policies, VPN, network objects, administrators, logs, monitoring.<br>
+<em>Usage:</em> Install SmartConsole on a Windows workstation connected to the Management Server. Use the "Gateways &amp; Servers" tab to manage objects.<br><br>
+
+<strong>SmartView Monitor</strong> - Real-time monitoring tool. Displays traffic, VPN connections, performance, alerts.<br>
+<em>Usage:</em> Accessible from SmartConsole or standalone. Use the "Traffic", "VPN", "System Health" tabs.<br><br>
+
+<strong>SmartLog</strong> - Log search engine with web interface. Allows fast searches across billions of logs.<br>
+<em>Usage:</em> Launch SmartLog from SmartConsole, use filters by IP address, user, application, action.<br><br>
+
+<strong>CLI (Expert mode)</strong> - Command line access on the gateway in expert mode.<br>
+<em>Usage:</em> SSH to the gateway, type <code>expert</code> to switch to expert mode (root password).<br><br>
+
+<strong>Useful CLI commands:</strong>
+<pre><code>fw stat                   # Firewall status (active blades)
+fw ctl pstat              # Firewall statistics
+fw tab -t connections -s  # Active connections
+cphaprob stat             # HA cluster status
+vpn tu                     # VPN tunnel status
+cpview                    # Performance overview
+netstat -rn               # Routing table
+cpconfig                  # Gateway configuration
+ls -l $FWDIR/log          # Log location</code></pre><br>
+
+<strong>CheckPoint Management API</strong> - REST API to automate policy management. Useful for script integration.<br>
+<em>Usage:</em> <code>curl -k -X POST https://management-server:443/web_api/login -d '{"user":"admin","password":"pass"}'</code>
+</div>
+
+<h2>Recommended Videos</h2>
+<div class="video-link">
+<strong>YouTube - CheckPoint Tutorials</strong><br>
+<a href="https://www.youtube.com/results?search_query=checkpoint+firewall+basics" target="_blank">CheckPoint Firewall Fundamentals</a><br>
+<a href="https://www.youtube.com/results?search_query=checkpoint+smartconsole+configuration" target="_blank">SmartConsole Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=checkpoint+site+to+site+vpn+setup" target="_blank">CheckPoint Site-to-Site VPN</a><br>
+<a href="https://www.youtube.com/results?search_query=checkpoint+threat+prevention+configuration" target="_blank">Threat Prevention (IPS, Antivirus, Anti-Bot)</a><br>
+<a href="https://www.youtube.com/results?search_query=checkpoint+identity+awareness+active+directory" target="_blank">Identity Awareness with Active Directory</a><br>
+<a href="https://www.youtube.com/results?search_query=checkpoint+cluster+ha+configuration" target="_blank">High Availability (Cluster) CheckPoint</a>
+</div>
+
+<h2>Tip for the Intern</h2>
+<div class="tip">
+<strong>Good to know:</strong>
+<ul>
+<li>CheckPoint is a powerful but complex security solution. The CCSA (CheckPoint Certified Security Administrator) certification is an excellent addition to your resume.</li>
+<li>In SmartConsole, the order of rules is crucial. Rules are evaluated from top to bottom. The last rule is "Drop Any Any" by default.</li>
+<li>Always check the logs after installing a policy to ensure it is not blocking legitimate traffic.</li>
+<li>Use "Install on all gateways" mode with caution. Test first on a lab gateway.</li>
+<li>SIC (Secure Internal Communication) must be established between the gateway and the management server before any configuration. Use <code>cpca cert -p</code> to reset SIC if needed.</li>
+<li>CheckPoint licenses are per blade (Firewall, VPN, IPS, etc.) and per subscription. Check the validity period.</li>
+<li>In case of problems, logs are your best ally. Use <code>fw log</code> in real time on the gateway.</li>
+</ul>
+</div>
+
+<h2>Troubleshooting</h2>
+<ul>
+<li><strong>Policy not installed:</strong> Check SIC (status "Trust established" or "Communication error"). Check licenses.</li>
+<li><strong>Connection blocked:</strong> Check logs in SmartConsole. Verify if the accept/block rule matches. Check IPS and Application Control logs.</li>
+<li><strong>VPN not establishing:</strong> Check IKE phases (encryption parameters), certificates, VPN domains, firewall rules allowing VPN traffic.</li>
+<li><strong>Gateway unresponsive:</strong> Access via physical console or management port. Check CPU with <code>cpview</code>, processes with <code>ps aux</code>.</li>
+<li><strong>Logs not centralized:</strong> Check connectivity between gateway and management server (port 257). Check disk space on the management server.</li>
+</ul>
+
+<h2>Best Practices</h2>
+<ul>
+<li>Follow the principle of least privilege: only allow strictly necessary traffic.</li>
+<li>Document each firewall rule with a clear name and description.</li>
+<li>Regularly audit unused rules (suggested Cleanup Rule).</li>
+<li>Use object groups (hosts, networks, services, applications) to structure the policy.</li>
+<li>Regularly backup the management server database.</li>
+<li>Enable alerts for critical events (intrusion attempts, administrator connections).</li>
+<li>Update Threat Prevention blades regularly (latest signatures).</li>
+</ul>
+
+<h2>Additional Resources</h2>
+<ul>
+<li><a href="https://supportcenter.checkpoint.com/" target="_blank" style="color:#60a5fa;">CheckPoint Support Center</a></li>
+<li><a href="https://community.checkpoint.com/" target="_blank" style="color:#60a5fa;">CheckPoint Community (forums)</a></li>
+<li><a href="https://training-certifications.checkpoint.com/" target="_blank" style="color:#60a5fa;">CheckPoint Training &amp; Certifications</a></li>
+<li><a href="https://checkpoint.com/downloads/" target="_blank" style="color:#60a5fa;">Downloads (SmartConsole, firmwares)</a></li>
+</ul>
+
+</div>
+
+<div class="footer">
+Matrix Telecom Yaound&eacute; - ROUTING Internship Guide - July 2026
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Acc&egrave;s Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>
