@@ -26,7 +26,19 @@ export default function ChatView({ onXpGained, onModeChange }) {
   });
   const { listening, speaking, voiceSupported, listen, stopListening, speak, stopSpeaking } = useSpeech();
   const bottomRef = useRef(null);
+  const robotRef = useRef(null);
+  const [robotSize, setRobotSize] = useState(450);
   const [helloSpoken, setHelloSpoken] = useState(false);
+
+  useEffect(() => {
+    const el = robotRef.current;
+    if (!el) return;
+    const update = () => setRobotSize(Math.max(220, Math.min(450, el.clientWidth - 24)));
+    update();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    return () => ro?.disconnect();
+  }, []);
 
   const reportMode = (m) => {
     setModeState(m);
@@ -101,7 +113,7 @@ export default function ChatView({ onXpGained, onModeChange }) {
   };
 
   return (
-    <div className="flex h-[calc(100vh-1.5rem)] w-full max-w-none flex-col gap-5 px-4 pb-4 lg:flex-row lg:pr-1">
+    <div className="flex h-[calc(100vh-1.5rem)] w-full max-w-none flex-col gap-5 overflow-x-hidden px-4 pb-4 lg:flex-row lg:pr-[2cm]">
       <div className="order-2 flex min-h-0 flex-1 flex-col lg:order-1 lg:max-w-[58%]">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
           <div
@@ -247,12 +259,12 @@ export default function ChatView({ onXpGained, onModeChange }) {
         </div>
       </div>
 
-      <div className="order-1 ml-auto flex min-h-[280px] w-full flex-col gap-3 lg:order-2 lg:h-auto lg:w-[42%] lg:min-w-[420px] lg:items-end">
-        <div className="flex h-1/2 items-center justify-center py-3 lg:justify-end">
+      <div className="order-1 flex min-h-[280px] w-full flex-col gap-3 lg:order-2 lg:h-auto lg:w-[42%] lg:min-w-0 lg:items-end">
+        <div ref={robotRef} className="flex h-1/2 w-full items-center justify-center py-3 lg:justify-end">
           <Robot
             talking={speaking}
             speaking={speaking}
-            size={450}
+            size={robotSize}
             message={
               busy
                 ? 'Je cherche dans la documentation Matrix...'

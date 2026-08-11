@@ -11,8 +11,8 @@ export default function Robot({ talking = false, size = 220, speaking = false, m
   const mouthWidth = (size * robotStyle.mouthWidthPercent) / 100;
 
   return (
-    <div className="relative flex flex-col items-center" style={{ width: size }}>
-      <div className="relative" style={{ width: size, height: size }}>
+    <div className="relative flex flex-col items-center" style={{ width: size, maxWidth: '100%' }}>
+      <div className="relative" style={{ width: size, height: size, maxWidth: '100%' }}>
         <motion.div
           className="absolute inset-0 rounded-full"
           animate={{
