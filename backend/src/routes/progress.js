@@ -60,6 +60,7 @@ router.post('/save', async (req, res) => {
         type: s.type || 'info',
         scene: s.scene || 'inspection',
         app: s.app || '',
+        quiz: s.quiz || null,
         completed: false,
       })),
       completed: false,

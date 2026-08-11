@@ -114,19 +114,28 @@ async function buildChunks() {
   return chunks;
 }
 
+function sameDocSet(cached, files) {
+  return (
+    cached &&
+    Array.isArray(cached.files) &&
+    cached.files.length === files.length &&
+    cached.files.every((f) => files.includes(f))
+  );
+}
+
 let indexPromise = null;
 
 export async function getKnowledgeIndex() {
   if (indexPromise) return indexPromise;
   indexPromise = (async () => {
-    let cached = loadCachedIndex();
-    if (cached && cached.version === 2 && cached.chunks.length > 0 && (cached.embedded || !canEmbedNow())) {
+    const files = listDocFiles();
+    const cached = loadCachedIndex();
+    if (cached && cached.version === 2 && cached.chunks.length > 0 && sameDocSet(cached, files)) {
       return cached;
     }
-    if (cached && cached.version !== 2) cached = null;
 
     const chunks = await buildChunks();
-    const index = { version: 2, embedded: false, embedder: null, chunks };
+    const index = { version: 2, files, embedded: false, embedder: null, chunks };
 
     if (hasOpenAIKey()) {
       try {
@@ -154,10 +163,6 @@ export async function getKnowledgeIndex() {
   return indexPromise;
 }
 
-function canEmbedNow() {
-  return hasOpenAIKey() || hasGeminiKey();
-}
-
 async function embedQuery(query, embedder) {
   if (embedder === 'gemini') return (await geminiEmbed([query]))?.[0];
   return (await embed([query]))?.[0];
@@ -168,18 +173,22 @@ export async function searchKnowledge(query, topK = 5) {
   const scored = [];
 
   if (index.embedded) {
-    const qv = await embedQuery(query, index.embedder);
-    if (qv) {
-      for (const c of index.chunks) scored.push({ ...c, score: cosine(qv, c.vector) });
-      scored.sort((a, b) => b.score - a.score);
-      return { results: scored.slice(0, topK), embedded: true, embedder: index.embedder };
+    try {
+      const qv = await embedQuery(query, index.embedder);
+      if (qv) {
+        for (const c of index.chunks) scored.push({ ...c, score: cosine(qv, c.vector) });
+        scored.sort((a, b) => b.score - a.score);
+        return { results: scored.slice(0, topK), embedded: true, embedder: index.embedder };
+      }
+    } catch (err) {
+      console.warn('[kb] embedding query failed, keyword fallback:', err.message);
     }
   }
 
   for (const c of index.chunks) scored.push({ ...c, score: keywordScore(query, c.content) });
   scored.sort((a, b) => b.score - a.score);
   const nonZero = scored.filter((s) => s.score > 0);
-  return { results: (nonZero.length ? nonZero : scored.slice(0, 1)).slice(0, topK), embedded: false };
+  return { results: nonZero.slice(0, topK), embedded: false };
 }
 
 export async function getKnowledgeStats() {

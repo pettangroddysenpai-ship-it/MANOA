@@ -1,6 +1,6 @@
 import { config, hasGeminiKey } from '../config/index.js';
 
-const MODEL = 'gemini-1.5-flash';
+const MODEL = 'gemini-2.5-flash';
 const BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 export function getGemini() {
@@ -30,6 +30,7 @@ export async function geminiGenerate({ system, context = '', question, json = fa
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(30000),
   });
 
   if (!res.ok) {
@@ -52,16 +53,18 @@ export async function geminiGenerate({ system, context = '', question, json = fa
 export async function geminiEmbed(texts) {
   const g = getGemini();
   if (!g) return null;
-  const BATCH = 100;
+  const BATCH = 64;
   const out = [];
   for (let i = 0; i < texts.length; i += BATCH) {
     const batch = texts.slice(i, i + BATCH);
-    const res = await fetch(`${BASE}/${g.model}:batchEmbedContents?key=${g.apiKey}`, {
+    console.log(`[embed] Gemini batch ${i / BATCH + 1}/${Math.ceil(texts.length / BATCH)} (${batch.length} items)`);
+    const res = await fetch(`${BASE}/${g.embedModel}:batchEmbedContents?key=${g.apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         requests: batch.map((text) => ({ model: `models/${g.embedModel}`, content: { parts: [{ text }] } })),
       }),
+      signal: AbortSignal.timeout(30000),
     });
     if (!res.ok) {
       const detail = await res.text().catch(() => '');

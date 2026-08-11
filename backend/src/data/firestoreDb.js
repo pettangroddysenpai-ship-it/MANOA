@@ -36,8 +36,8 @@ export const firestoreDb = {
     const snap = await col('users').doc(id).get();
     return snap.exists ? snap.data() : null;
   },
-  async createUser(id, data) {
-    const doc = { xp: 0, level: 1, streak: 0, badges: [], createdAt: new Date().toISOString(), ...data };
+  async createUser({ id, name }) {
+    const doc = { id, name, xp: 0, level: 1, streak: 0, badges: [], createdAt: new Date().toISOString() };
     await col('users').doc(id).set(doc);
     return doc;
   },

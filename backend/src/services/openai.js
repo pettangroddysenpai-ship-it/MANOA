@@ -4,7 +4,7 @@ import { config, hasOpenAIKey } from '../config/index.js';
 let client = null;
 
 export function getOpenAI() {
-  if (!client && hasOpenAIKey()) client = new OpenAI({ apiKey: config.openai.apiKey });
+  if (!client && hasOpenAIKey()) client = new OpenAI({ apiKey: config.openai.apiKey, timeout: 60000, maxRetries: 1 });
   return client;
 }
 

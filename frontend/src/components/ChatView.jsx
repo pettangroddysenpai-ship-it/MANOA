@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Mic, Square, Volume2, Bot, User } from 'lucide-react';
+import { Send, Mic, Square, Volume2, Bot, User, Youtube } from 'lucide-react';
 import Robot from './Robot.jsx';
 import RoadmapView from './RoadmapView.jsx';
 import StickmanCanvas from './StickmanCanvas.jsx';
@@ -14,15 +14,35 @@ const SUGGESTIONS = [
   'Comment utiliser Winbox ?',
 ];
 
-export default function ChatView({ onXpGained }) {
+export default function ChatView({ onXpGained, onModeChange }) {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [busy, setBusy] = useState(false);
   const [roadmapEntries, setRoadmapEntries] = useState({});
   const [activeScene, setActiveScene] = useState({ scene: 'inspection', app: '', title: '' });
+  const [mode, setModeState] = useState({
+    online: typeof navigator !== 'undefined' ? navigator.onLine : false,
+    label: typeof navigator !== 'undefined' && navigator.onLine ? 'Mode en ligne' : 'Mode hors ligne',
+  });
   const { listening, speaking, voiceSupported, listen, stopListening, speak, stopSpeaking } = useSpeech();
   const bottomRef = useRef(null);
   const [helloSpoken, setHelloSpoken] = useState(false);
+
+  const reportMode = (m) => {
+    setModeState(m);
+    if (onModeChange) onModeChange(m);
+  };
+
+  useEffect(() => {
+    const onOnline = () => reportMode({ online: true, label: 'Mode en ligne' });
+    const onOffline = () => reportMode({ online: false, label: 'Mode hors ligne' });
+    window.addEventListener('online', onOnline);
+    window.addEventListener('offline', onOffline);
+    return () => {
+      window.removeEventListener('online', onOnline);
+      window.removeEventListener('offline', onOffline);
+    };
+  }, []);
 
   useEffect(() => {
     if (!helloSpoken && !speaking) {
@@ -43,7 +63,13 @@ export default function ChatView({ onXpGained }) {
     setBusy(true);
     try {
       const res = await api.chat(q);
-      setMessages((m) => [...m, { role: 'assistant', content: res.text, sources: res.sources, type: res.type }]);
+      const providers = res.providers || [];
+      const onlineProviders = providers.filter((p) => p === 'openai' || p === 'gemini');
+      reportMode({
+        online: onlineProviders.length > 0,
+        label: onlineProviders.length > 0 ? `Mode en ligne: ${onlineProviders.join(' + ')}` : 'Mode hors ligne: documents locaux',
+      });
+      setMessages((m) => [...m, { role: 'assistant', content: res.text, sources: res.sources, type: res.type, videos: res.videos }]);
       if (res.roadmap) {
         const saved = await api.saveRoadmap(q, res.roadmap);
         setRoadmapEntries((e) => ({ ...e, [saved.id]: saved }));
@@ -75,18 +101,30 @@ export default function ChatView({ onXpGained }) {
   };
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-1.5rem)] w-full max-w-6xl flex-col gap-5 px-4 pb-4 lg:flex-row">
-      <div className="order-2 flex min-h-0 flex-1 flex-col lg:order-1 lg:w-3/5">
-        <div className="mb-2 flex flex-wrap justify-center gap-2">
-          {SUGGESTIONS.map((s) => (
-            <button
-              key={s}
-              onClick={() => send(s)}
-              className="glass rounded-full px-3 py-1.5 text-xs text-blue-200 transition hover:bg-blue-500/20"
-            >
-              {s}
-            </button>
-          ))}
+    <div className="flex h-[calc(100vh-1.5rem)] w-full max-w-none flex-col gap-5 px-4 pb-4 lg:flex-row lg:pr-1">
+      <div className="order-2 flex min-h-0 flex-1 flex-col lg:order-1 lg:max-w-[58%]">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <div
+            className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
+              mode.online
+                ? 'border-emerald-400/30 bg-emerald-500/10 text-emerald-300'
+                : 'border-amber-400/30 bg-amber-500/10 text-amber-300'
+            }`}
+            title={mode.label}
+          >
+            {mode.label}
+          </div>
+          <div className="flex flex-wrap justify-end gap-2">
+            {SUGGESTIONS.map((s) => (
+              <button
+                key={s}
+                onClick={() => send(s)}
+                className="glass rounded-full px-3 py-1.5 text-xs text-blue-200 transition hover:bg-blue-500/20"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-1">
@@ -122,6 +160,28 @@ export default function ChatView({ onXpGained }) {
                       </button>
                       {msg.sources?.length > 0 && (
                         <span className="text-slate-500">Sources: {msg.sources.slice(0, 2).map((s) => s.title).join(', ')}</span>
+                      )}
+                      {msg.videos?.length > 0 && (
+                        <div className="mt-2 space-y-1.5">
+                          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-rose-300">
+                            <Youtube size={13} /> Tutoriels video recommandes
+                          </div>
+                          {msg.videos.map((v) => (
+                            <a
+                              key={v.id}
+                              href={v.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex items-start gap-2 rounded-xl border border-rose-400/20 bg-rose-500/5 px-3 py-2 text-xs text-blue-200 transition hover:border-rose-400/40 hover:bg-rose-500/10"
+                            >
+                              <Youtube size={14} className="mt-0.5 shrink-0 text-rose-400" />
+                              <span className="min-w-0">
+                                <span className="block truncate">{v.title}</span>
+                                <span className="block text-slate-500">{v.channel}</span>
+                              </span>
+                            </a>
+                          ))}
+                        </div>
                       )}
                     </div>
                   )}
@@ -187,12 +247,12 @@ export default function ChatView({ onXpGained }) {
         </div>
       </div>
 
-      <div className="order-1 flex min-h-[280px] w-full flex-col gap-3 lg:order-2 lg:h-auto lg:w-2/5">
-        <div className="glass flex h-1/2 items-center justify-center rounded-2xl py-3">
+      <div className="order-1 ml-auto flex min-h-[280px] w-full flex-col gap-3 lg:order-2 lg:h-auto lg:w-[42%] lg:min-w-[420px] lg:items-end">
+        <div className="flex h-1/2 items-center justify-center py-3 lg:justify-end">
           <Robot
             talking={speaking}
             speaking={speaking}
-            size={160}
+            size={450}
             message={
               busy
                 ? 'Je cherche dans la documentation Matrix...'

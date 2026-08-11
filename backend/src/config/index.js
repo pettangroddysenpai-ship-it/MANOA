@@ -13,8 +13,12 @@ export const config = {
   },
   gemini: {
     apiKey: process.env.GEMINI_API_KEY || '',
-    model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
-    embedModel: process.env.GEMINI_EMBED_MODEL || 'embedding-001',
+    model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+    embedModel: process.env.GEMINI_EMBED_MODEL || 'gemini-embedding-001',
+  },
+  youtube: {
+    apiKey: process.env.YOUTUBE_API_KEY || '',
+    maxResults: Number(process.env.YOUTUBE_MAX_RESULTS || 3),
   },
   firebase: {
     serviceAccountPath: process.env.FIREBASE_SERVICE_ACCOUNT || process.env.GOOGLE_APPLICATION_CREDENTIALS || '',
@@ -31,3 +35,4 @@ export const config = {
 
 export const hasOpenAIKey = () => Boolean(config.openai.apiKey && !config.openai.apiKey.includes('your-openai-api-key'));
 export const hasGeminiKey = () => Boolean(config.gemini.apiKey);
+export const hasYoutubeKey = () => Boolean(config.youtube.apiKey);

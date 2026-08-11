@@ -9,7 +9,8 @@ feuilles de route pedagogiques style Duolingo et base de connaissances RAG (27 d
 |--------|-------------|
 | Frontend | React + Vite + Tailwind CSS + Framer Motion |
 | Backend | Node.js + Express |
-| IA | OpenAI API (GPT-4o-mini + text-embedding-3-small) + Google Gemini (gemini-1.5-flash) |
+| IA | OpenAI API (GPT-4o-mini + text-embedding-3-small) + Google Gemini (gemini-2.5-flash) |
+| Videos | YouTube Data API v3 (gratuite) : tutoriels recommandes selon la question |
 | Base de donnees | Firebase Firestore (sinon JSON local automatique) |
 | Voix | SpeechRecognition (entree) + speechSynthesis (sortie) - gratuit, navigateur |
 | Robot | Image `MANOA.jpeg` animee en CSS/Framer Motion |
@@ -33,11 +34,15 @@ Ouvrez `backend\.env` et renseignez :
 ```
 OPENAI_API_KEY=sk-...        # cle OpenAI (necessite des credits)
 GEMINI_API_KEY=AIza...       # cle Gemini gratuite : https://aistudio.google.com/apikey
+YOUTUBE_API_KEY=AIza...      # cle YouTube gratuite : https://console.cloud.google.com/apis/library/youtube.googleapis.com
 ```
 
 MANOA interroge **OpenAI et Gemini** a chaque question et combine leurs reponses.
 Sans cle, ou si OpenAI n'a pas de credits, l'application bascule automatiquement en
 mode hors-ligne (reponses issues des documents de formation, feuilles de route predefinies).
+
+Avec `YOUTUBE_API_KEY`, chaque reponse est enrichie de **tutoriels video YouTube**
+correspondant a la question (cartes cliquables sous la reponse).
 
 ### 3. Lancer le projet
 
@@ -61,6 +66,11 @@ Cela ouvre :
 - **Double IA** : chaque question consulte **OpenAI et Gemini**, reponses combinees avec sources.
 - **Chat telecom** : reponses basees sur les 27 documents de formation Matrix (RAG, HTML + PDF).
 - **Feuilles de route** : questions "comment..." -> parcours Duolingo avec etapes, commandes, quiz et scenes.
+- **Mode hors-ligne** : sans credit AI, MANOA repond quand meme avec des procedures **pas a pas precises**
+  (menus et commandes exactes, valeurs a remplacer, controles attendus) et des feuilles de route pour
+  les cas courants : PPPoE MikroTik, mise en service Internet, diagnostic panne, fibre ONU/CPE, DHCP, DNS, Winbox.
+- **Tutoriels video** : avec une cle YouTube, des videos pertinentes sont proposees sous chaque reponse.
+- **Indicateur de mode** : un badge affiche si vous etes en mode en ligne ou hors ligne (coin du chat + barre laterale).
 - **Progression** : XP, niveaux, badges, series.
 - **Tableau de bord admin** : statistiques d'utilisation, conversations (mot de passe : `manoa-admin`).
 

@@ -50,8 +50,8 @@ router.post('/roadmap', async (req, res) => {
     if (!question || !String(question).trim()) {
       return res.status(400).json({ error: 'Question vide' });
     }
-    const { roadmap, provider } = await generateRoadmapOnly(String(question));
-    res.json({ roadmap, provider });
+    const { roadmap, providers, videos } = await generateRoadmapOnly(String(question));
+    res.json({ roadmap, providers, videos });
   } catch (err) {
     console.error('[roadmap] error:', err);
     res.status(500).json({ error: 'Erreur serveur' });
