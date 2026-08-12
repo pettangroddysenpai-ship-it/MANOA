@@ -65,22 +65,22 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
   return (
     <div className="mx-auto w-full max-w-2xl">
       <div className="mb-6 text-center">
-        <div className="flex items-center justify-center gap-2 text-2xl font-bold text-slate-100">
+        <div className="flex items-center justify-center gap-2 text-2xl font-bold text-neutral-900">
           <Award className="text-amber-400" size={26} />
           {entry.title}
         </div>
-        <div className="mt-3 flex items-center justify-center gap-3 text-sm text-slate-300">
-          <span className="rounded-full bg-blue-500/20 px-3 py-1 text-blue-300">
+        <div className="mt-3 flex items-center justify-center gap-3 text-sm text-neutral-600">
+          <span className="rounded-full bg-green-500/15 px-3 py-1 font-semibold text-green-700">
             {doneCount}/{steps.length} etapes
           </span>
-          <span className="rounded-full bg-orange-500/20 px-3 py-1 text-orange-300">
+          <span className="rounded-full bg-orange-500/15 px-3 py-1 font-semibold text-orange-700">
             <Flame size={12} className="mr-1 inline" />
             serie
           </span>
         </div>
-        <div className="mx-auto mt-3 h-2 w-56 overflow-hidden rounded-full bg-slate-800">
+        <div className="mx-auto mt-3 h-2 w-56 overflow-hidden rounded-full bg-neutral-200">
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400"
+            className="h-full rounded-full bg-gradient-to-r from-green-500 to-lime-400"
             animate={{ width: `${(doneCount / steps.length) * 100}%` }}
           />
         </div>
@@ -107,7 +107,7 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
           return (
             <div key={i}>
               {i > 0 && (
-                <div className={`mx-auto h-5 w-0.5 ${steps[i - 1].completed ? 'bg-emerald-400' : 'bg-slate-700'}`} />
+                <div className={`mx-auto h-5 w-0.5 ${steps[i - 1].completed ? 'bg-emerald-400' : 'bg-neutral-300'}`} />
               )}
               <motion.button
                 layout
@@ -116,12 +116,12 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
                 whileTap={unlocked ? { scale: 0.97 } : {}}
                 className={`w-full rounded-2xl border p-3 text-left transition-all ${
                   openIndex === i
-                    ? 'border-blue-400 bg-blue-500/15'
+                    ? 'border-green-500 bg-green-500/10'
                     : completed
-                      ? 'border-emerald-500/40 bg-emerald-500/10'
+                      ? 'border-emerald-500/40 bg-emerald-100'
                       : unlocked
-                        ? 'border-blue-400/40 bg-blue-500/5 hover:bg-blue-500/10'
-                        : 'border-slate-700 bg-slate-800/40 opacity-55'
+                        ? 'border-green-500/40 bg-green-500/5 hover:bg-green-500/10'
+                        : 'border-neutral-300 bg-neutral-100 opacity-55'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -130,24 +130,24 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
                       completed
                         ? 'bg-emerald-500 text-white'
                         : unlocked
-                          ? 'bg-blue-500 text-white'
-                          : 'bg-slate-700 text-slate-400'
+                          ? 'bg-green-600 text-white'
+                          : 'bg-neutral-300 text-neutral-500'
                     }`}
                   >
                     {completed ? <Check size={20} /> : unlocked ? <Icon size={18} /> : <Lock size={16} />}
                   </span>
                   <span className="flex-1">
-                    <span className={`block font-semibold ${completed ? 'text-emerald-300' : 'text-slate-100'}`}>
+                    <span className={`block font-semibold ${completed ? 'text-emerald-600' : 'text-neutral-900'}`}>
                       {step.title}
                     </span>
-                    <span className="block text-xs text-slate-400">
+                    <span className="block text-xs text-neutral-500">
                       {completed ? 'Terminee' : unlocked ? 'Cliquez pour ouvrir' : 'Verrouillee'}
                     </span>
                   </span>
                   {unlocked && (
                     <ChevronDown
                       size={18}
-                      className={`text-slate-400 transition-transform ${openIndex === i ? 'rotate-180' : ''}`}
+                      className={`text-neutral-500 transition-transform ${openIndex === i ? 'rotate-180' : ''}`}
                     />
                   )}
                 </div>
@@ -162,12 +162,12 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
                     className="overflow-hidden"
                   >
                     <div className="glass mt-2 rounded-2xl p-4">
-                      <p className="text-sm leading-relaxed text-slate-200">{step.description}</p>
+                      <p className="text-sm leading-relaxed text-neutral-700">{step.description}</p>
 
                       {step.commands?.length > 0 && (
                         <div className="mt-3 space-y-1.5">
                           {step.commands.map((cmd, ci) => (
-                            <div key={ci} className="rounded-lg bg-slate-900 px-3 py-2 font-mono text-xs text-cyan-300">
+                            <div key={ci} className="rounded-lg bg-neutral-900 px-3 py-2 font-mono text-xs text-green-300">
                               <Terminal size={12} className="mr-2 inline" />
                               {cmd}
                             </div>
@@ -176,8 +176,8 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
                       )}
 
                       {step.quiz && (
-                        <div className="mt-3 rounded-xl bg-slate-900/70 p-3">
-                          <p className="mb-2 text-sm font-medium text-slate-100">{step.quiz.question}</p>
+                        <div className="mt-3 rounded-xl bg-neutral-100 p-3">
+                          <p className="mb-2 text-sm font-medium text-neutral-800">{step.quiz.question}</p>
                           <div className="space-y-1.5">
                             {step.quiz.options.map((opt, oi) => {
                               const chosen = quizChoice === oi;
@@ -189,10 +189,10 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
                                   onClick={() => answerQuiz(i, oi)}
                                   className={`block w-full rounded-lg border px-3 py-1.5 text-left text-sm transition-colors ${
                                     isRight
-                                      ? 'border-emerald-500 bg-emerald-500/20 text-emerald-200'
+                                      ? 'border-emerald-500 bg-emerald-500/20 text-emerald-700'
                                       : chosen && !step.completed
-                                        ? 'border-rose-500 bg-rose-500/20 text-rose-200'
-                                        : 'border-slate-700 bg-slate-800 text-slate-300 hover:border-blue-400'
+                                        ? 'border-rose-500 bg-rose-500/20 text-rose-600'
+                                        : 'border-neutral-300 bg-white text-neutral-700 hover:border-green-500'
                                   }`}
                                 >
                                   {opt}
@@ -200,7 +200,7 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
                               );
                             })}
                           </div>
-                          {wrong && <p className="mt-2 text-xs text-rose-400">Mauvaise reponse, essayez encore !</p>}
+                          {wrong && <p className="mt-2 text-xs text-rose-500">Mauvaise reponse, essayez encore !</p>}
                         </div>
                       )}
 
@@ -208,7 +208,7 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
                         <button
                           onClick={() => completeStep(i)}
                           disabled={busy}
-                          className="mt-3 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-emerald-400 disabled:opacity-50"
+                          className="mt-3 rounded-xl bg-green-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-green-500 disabled:opacity-50"
                         >
                           {busy ? '...' : 'Terminer cette etape (+25 XP)'}
                         </button>
@@ -229,8 +229,8 @@ export default function RoadmapView({ entry, onXpGained, onStepOpen }) {
           className="mt-6 flex flex-col items-center rounded-2xl border border-amber-400/40 bg-amber-500/10 p-6 text-center"
         >
           <Award size={40} className="text-amber-400" />
-          <p className="mt-2 text-lg font-bold text-amber-300">Feuille de route terminee !</p>
-          <p className="text-sm text-slate-300">+50 XP bonus. Bravo, vous progressez comme un pro.</p>
+          <p className="mt-2 text-lg font-bold text-amber-700">Feuille de route terminee !</p>
+          <p className="text-sm text-neutral-600">+50 XP bonus. Bravo, vous progressez comme un pro.</p>
         </motion.div>
       )}
     </div>

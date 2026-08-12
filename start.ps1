@@ -11,8 +11,8 @@ Write-Host "   MANOA - Matrix AI Technician"
 Write-Host "  ============================================="
 Write-Host ""
 
-$backend = "matrix-ai\backend"
-$frontend = "matrix-ai\frontend"
+$backend = "backend"
+$frontend = "frontend"
 
 if (-not (Test-Path "$backend\node_modules")) {
   Write-Host "[1/4] Installation du backend..."

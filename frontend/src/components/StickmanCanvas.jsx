@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 
 const INK = '#cbd5e1';
-const ACCENT = '#60a5fa';
+const ACCENT = '#4ade80';
 const GREEN = '#34d399';
 const AMBER = '#fbbf24';
 
@@ -279,17 +279,23 @@ export default function StickmanCanvas({ scene = 'inspection', app = '', title =
       key={scene}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative h-full w-full overflow-hidden rounded-2xl border border-blue-500/20 bg-[#0a1424]"
+      className="simulation-container"
     >
-      <svg viewBox="0 0 420 300" className="h-full w-full" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <Grid />
-        </defs>
-        <rect width="420" height="300" fill="url(#grid)" />
-        <Scene app={app} title={title} />
-      </svg>
-      <div className="pointer-events-none absolute bottom-2 left-0 right-0 text-center text-xs text-slate-400">
-        Simulation - {scene.replace(/-/g, ' ')}
+      <div className="simulation-box">
+        <span />
+        <span />
+        <span />
+        <span />
+        <div className="simulation-content">
+          <svg viewBox="-38 0 496 300" className="h-full w-full" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <Grid />
+            </defs>
+            <rect x="-38" y="38" width="496" height="262" fill="url(#grid)" />
+            <Scene app={app} title={title} />
+          </svg>
+          <div className="simulation-label">Simulation - {scene.replace(/-/g, ' ')}</div>
+        </div>
       </div>
     </motion.div>
   );

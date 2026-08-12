@@ -17,8 +17,8 @@ export default function Robot({ talking = false, size = 220, speaking = false, m
           className="absolute inset-0 rounded-full"
           animate={{
             boxShadow: speaking
-              ? ['0 0 30px 6px rgba(96,165,250,.75)', '0 0 60px 18px rgba(96,165,250,.95)', '0 0 30px 6px rgba(96,165,250,.75)']
-              : '0 0 24px 4px rgba(96,165,250,.35)',
+              ? ['0 0 30px 6px rgba(74,222,128,.75)', '0 0 60px 18px rgba(34,197,94,.95)', '0 0 30px 6px rgba(74,222,128,.75)']
+              : '0 0 24px 4px rgba(74,222,128,.4)',
             transition: { duration: speaking ? 0.9 : 0.5 },
           }}
         />
@@ -50,7 +50,7 @@ export default function Robot({ talking = false, size = 220, speaking = false, m
                   height: 6,
                   transform: 'translateX(-50%)',
                   background: 'rgba(10,15,30,0.9)',
-                  border: '2px solid rgba(96,165,250,0.9)',
+                  border: '2px solid rgba(74,222,128,0.9)',
                 }}
                 animate={{ height: [6, 14, 7, 13, 6], transition: { duration: 0.3, repeat: Infinity } }}
               />
@@ -61,7 +61,7 @@ export default function Robot({ talking = false, size = 220, speaking = false, m
           <motion.div
             className="absolute inset-0 rounded-full"
             animate={{ scale: [1, 1.08, 1], opacity: [0.35, 0.15, 0.35], transition: { duration: 0.8, repeat: Infinity } }}
-            style={{ border: '2px solid rgba(96,165,250,0.8)' }}
+            style={{ border: '2px solid rgba(74,222,128,0.8)' }}
           />
         )}
       </div>
@@ -70,10 +70,10 @@ export default function Robot({ talking = false, size = 220, speaking = false, m
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass relative mt-4 max-w-full rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-slate-100"
+          className="glass relative mt-4 max-w-full rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm text-neutral-800"
         >
           {message}
-          <span className="absolute -top-1.5 left-4 h-3 w-3 rotate-45 border-l border-t border-[rgba(96,165,250,.18)] bg-[#0f1e37]" />
+          <span className="absolute -top-1.5 left-4 h-3 w-3 rotate-45 border-l border-t border-[rgba(34,197,94,.3)] bg-white" />
         </motion.div>
       )}
     </div>

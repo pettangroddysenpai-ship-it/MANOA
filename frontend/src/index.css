@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  background: radial-gradient(1200px 800px at 20% -10%, #0f2a4a 0%, #0b1626 45%, #070d18 100%);
+  background: radial-gradient(1200px 800px at 20% -10%, #f3fbf1 0%, #ffffff 45%, #e4f7e9 100%);
   min-height: 100vh;
   margin: 0;
-  color: #e2e8f0;
+  color: #111111;
   overflow-x: hidden;
 }
 
@@ -21,12 +21,111 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e3a5f;
+  background: #86efac;
   border-radius: 999px;
 }
 
 .glass {
-  background: rgba(15, 30, 55, 0.55);
-  border: 1px solid rgba(96, 165, 250, 0.18);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(34, 197, 94, 0.3);
   backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Discussion page background image */
+.chat-bg {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(240, 255, 244, 0.5)),
+    url("/Background.jpeg") center/cover no-repeat fixed;
+}
+
+/* Simulation box - animated glowing border (from animated-box-border.html) */
+.simulation-container {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 100;
+}
+
+.simulation-container .simulation-box {
+  position: relative;
+  width: 14cm;
+  height: 7cm;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1a1a1e;
+  border-radius: 8px;
+  overflow: hidden;
+  --main-color: #4dff4d;
+}
+
+.simulation-container .simulation-box span {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.simulation-container .simulation-box span::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  left: -25%;
+  top: -25%;
+  background: conic-gradient(transparent, transparent, transparent, var(--clr));
+  animation: rotate 3s linear infinite;
+  animation-delay: calc(var(--i) * -0.75s);
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.simulation-container .simulation-box span:nth-child(1) { --i: 0; --clr: var(--main-color); }
+.simulation-container .simulation-box span:nth-child(2) { --i: 1; --clr: var(--main-color); }
+.simulation-container .simulation-box span:nth-child(3) { --i: 2; --clr: var(--main-color); }
+.simulation-container .simulation-box span:nth-child(4) { --i: 3; --clr: var(--main-color); }
+
+.simulation-container .simulation-box .simulation-content {
+  position: absolute;
+  inset: 3px;
+  background: #1a1a1e;
+  border-radius: 6px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.simulation-container .simulation-box .simulation-label {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.simulation-container .simulation-box:hover {
+  box-shadow: 0 0 60px var(--main-color);
+}
+
+.simulation-container .simulation-box:hover span::before {
+  animation-duration: 1.2s;
+}
+
+/* Mascot (Robot) sitting directly on top of the simulation box */
+.mascot-container {
+  position: fixed;
+  right: 20px;
+  bottom: calc(7cm + 20px);
+  z-index: 110;
+  display: flex;
+  justify-content: center;
+  width: 14cm;
+  pointer-events: none;
 }
