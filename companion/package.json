@@ -1,0 +1,60 @@
+{
+  "name": "manoa-companion",
+  "version": "1.0.0",
+  "description": "MANOA tray companion : detection de mot-cle vocal (Vosk) + ouverture automatique de l'application",
+  "main": "main.js",
+  "author": "Matrix Telecom",
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "node scripts/copy-vosk.js && node scripts/make-icons.mjs",
+    "start": "electron .",
+    "icons": "node scripts/make-icons.mjs",
+    "build:win": "powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1"
+  },
+  "dependencies": {
+    "extract-zip": "^2.0.1",
+    "tar": "^7.4.3",
+    "vosk-browser": "0.0.8"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
+    "jimp": "^0.22.12",
+    "png-to-ico": "^2.1.8"
+  },
+  "build": {
+    "appId": "com.matrix.manoa",
+    "productName": "MANOA",
+    "copyright": "Matrix Telecom",
+    "asar": true,
+    "files": [
+      "main.js",
+      "config.js",
+      "preload.js",
+      "resources/**/*",
+      "!resources/icons/*.png"
+    ],
+    "extraResources": [
+      { "from": "bundled/backend", "to": "backend" },
+      { "from": "bundled/frontend", "to": "frontend" },
+      { "from": "bundled/node/node.exe", "to": "node/node.exe" }
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "runAfterFinish": true,
+      "shortcutName": "MANOA"
+    }
+  }
+}
