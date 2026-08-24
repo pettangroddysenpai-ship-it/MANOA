@@ -5,6 +5,7 @@ import pdfParse from 'pdf-parse/lib/pdf-parse.js';
 import { config, hasOpenAIKey, hasGeminiKey } from '../config/index.js';
 import { embed } from './openai.js';
 import { geminiEmbed } from './geminiService.js';
+import { ollamaEmbed, ollamaEnabled, ollamaEmbedModel } from './ollamaService.js';
 
 const indexFile = path.join(config.paths.data, 'knowledge_index.json');
 const kbDir = config.paths.knowledge;
@@ -35,15 +36,35 @@ export async function extractPdfText(buffer) {
   }
 }
 
-export function chunkText(text, size = 600, overlap = 80) {
+export function chunkText(text, size = 800, overlap = 120) {
   const cleaned = text.replace(/\s+/g, ' ').trim();
-  if (cleaned.length <= size) return cleaned ? [cleaned] : [];
+  if (!cleaned) return [];
+  if (cleaned.length <= size) return [cleaned];
+  const sentences = cleaned.match(/[^.!?]+(?:[.!?]|$)\s*/g) || [cleaned];
   const chunks = [];
-  let i = 0;
-  while (i < cleaned.length) {
-    chunks.push(cleaned.slice(i, i + size));
-    i += size - overlap;
+  let current = '';
+  const push = () => {
+    const trimmed = current.trim();
+    if (trimmed) chunks.push(trimmed);
+    const words = trimmed.split(/\s+/);
+    const tail = [];
+    let tailLen = 0;
+    for (let i = words.length - 1; i >= 0 && tailLen < overlap; i--) {
+      tail.unshift(words[i]);
+      tailLen += words[i].length + 1;
+    }
+    current = tail.join(' ') + ' ';
+  };
+  for (const sent of sentences) {
+    const pieces = sent.length > size
+      ? Array.from({ length: Math.ceil(sent.length / size) }, (_, i) => sent.slice(i * size, (i + 1) * size))
+      : [sent];
+    for (const piece of pieces) {
+      if ((current + piece).trim().length > size && current.trim()) push();
+      current += piece;
+    }
   }
+  if (current.trim()) chunks.push(current.trim());
   return chunks;
 }
 
@@ -130,12 +151,12 @@ export async function getKnowledgeIndex() {
   indexPromise = (async () => {
     const files = listDocFiles();
     const cached = loadCachedIndex();
-    if (cached && cached.version === 2 && cached.chunks.length > 0 && sameDocSet(cached, files)) {
+    if (cached && cached.version === 4 && cached.chunks.length > 0 && sameDocSet(cached, files)) {
       return cached;
     }
 
     const chunks = await buildChunks();
-    const index = { version: 2, files, embedded: false, embedder: null, chunks };
+    const index = { version: 4, files, embedded: false, embedder: null, chunks };
 
     if (hasOpenAIKey()) {
       try {
@@ -154,7 +175,21 @@ export async function getKnowledgeIndex() {
         index.embedded = true;
         index.embedder = 'gemini';
       } catch (err) {
-        console.warn('[kb] Gemini embedding failed, using keyword search:', err.message);
+        console.warn('[kb] Gemini embedding failed, trying Ollama:', err.message);
+      }
+    }
+    if (!index.embedded && (await ollamaEnabled())) {
+      try {
+        const vectors = await ollamaEmbed(chunks.map((c) => c.content.slice(0, 8000)));
+        if (!Array.isArray(vectors) || vectors.length !== chunks.length) {
+          throw new Error('Ollama embed: modele d embedding indisponible');
+        }
+        index.chunks = chunks.map((c, i) => ({ ...c, vector: vectors[i] }));
+        index.embedded = true;
+        index.embedder = 'ollama';
+        console.log(`[kb] Index embarque avec Ollama (${await ollamaEmbedModel()})`);
+      } catch (err) {
+        console.warn('[kb] Ollama embedding failed, using keyword search:', err.message);
       }
     }
     saveIndex(index);
@@ -165,10 +200,11 @@ export async function getKnowledgeIndex() {
 
 async function embedQuery(query, embedder) {
   if (embedder === 'gemini') return (await geminiEmbed([query]))?.[0];
+  if (embedder === 'ollama') return (await ollamaEmbed([query]))?.[0];
   return (await embed([query]))?.[0];
 }
 
-export async function searchKnowledge(query, topK = 5) {
+export async function searchKnowledge(query, topK = 6) {
   const index = await getKnowledgeIndex();
   const scored = [];
 
@@ -176,7 +212,11 @@ export async function searchKnowledge(query, topK = 5) {
     try {
       const qv = await embedQuery(query, index.embedder);
       if (qv) {
-        for (const c of index.chunks) scored.push({ ...c, score: cosine(qv, c.vector) });
+        for (const c of index.chunks) {
+          const semantic = cosine(qv, c.vector);
+          const kw = keywordScore(query, c.content);
+          scored.push({ ...c, score: semantic * 0.8 + kw * 0.4 });
+        }
         scored.sort((a, b) => b.score - a.score);
         return { results: scored.slice(0, topK), embedded: true, embedder: index.embedder };
       }

@@ -217,7 +217,7 @@ function AppWalkthroughScene({ app }) {
       </g>
 
       <Stickman x={305} y={185} s={0.95} pose="sit" />
-      <text x="305" y="225" textAnchor="middle" fontSize="10" fill={INK}>J'apprends {app || 'le logiciel'}</text>
+      <text x="305" y="225" textAnchor="middle" fontSize="10" fill={INK}>{`J'apprends ${app || 'le logiciel'}`}</text>
       <text x="210" y="280" textAnchor="middle" fontSize="12" fontWeight="bold" fill={ACCENT}>{`Utilisation de ${app || "l'application"}`}</text>
     </g>
   );

@@ -115,7 +115,7 @@ export default function App() {
         </div>
       </aside>
 
-      <main className={`ml-60 flex-1 ${tab === 'chat' ? 'chat-bg' : ''}`}>
+      <main className="ml-60 flex-1">
         <div className={tab === 'chat' ? 'w-full pt-6' : 'mx-auto max-w-5xl pt-6'}>
           {tab === 'chat' && <ChatView onXpGained={handleXpGained} onModeChange={setMode} />}
           {tab === 'roadmaps' && <ProgressListView onXpGained={handleXpGained} />}

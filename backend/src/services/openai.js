@@ -11,9 +11,16 @@ export function getOpenAI() {
 export async function embed(texts) {
   const openai = getOpenAI();
   if (!openai) return null;
-  const res = await openai.embeddings.create({
-    model: config.openai.embedModel,
-    input: texts,
-  });
-  return res.data.map((d) => d.embedding);
+  const BATCH = 64;
+  const out = [];
+  for (let i = 0; i < texts.length; i += BATCH) {
+    const batch = texts.slice(i, i + BATCH);
+    console.log(`[embed] OpenAI batch ${i / BATCH + 1}/${Math.ceil(texts.length / BATCH)} (${batch.length} items)`);
+    const res = await openai.embeddings.create({
+      model: config.openai.embedModel,
+      input: batch,
+    });
+    out.push(...res.data.map((d) => d.embedding));
+  }
+  return out;
 }

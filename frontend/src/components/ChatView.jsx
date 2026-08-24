@@ -77,9 +77,14 @@ export default function ChatView({ onXpGained, onModeChange }) {
       const res = await api.chat(q);
       const providers = res.providers || [];
       const onlineProviders = providers.filter((p) => p === 'openai' || p === 'gemini');
+      const localProviders = providers.filter((p) => p === 'ollama');
       reportMode({
         online: onlineProviders.length > 0,
-        label: onlineProviders.length > 0 ? `Mode en ligne: ${onlineProviders.join(' + ')}` : 'Mode hors ligne: documents locaux',
+        label: onlineProviders.length > 0
+          ? `Mode en ligne: ${onlineProviders.join(' + ')}`
+          : localProviders.length > 0
+            ? `Mode local: ${localProviders.join(' + ')}`
+            : 'Mode hors ligne: documents locaux',
       });
       setMessages((m) => [...m, { role: 'assistant', content: res.text, sources: res.sources, type: res.type, videos: res.videos }]);
       if (res.roadmap) {

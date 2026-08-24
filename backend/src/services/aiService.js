@@ -1,5 +1,6 @@
 import { getOpenAI, embed } from './openai.js';
 import { geminiGenerate } from './geminiService.js';
+import { ollamaGenerate, ollamaEnabled } from './ollamaService.js';
 import { config, hasOpenAIKey, hasGeminiKey, hasYoutubeKey } from '../config/index.js';
 import { searchKnowledge } from './knowledgeBase.js';
 import { searchYoutube } from './youtubeService.js';
@@ -347,6 +348,20 @@ async function geminiTextAnswer(question, ctx) {
   return geminiGenerate({ system: SYSTEM_PROMPT, context: ctx, question, json: false });
 }
 
+async function ollamaTextAnswer(question, ctx) {
+  return ollamaGenerate({ system: SYSTEM_PROMPT, context: ctx, question, json: false });
+}
+
+async function ollamaRoadmap(question, ctx) {
+  const raw = await ollamaGenerate({
+    system: `${SYSTEM_PROMPT}\n\n${ROADMAP_PROMPT}`,
+    context: ctx,
+    question,
+    json: true,
+  });
+  return raw ? normalizeRoadmap(raw) : null;
+}
+
 async function openaiRoadmap(question, ctx) {
   const openai = getOpenAI();
   if (!openai) return null;
@@ -402,6 +417,17 @@ export async function answerQuestion(question) {
         console.error('[ai] Gemini roadmap failed:', err.message);
       }
     }
+    if (!gen) {
+      try {
+        const local = await ollamaRoadmap(question, ctx);
+        if (local) {
+          gen = local;
+          usedProviders.push('ollama');
+        }
+      } catch (err) {
+        console.error('[ai] Ollama roadmap failed:', err.message);
+      }
+    }
     if (gen) {
       roadmap = gen;
       text = `Voici une feuille de route pour : ${roadmap.title}. Suivez les etapes, les animations vous montrent chaque action.`;
@@ -440,8 +466,21 @@ export async function answerQuestion(question) {
     } else if (answers.length > 1) {
       text = `${answers[0].body}\n\n--- Complement ${answers[1].label} ---\n${answers[1].body}`;
     } else {
-      usedProviders.push('offline');
-      text = fallbackTextAnswer(question, results);
+      try {
+        const local = await ollamaTextAnswer(question, ctx);
+        if (local) {
+          answers.push({ label: 'Ollama', body: local });
+          usedProviders.push('ollama');
+        }
+      } catch (err) {
+        console.error('[ai] Ollama answer failed:', err.message);
+      }
+      if (answers.length === 1) {
+        text = answers[0].body;
+      } else {
+        usedProviders.push('offline');
+        text = fallbackTextAnswer(question, results);
+      }
     }
   }
 
@@ -479,6 +518,14 @@ export async function generateRoadmapOnly(question) {
       } catch (err) {
         console.error('[ai] Gemini roadmap failed:', err.message);
       }
+    }
+  }
+  if (!result.roadmap || result.providers.includes('offline')) {
+    try {
+      const roadmap = await ollamaRoadmap(question, ctx);
+      if (roadmap) result = { roadmap, providers: ['ollama'] };
+    } catch (err) {
+      console.error('[ai] Ollama roadmap failed:', err.message);
     }
   }
   return enrichWithVideos(question, result);

@@ -6,7 +6,9 @@
 
 body {
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  background: radial-gradient(1200px 800px at 20% -10%, #f3fbf1 0%, #ffffff 45%, #e4f7e9 100%);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(240, 255, 244, 0.5)),
+    url("/Background.jpeg") center/cover no-repeat fixed;
   min-height: 100vh;
   margin: 0;
   color: #111111;
@@ -30,13 +32,6 @@ body {
   border: 1px solid rgba(34, 197, 94, 0.3);
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-}
-
-/* Discussion page background image */
-.chat-bg {
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.45), rgba(240, 255, 244, 0.5)),
-    url("/Background.jpeg") center/cover no-repeat fixed;
 }
 
 /* Simulation box - animated glowing border (from animated-box-border.html) */
@@ -122,10 +117,75 @@ body {
 .mascot-container {
   position: fixed;
   right: 20px;
-  bottom: calc(7cm + 20px);
+  bottom: calc(7cm + 20px - 1.5cm);
   z-index: 110;
   display: flex;
   justify-content: center;
   width: 14cm;
   pointer-events: none;
+}
+
+/* Floating MANOA orb */
+.manoa-orb {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(74, 222, 128, 0.6);
+  background: linear-gradient(135deg, #22c55e, #10b981);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  animation: manoa-orb-in 0.4s ease-out;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.manoa-orb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(34, 197, 94, 0.6);
+}
+.manoa-orb:active {
+  transform: scale(0.95);
+}
+.manoa-orb-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.manoa-orb-ping {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: manoa-ping 1.5s ease-out infinite;
+}
+@keyframes manoa-orb-in {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes manoa-ping {
+  0% { transform: scale(1); opacity: 0.8; }
+  75%, 100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes manoaOrbIn {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes manoaPing {
+  0% { transform: scale(1); opacity: 0.8; }
+  75%, 100% { transform: scale(2.5); opacity: 0; }
 }

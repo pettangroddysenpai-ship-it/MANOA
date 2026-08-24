@@ -16,6 +16,12 @@ export const config = {
     model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
     embedModel: process.env.GEMINI_EMBED_MODEL || 'gemini-embedding-001',
   },
+  ollama: {
+    url: process.env.OLLAMA_URL || 'http://127.0.0.1:11434',
+    model: process.env.OLLAMA_MODEL || 'qwen3:4b',
+    embedModel: process.env.OLLAMA_EMBED_MODEL || 'nomic-embed-text',
+    maxTokens: Number(process.env.OLLAMA_MAX_TOKENS || 2048),
+  },
   youtube: {
     apiKey: process.env.YOUTUBE_API_KEY || '',
     maxResults: Number(process.env.YOUTUBE_MAX_RESULTS || 3),
