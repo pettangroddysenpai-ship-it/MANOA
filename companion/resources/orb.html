@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' http://127.0.0.1:*; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' blob:; connect-src 'self' http://127.0.0.1:*" />
+  <title>MANOA</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      background: transparent;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #drag {
+      position: fixed; inset: 0;
+      -webkit-app-region: drag;
+    }
+    #ring {
+      position: absolute; left: 50%; top: 50%;
+      width: 92px; height: 92px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 2px solid rgba(52, 211, 153, 0);
+      pointer-events: none;
+    }
+    #orb {
+      position: absolute; left: 50%; top: 50%;
+      width: 72px; height: 72px;
+      transform: translate(-50%, -50%);
+      -webkit-app-region: no-drag;
+      cursor: pointer;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #16243f, #0b1220 72%);
+      box-shadow: 0 0 22px rgba(52, 211, 153, .55), inset 0 0 14px rgba(52, 211, 153, .35);
+      display: flex; align-items: center; justify-content: center;
+      transition: box-shadow .3s ease, filter .3s ease;
+    }
+    #orb img {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    #orb.listening #ring {
+      border-color: rgba(52, 211, 153, .55);
+      animation: pulse 2.4s ease-out infinite;
+    }
+    #orb.wake {
+      box-shadow: 0 0 44px rgba(74, 222, 128, .95), inset 0 0 18px rgba(74, 222, 128, .65);
+    }
+    #orb.wake #ring {
+      border-color: rgba(74, 222, 128, .8);
+      animation: pulse .7s ease-out 4;
+    }
+    #orb.muted {
+      filter: grayscale(.65);
+      box-shadow: 0 0 10px rgba(148, 163, 184, .35), inset 0 0 10px rgba(148, 163, 184, .25);
+    }
+    @keyframes pulse {
+      0%   { transform: translate(-50%, -50%) scale(.78); opacity: .9; }
+      70%  { transform: translate(-50%, -50%) scale(1.25); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1.25); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="drag">
+    <div id="ring"></div>
+    <div id="orb" class="listening" title="MANOA — cliquez pour ouvrir">
+      <img src="orb.png" alt="MANOA" draggable="false" />
+    </div>
+  </div>
+  <script src="orb.js"></script>
+</body>
+</html>

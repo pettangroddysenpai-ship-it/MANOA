@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' http://127.0.0.1:*; worker-src 'self' blob:; script-src 'self' blob:; connect-src 'self' http://127.0.0.1:*; media-src 'self'; style-src 'self' 'unsafe-inline'" />
+  <title>MANOA - réveil vocal</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0a0f1e;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .box { text-align: center; }
+    .dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      margin: 0 auto 10px; background: #f59e0b;
+      box-shadow: 0 0 12px #f59e0b; animation: pulse 1.4s infinite;
+    }
+    .dot.ok { background: #22c55e; box-shadow: 0 0 12px #22c55e; }
+    .dot.err { background: #ef4444; box-shadow: 0 0 12px #ef4444; }
+    .dot.muted { background: #64748b; box-shadow: none; animation: none; }
+    .title { font-weight: 700; font-size: 16px; letter-spacing: .4px; }
+    .sub { font-size: 12px; color: #94a3b8; margin-top: 6px; }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: .5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div id="dot" class="dot"></div>
+    <div class="title">MANOA</div>
+    <div id="sub" class="sub">chargement du modèle vocal…</div>
+  </div>
+  <script src="vosk.js"></script>
+  <script src="wake.js"></script>
+</body>
+</html>
