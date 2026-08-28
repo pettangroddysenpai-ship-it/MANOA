@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPLC - Matrix Telecom</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>IPLC (International Private Leased Circuit)</h1>
+            <div class="subtitle">Matrix Telecom Yaoundé</div>
+            <div class="badge">Service Infrastructure — Services</div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="breadcrumb"><a href="index.html">Accueil</a> / Services / IPLC</div>
+
+        <section>
+            <h2>1. Définition</h2>
+            <p>L'<strong>IPLC (International Private Leased Circuit)</strong> est une connexion privée dédiée entre deux sites distants, souvent dans des pays différents. Contrairement à Internet, le trafic IPLC est <strong>privé et sécurisé</strong>, traversant un réseau backbone dédié du fournisseur.</p>
+
+            <div class="card">
+                <h3>Différence entre Internet et IPLC</h3>
+                <table>
+                    <tr><th>Critère</th><th>Internet</th><th>IPLC</th></tr>
+                    <tr><td>Connexion</th><td>Partagée (public)</td><td>Dédiée (privé)</td></tr>
+                    <tr><td>Sécurité</td><td>Variable</td><td>Élevée</td></tr>
+                    <tr><td>Bande passante</td><td>Best effort</td><td>Garantie (SLA)</td></tr>
+                    <tr><td>Latence</td><td>Variable</td><td>Prévisible</td></tr>
+                    <tr><td>Coût</td><td>Économique</td><td>Élevé</td></tr>
+                    <tr><td>Usage</td><td>Navigation, email</td><td>Données critiques, VoIP inter-site</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Clients IPLC typiques</h2>
+            <ul>
+                <li><strong>Banques</strong> : lien sécurisé entre siège et agences</li>
+                <li><strong>Ambassades</strong> : communication diplomatique sécurisée</li>
+                <li><strong>Entreprises multinationales</strong> : interconnexion des sites</li>
+                <li><strong>Compagnies de télécoms</strong> : backbone interurbain</li>
+                <li><strong>Gouvernements</strong> : réseau administratif sécurisé</li>
+            </ul>
+
+            <div class="tip">Chez Matrix Telecom, les clients IPLC sont principalement des entreprises et institutions qui ont besoin de transmission sécurisée et fiable entre sites.</div>
+        </section>
+
+        <section>
+            <h2>3. Technologies sous-jacentes</h2>
+
+            <h3>3.1 MPLS (Multiprotocol Label Switching)</h3>
+            <p>MPLS est la technologie backbone utilisée pour transporter le trafic IPLC. Au lieu d'analyser l'entête IP à chaque saut, MPLS utilise des <strong>labels</strong> pour router les paquets rapidement.</p>
+
+            <div class="diagram">
+    ┌──────────┐    MPLS    ┌──────────┐    MPLS    ┌──────────┐
+    │ Site A   │◄──────────►│ Backbone │◄──────────►│ Site B   │
+    │ (Yaoundé)│  Label:10  │  MPLS    │  Label:20  │ (Douala) │
+    └──────────┘            └──────────┘            └──────────┘
+            </div>
+
+            <h3>3.2 Lignes louées (Leased Lines)</h3>
+            <p>Connexion dédiée physique (copper ou fibre) entre deux points. Bande passante garantie 24h/24, 7j/7.</p>
+
+            <h3>3.3 SLA (Service Level Agreement)</h3>
+            <p>Contrat garantissant des métriques de qualité :</p>
+            <ul>
+                <li>Disponibilité : 99.9% ou plus</li>
+                <li>Temps de réponse : < 50ms</li>
+                <li>Taux de perte de paquets : < 0.1%</li>
+                <li>Temps de réparation : < 4 heures</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Architecture IPLC</h2>
+            <div class="diagram">
+    ┌─────────────────────────────────────────────────────────────────┐
+    │                    ARCHITECTURE IPLC                            │
+    └─────────────────────────────────────────────────────────────────┘
+
+    Client A                                                    Client B
+    ┌──────┐                                                    ┌──────┐
+    │Routeur│──┐                                            ┌──│Routeur│
+    └──────┘  │                                            │  └──────┘
+              │                                            │
+    ┌─────────▼──────┐    Backbone MPLS    ┌───────────────▼──────┐
+    │  PE Router A   │◄───────────────────►│   PE Router B       │
+    │ (Provider Edge)│    Label Switched   │  (Provider Edge)    │
+    └────────────────┘                     └─────────────────────┘
+              │                                    │
+              └──────────► P Router ◄──────────────┘
+                       (Core Network)
+            </div>
+        </section>
+
+        <section>
+            <h2>5. Configuration MikroTik pour MPLS/IPLC</h2>
+            <pre><code># Activer MPLS sur MikroTik
+/ip route vrf
+add name=CUSTOMER_A rd=65000:1 import-route-target=65000:1 \
+    export-route-target=65000:1
+
+# Configurer le routeur MPLS
+/mpls ldp
+set enabled=yes lsr-id=10.0.0.1 transport-address=10.0.0.1
+
+# Ajouter les interfaces au MPLS
+/mpls ldp interface
+add interface=ether1
+
+# Configuration du tunnel VPN pour le client
+/interface gre tunnel
+add name=iplc-client-a remote-address=203.0.113.1 \
+    local-address=198.51.100.1 mtu=1400</code></pre>
+        </section>
+
+        <section>
+            <h2>6. Équipements utilisés</h2>
+            <div class="tool-card">
+                <div class="tool-name">Cisco</div>
+                <p>Routeurs enterprise pour backbone MPLS. IOS XR pour les gros routeurs (ASR 9000, NCS 5500).</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-name">Huawei</div>
+                <p>Routeurs NE (NetEngine)series. NE40E, NE8000 pour backbone haute performance.</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-name">Juniper</div>
+                <p>Routeurs MX Series. Junos OS pour MPLS et VPN L2/L3.</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-name">MikroTik</div>
+                <p>CPE (Customer Premises Equipment) côté client. CHR pour tunneling.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>7. Vidéos recommandées</h2>
+            <a href="https://www.youtube.com/results?search_query=MPLS+explained+simply" class="video-link" target="_blank">🎬 MPLS Explained Simply</a>
+            <a href="https://www.youtube.com/results?search_query=IP+VPN+vs+MPLS+vs+IPLC" class="video-link" target="_blank">🎬 VPN vs MPLS vs IPLC Comparison</a>
+            <a href="https://www.youtube.com/results?search_query=Cisco+MPLS+lab+tutorial" class="video-link" target="_blank">🎬 Cisco MPLS Lab Tutorial</a>
+        </section>
+
+        <section>
+            <h2>8. Questions à poser chez Matrix Telecom</h2>
+            <div class="tip">Quel backbone MPLS utilise Matrix Telecom pour ses circuits IPLC ?</div>
+            <div class="tip">Combien de POPs MPLS sont déployés au Cameroun ?</div>
+            <div class="tip">Quel SLA est offert aux clients IPLC ?</div>
+        </section>
+
+        <footer>
+            <p>Matrix Telecom Yaoundé — Stage Service Delivery & Infrastructure</p>
+        </footer>
+    </div>
+</body>
+</html>

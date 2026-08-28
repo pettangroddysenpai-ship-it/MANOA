@@ -1,0 +1,650 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NanoStation M2/M5 - Matrix Transmission Guide</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+th, td { padding: 10px 12px; text-align: left; border: 1px solid #1e293b; }
+th { background: #1e293b; color: #60a5fa; }
+td { background: #0f172a; color: #cbd5e1; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>NanoStation M2 / M5 &mdash; Point-to-Point Links</h1>
+<a class="back" href="index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<h2>Definition</h2>
+<p>The NanoStation (M2 and M5 models) is a professional WiFi device from Ubiquiti Networks. It is designed to establish point-to-point (PtP) or point-to-multipoint (PtMP) links over distances of 1 to 15+ km. At Matrix Telecom, NanoStations are widely used to connect customers who cannot be served by fiber optic, using license-free frequencies (2.4 GHz for M2, 5 GHz for M5).</p>
+
+<img src="https://source.unsplash.com/600x400/?antenna,wireless,signal" alt="Wireless Antenna Signal">
+
+<h2>Technical Specifications</h2>
+
+<table>
+<thead>
+<tr>
+<th>Characteristic</th>
+<th>NanoStation M2</th>
+<th>NanoStation M5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frequency</td>
+<td>2.4 GHz (2412-2462 MHz)</td>
+<td>5 GHz (5170-5875 MHz)</td>
+</tr>
+<tr>
+<td>Max theoretical speed</td>
+<td>300 Mb/s (MIMO 2x2)</td>
+<td>300 Mb/s (MIMO 2x2)</td>
+</tr>
+<tr>
+<td>Actual throughput</td>
+<td>~150 Mb/s</td>
+<td>~150 Mb/s</td>
+</tr>
+<tr>
+<td>Antenna gain</td>
+<td>11 dBi</td>
+<td>16 dBi</td>
+</tr>
+<tr>
+<td>Maximum range</td>
+<td>~5 km (depending on context)</td>
+<td>~15+ km (LoS, good conditions)</td>
+</tr>
+<tr>
+<td>Max TX power</td>
+<td>28 dBm</td>
+<td>26 dBm</td>
+</tr>
+<tr>
+<td>Receiver sensitivity</td>
+<td>-97 dBm (6 Mb/s)</td>
+<td>-96 dBm (6 Mb/s)</td>
+</tr>
+<tr>
+<td>Polarization</td>
+<td>Dual (V/H)</td>
+<td>Dual (V/H)</td>
+</tr>
+<tr>
+<td>Processor</td>
+<td>Atheros MIPS 74Kc</td>
+<td>Atheros MIPS 74Kc</td>
+</tr>
+<tr>
+<td>Network port</td>
+<td>1 x 10/100 Ethernet + PoE</td>
+<td>1 x 10/100 Ethernet + PoE</td>
+</tr>
+<tr>
+<td>Power</td>
+<td>24V PoE (adapter included)</td>
+<td>24V PoE (adapter included)</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Operating Modes</h2>
+
+<h3>1. Bridge Mode (Point-to-Point)</h3>
+<p>The most commonly used mode at Matrix. Two NanoStations are configured to create a transparent bridge between two Ethernet networks. One is in Station mode (AP-Client), the other in AP mode (Access Point). Clients connected on both sides are on the same subnet.</p>
+<ul>
+<li><strong>AP (Access Point):</strong> Matrix POP side. Emits the signal, connected to the distribution switch.</li>
+<li><strong>Station (Client):</strong> Customer side. Receives the signal, connected to the customer's router.</li>
+</ul>
+
+<h3>2. Station Mode (Client)</h3>
+<p>The NanoStation connects to an existing AP. Used to connect a single customer to a Matrix POP. The IP address is obtained via DHCP or configured statically.</p>
+
+<h3>3. Access Point Mode (WDS)</h3>
+<p>The NanoStation acts as a standard WiFi access point. Used to cover a limited area (a few hundred meters). Less common mode at Matrix, mostly used for temporary hotspots.</p>
+
+<h2>airOS Interface</h2>
+<p>All NanoStations use Ubiquiti's airOS firmware, accessible via a web browser at the device's IP address. The interface offers:</p>
+<ul>
+<li><strong>Main:</strong> Dashboard with signal indicators, speed, connections</li>
+<li><strong>Wireless:</strong> WiFi configuration (SSID, frequency, channel, power)</li>
+<li><strong>Network:</strong> Network configuration (IP, mask, gateway, DHCP)</li>
+<li><strong>Advanced:</strong> Advanced settings (distance, QoS, VLAN)</li>
+<li><strong>Services:</strong> Network services (SNMP, syslog, NTP)</li>
+<li><strong>System:</strong> Administration (password, backup, firmware, reboot)</li>
+<li><strong>Tools:</strong> Built-in tools (ping, traceroute, spectrum analyzer, antenna alignment)</li>
+</ul>
+
+<h2>Step-by-Step Configuration Guide</h2>
+
+<h3>Step 1: Pre-Configuration at the Office</h3>
+<ol>
+<li>Connect the NanoStation to a PoE adapter and to a PC via Ethernet</li>
+<li>Configure the PC's network interface to 192.168.1.0/24</li>
+<li>Open a browser and go to http://192.168.1.20</li>
+<li>Default credentials: admin / ubnt</li>
+<li>Change the password immediately (System &gt; System Config)</li>
+</ol>
+
+<h3>Step 2: AP Side Configuration (POP)</h3>
+<ol>
+<li>Network tab: Set static IP (e.g., 10.0.0.2/24)</li>
+<li>Wireless tab:
+  <ul>
+    <li>Mode: AP</li>
+    <li>SSID: Matrix-POP-Bastos-Link1</li>
+    <li>Frequency: 5 GHz (for M5)</li>
+    <li>Channel: 149 (DFS-free for urban areas)</li>
+    <li>Channel width: 40 MHz (20/40 MHz auto)</li>
+    <li>Power: 20 dBm (max regulatory)</li>
+    <li>Security: WPA2-AES (or WPA3 if supported)</li>
+  </ul>
+</li>
+<li>Advanced tab: Set the distance (e.g., 2000 meters)</li>
+<li>Apply changes (Apply + Reboot if necessary)</li>
+</ol>
+
+<h3>Step 3: Station Side Configuration (Client)</h3>
+<ol>
+<li>Network tab: Set static IP (e.g., 10.0.0.3/24)</li>
+<li>Wireless tab:
+  <ul>
+    <li>Mode: Station</li>
+    <li>Select the SSID: Matrix-POP-Bastos-Link1</li>
+    <li>Enter the WPA2 key</li>
+    <li>Verify that the signal appears (RSSI)</li>
+  </ul>
+</li>
+<li>Apply changes</li>
+<li>Verify the connection: the AP should appear in the "Access Point" section</li>
+</ol>
+
+<h3>Step 4: Antenna Alignment</h3>
+<p>Alignment is the most critical step. A poorly aligned NanoStation can lose 10 to 20 dB of signal.</p>
+<ol>
+<li>Open airOS on the Station (client side)</li>
+<li>Go to Tools &gt; Alignment Tool</li>
+<li>A real-time graph displays the signal strength (RSSI)</li>
+<li>One person adjusts the antenna (azimuth then elevation) while the other watches the signal</li>
+<li>Look for the maximum signal peak</li>
+<li>Final tightening of the mounting screws</li>
+<li>Target: RSSI &gt; -65 dBm, SNR &gt; 25 dB, CCQ &gt; 90%</li>
+</ol>
+
+<h3>Step 5: Test and Validation</h3>
+<pre><code># Verify connectivity (from the NanoStation or a PC behind it)
+ping 10.0.0.2 -n 20
+
+# Measure throughput with iperf3 (server side on the AP)
+iperf3 -s -p 5201
+
+# Client side
+iperf3 -c 10.0.0.2 -t 30 -p 5201
+
+# Check indicators in airOS:
+# - Signal Strength (dBm)
+# - Noise Floor (dBm)
+# - SNR (dB)
+# - TX/RX Rate (Mb/s)
+# - CCQ (Client Connection Quality)</code></pre>
+
+<h2>Performance Indicators</h2>
+<table>
+<thead>
+<tr>
+<th>Indicator</th>
+<th>Excellent</th>
+<th>Good</th>
+<th>Fair</th>
+<th>Poor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RSSI (dBm)</td>
+<td>&gt; -50</td>
+<td>-50 to -65</td>
+<td>-65 to -75</td>
+<td>&lt; -75</td>
+</tr>
+<tr>
+<td>SNR (dB)</td>
+<td>&gt; 30</td>
+<td>25 to 30</td>
+<td>15 to 25</td>
+<td>&lt; 15</td>
+</tr>
+<tr>
+<td>Noise Floor (dBm)</td>
+<td>&lt; -100</td>
+<td>-95 to -100</td>
+<td>-85 to -95</td>
+<td>&gt; -85</td>
+</tr>
+<tr>
+<td>CCQ (%)</td>
+<td>&gt; 95</td>
+<td>90 to 95</td>
+<td>75 to 90</td>
+<td>&lt; 75</td>
+</tr>
+<tr>
+<td>TX Rate (Mb/s)</td>
+<td>&gt; 260</td>
+<td>130 to 260</td>
+<td>65 to 130</td>
+<td>&lt; 65</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Radio Link Budget Calculation</h2>
+<p>The link budget allows predicting whether the link will be functional before even installing the equipment.</p>
+
+<pre><code>Formula: Received power = TX power + TX gain + RX gain - Cable losses - FSPL
+
+FSPL (Free Space Path Loss) = 32.45 + 20 * log10(distance in km) + 20 * log10(frequency in MHz)
+
+Example for a NanoStation M5 link at 3 km:
+- TX power: 26 dBm
+- AP gain: 16 dBi
+- Station gain: 16 dBi
+- Cable losses: 0.5 dB (very low because integrated PoE)
+- FSPL = 32.45 + 20*log10(3) + 20*log10(5800)
+       = 32.45 + 9.54 + 75.27 = 117.26 dB
+- Received power = 26 + 16 + 16 - 0.5 - 117.26 = -59.76 dBm
+
+Result: -59.76 dBm (excellent, &gt; -65 dBm)
+Fade margin: (-59.76) - (-75) = 15.24 dB (very good margin)</code></pre>
+
+<h2>Common Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Probable Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No WiFi connection</td>
+<td>Incorrect SSID or frequency</td>
+<td>Check the Wireless tab on both sides</td>
+</tr>
+<tr>
+<td>Very weak signal (&lt; -80 dBm)</td>
+<td>Poor alignment or obstacle</td>
+<td>Use Alignment Tool, check LoS</td>
+</tr>
+<tr>
+<td>Slow speed (&lt; 50 Mb/s)</td>
+<td>Interference or saturated channel</td>
+<td>Change channel, use Spectrum Analyzer</td>
+</tr>
+<tr>
+<td>Unstable ping</td>
+<td>Distance misconfigured</td>
+<td>Check ACK timeout in Advanced</td>
+</tr>
+<tr>
+<td>Random disconnections</td>
+<td>Unstable PoE power</td>
+<td>Check PoE LED, replace adapter</td>
+</tr>
+<tr>
+<td>Low CCQ (&lt; 70%)</td>
+<td>Too many clients or noise</td>
+<td>Reduce client count, change channel</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>airOS Web Interface</strong><br>
+<strong>Usage:</strong>
+<ul>
+<li>Browser access to the NanoStation's IP</li>
+<li>Check Main tab: signal, speed, CCQ, connections</li>
+<li>Use Alignment Tool for fine antenna tuning</li>
+<li>Spectrum Analyzer to find a clean channel</li>
+<li>System &gt; Backup to save configuration</li>
+<li>System &gt; Firmware Update to update firmware</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>Built-in Alignment Tool</strong><br>
+<strong>Usage:</strong>
+<ol>
+<li>In airOS &gt; Tools &gt; Alignment Tool</li>
+<li>A timeline graph displays received power (RSSI)</li>
+<li>A real-time level bar shows instant RSSI</li>
+<li>Adjust azimuth (horizontal) in 1-2&deg; increments</li>
+<li>Wait 2-3 seconds for the graph to stabilize</li>
+<li>Mark the best angle, then adjust elevation (vertical)</li>
+<li>Repeat until maximum RSSI is obtained</li>
+</ol>
+</div>
+
+<div class="tool-box">
+<strong>Spectrum Analyzer (airOS)</strong><br>
+<strong>Usage:</strong>
+<ul>
+<li>Go to Tools &gt; Spectrum Analyzer</li>
+<li>Start a scan on the 5 GHz band (or 2.4 GHz for M2)</li>
+<li>Analyze the graph: identify channels with the least interference</li>
+<li>Choose a channel away from noise peaks</li>
+<li>In dense urban areas, DFS channels (52-64, 100-140) are often cleaner</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>Ubiquiti Network Application (UNMS / UISP)</strong><br>
+<strong>Usage:</strong>
+<ul>
+<li>Centralized management platform for all Ubiquiti devices</li>
+<li>Automatic discovery of NanoStations on the network</li>
+<li>Real-time monitoring: signal, speed, uptime</li>
+<li>Remote firmware updates</li>
+<li>Alerts for link loss or weak signal</li>
+</ul>
+</div>
+
+<h2>Practical Case at Matrix Telecom Yaound&eacute;</h2>
+
+<div class="matrix-example">
+<strong>Link Between Two Buildings in Yaound&eacute;</strong>
+<p>Matrix needs to connect a professional customer (law firm) located on the 8th floor of a building in Mfoundi, 2.3 km from the Matrix Bastos POP.</p>
+
+<p><strong>Situation:</strong></p>
+<ul>
+<li>Matrix Bastos POP: rooftop terrace, direct line of sight to Mfoundi</li>
+<li>Mfoundi client: balcony facing Bastos, no obstacles between the two points</li>
+<li>Distance: 2.3 km measured on Google Earth</li>
+<li>Customer requirements: 100 Mb/s symmetric, SLA 99.9%</li>
+</ul>
+
+<p><strong>Deployed Solution:</strong></p>
+<ol>
+<li><strong>Equipment:</strong> 2x NanoStation M5 (one at POP, one at customer)</li>
+<li><strong>POP side:</strong> AP mode, channel 120 (DFS), power 20 dBm, SSID "Matrix-BASTOS-MFO-01"</li>
+<li><strong>Client side:</strong> Station mode, connect to SSID, static IP 10.10.5.2/24</li>
+<li><strong>Alignment:</strong> Final RSSI of -58 dBm, SNR 32 dB, CCQ 97%</li>
+<li><strong>Throughput:</strong> 135 Mb/s measured with iperf3 (sufficient for the promised 100 Mb/s)</li>
+<li><strong>Security:</strong> WPA2-AES + MAC filtering + VLAN 100 isolated for the client</li>
+<li><strong>Protection:</strong> Surge protector on the Ethernet cable between NanoStation and switch</li>
+</ol>
+
+<p><strong>Result:</strong> Stable link for 18 months, no major incidents. Maintenance: semi-annual check of screw tightness and connector cleanliness.</p>
+</div>
+
+<h2>Recommended Videos</h2>
+<div class="video-link">
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=ubiquiti+nanostation+configuration" target="_blank">Search: Ubiquiti NanoStation Configuration</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=nanostation+m5+point+to+point+setup" target="_blank">Search: NanoStation M5 Point to Point Setup</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=airOS+alignment+tool+tutorial" target="_blank">Search: airOS Alignment Tool Tutorial</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=ubiquiti+wireless+link+budget+calculation" target="_blank">Search: Ubiquiti Link Budget Calculation</a>
+</div>
+
+<h2>Tip for the Intern</h2>
+<div class="tip">
+<strong>Tip:</strong>
+<ul>
+<li>Always perform a Line of Sight (LoS) test before deploying a NanoStation. A single tree can cause 20 dB of signal loss.</li>
+<li>Use the online tool link.ubnt.com to simulate the link before installation. Enter the GPS coordinates of both points.</li>
+<li>Never exceed the regulatory power allowed by ART Cameroon (20 dBm EIRP in 5 GHz).</li>
+<li>For long distances (&gt; 5 km), configure the ACK distance in Advanced &gt; ACK Timeout (value = distance in miles).</li>
+<li>Protect outdoor Ethernet cables with conduit and waterproof enclosures (IP65 minimum).</li>
+<li>Use Ethernet surge protectors between the NanoStation and the switch to prevent lightning damage.</li>
+<li>Record configuration parameters (IP address, SSID, channel, frequency) in the customer folder.</li>
+<li>Update NanoStation firmware regularly. Ubiquiti fixes security vulnerabilities.</li>
+<li>During frequent thunderstorms, disconnect the NanoStation's Ethernet cables (surge protection).</li>
+<li>Learn to read airOS logs (System &gt; System Log) to identify disconnection causes.</li>
+</ul>
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Align a NanoStation M2 for Maximum Signal on a PtP Link</strong></p>
+<p>Matrix uses NanoStation M2/M5 radios for point-to-point links between POPs and client buildings. Proper antenna alignment is critical for throughput and link stability. This task guides you through aligning a pair of NanoStations for optimal signal quality.</p>
+<ol>
+  <li>Mount both NanoStations on poles with clear line of sight. Connect each to a PoE injector and a laptop.</li>
+  <li>Access the airOS web interface at 192.168.1.20 (default). Set one as <strong>Station</strong> and the other as <strong>Access Point</strong> on the same SSID.</li>
+  <li>Set both to the same frequency channel (e.g., 5200 MHz for M5) and channel width (20 MHz for stability).</li>
+  <li>On the Station side, go to <strong>Main &gt; Alignment</strong>. Observe the RSSI (Received Signal Strength Indicator) in real-time.</li>
+  <li>Slowly rotate the Station antenna horizontally (azimuth) while watching the RSSI — stop at the peak value.</li>
+  <li>Now adjust the vertical tilt (elevation) in 1-degree steps — again stop at the peak RSSI.</li>
+  <li>Tighten all mounting bolts. The target RSSI should be &ge; -60 dBm, with SNR &ge; 25 dB and CCQ &ge; 90%.</li>
+  <li>Run a throughput test: from the AP, ping the Station with <code>ping -n 100 station-ip</code> — expect &lt; 5 ms latency and 0% loss.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Change the Wireless Channel Width to Mitigate Interference</strong></p>
+<p>In dense urban areas, Matrix's PtMP networks suffer from co-channel interference. Changing the channel width or frequency can dramatically improve performance. This task simulates diagnosing and resolving interference on a NanoStation link.</p>
+<ol>
+  <li>Log into the airOS interface of the AP and go to <strong>Wireless &gt; Scan</strong> to see nearby APs on the same channel.</li>
+  <li>Identify all APs on your current frequency with RSSI > -85 dBm — these are interference sources.</li>
+  <li>Choose a cleaner channel from the scan results (least number of APs with high signal).</li>
+  <li>Change the AP's channel width from 40 MHz to 20 MHz (reduces throughput but improves noise immunity).</li>
+  <li>Apply changes and re-align both antennas if necessary. Check the new RSSI and SNR values.</li>
+  <li>Run a throughput test and compare before/after: note the improvement in CCQ and reduction in retransmissions.</li>
+  <li>Document the channel change in the site log: old channel = 5200 MHz/40 MHz, new channel = 5240 MHz/20 MHz, date, and reason (interference mitigation).</li>
+</ol>
+</div>
+
+<h2>Essential Commands</h2>
+<pre><code># SSH access to a NanoStation
+ssh admin@192.168.1.20
+
+# airOS command line commands
+# Display link status
+iwconfig ath0
+
+# View WiFi associations
+iw dev ath0 station dump
+
+# Measure noise on each channel
+iw dev ath0 survey dump
+
+# Reboot the NanoStation
+reboot
+
+# Configuration backup
+# In the web interface: System &gt; Backup &gt; Download
+# .cfg file downloaded, keep in customer folder
+
+# Restore configuration
+# System &gt; Backup &gt; Browse &gt; Upload &gt; Apply</code></pre>
+
+<h2>Best Practices</h2>
+<ul>
+<li>Always verify frequency compatibility with local regulations.</li>
+<li>Prefer DFS channels (52-64, 100-144) in urban areas to avoid WiFi interference.</li>
+<li>Use VLAN tagging to isolate customer traffic from management traffic.</li>
+<li>Set a strong password (12+ characters) on each NanoStation.</li>
+<li>Disable unused ports and services (public SNMP, telnet, HTTP if HTTPS is available).</li>
+<li>Perform an annual link check: tightness, alignment, performance.</li>
+</ul>
+
+</div>
+
+<div class="footer">
+Matrix Telecom &mdash; Internship Guide &mdash; Transmission &mdash; NanoStation M2/M5
+</div>
+
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

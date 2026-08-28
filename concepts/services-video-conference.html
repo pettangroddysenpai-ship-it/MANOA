@@ -1,0 +1,459 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Conferencing / Telework - Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Video Conferencing &amp; Telework</h1>
+<a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+<div class="container">
+
+<img src="https://source.unsplash.com/600x400/?video,conference,meeting" alt="Video Conference Meeting">
+
+<h2>Definition and Detailed Explanation</h2>
+<p>Video conferencing is a technology that enables real-time audiovisual communication between multiple participants located in geographically distant locations. Telework (remote work) heavily relies on these tools to maintain collaboration within teams.</p>
+<p>At Matrix Telecom, video conferencing and telework are key services for Cameroonian businesses, especially since the rise of hybrid work. Matrix assists its clients in selecting, deploying, and optimizing solutions (Microsoft Teams, Zoom, Google Meet) on their network infrastructure.</p>
+<p>The main market tools:</p>
+<ul>
+<li><strong>Microsoft Teams</strong>: Integrated with Microsoft 365, used by most enterprises. Offers chat, video, file sharing, Office integration.</li>
+<li><strong>Zoom</strong>: Leader in video conferencing, known for reliability and ease of use. Webinars and breakout rooms.</li>
+<li><strong>Google Meet</strong>: Integrated with Google Workspace. Simple, lightweight, no client installation required.</li>
+<li><strong>Cisco Webex</strong>: Enterprise solution with advanced security features.</li>
+<li><strong>Jitsi Meet</strong>: Open source, self-hosted. Interesting solution for Matrix customers who want data control.</li>
+</ul>
+
+<h2>How It Works</h2>
+
+<h3>Video Conferencing Platform Infrastructure</h3>
+<p>Modern platforms use a client-server architecture with media servers (SFU - Selective Forwarding Unit) that receive video/audio streams from each participant and redistribute them to others. This approach saves upload bandwidth for participants.</p>
+<ul>
+<li><strong>SFU (Selective Forwarding Unit)</strong>: The server receives N streams and sends each participant N-1 streams (except their own). This is the architecture of Zoom, Teams, Meet.</li>
+<li><strong>MCU (Multipoint Control Unit)</strong>: The server mixes all streams into a single stream. To avoid: one slow participant degrades quality for everyone.</li>
+<li><strong>P2P (Peer-to-Peer)</strong>: Direct communication between 2 participants without an intermediary server. For small meetings (2-4 people).</li>
+</ul>
+
+<h3>Codecs and Bandwidth</h3>
+<p>Modern codecs offer excellent quality at reasonable bitrates:</p>
+<ul>
+<li><strong>H.264</strong>: Widely supported standard. Good compression, acceptable quality.</li>
+<li><strong>H.265 (HEVC)</strong>: Better compression than H.264 (30-50% bandwidth savings).</li>
+<li><strong>VP8/VP9</strong>: Google's free codecs, used by Chrome and Google Meet.</li>
+<li><strong>AV1</strong>: Latest codec, superior compression, requires recent hardware.</li>
+</ul>
+
+<p>Bandwidth requirements (official recommendations):</p>
+<table style="width:100%; border-collapse:collapse; margin:15px 0; color:#cbd5e1;">
+<tr style="background:#1e293b;"><th style="padding:10px; border:1px solid #334155; text-align:left;">Activity</th><th style="padding:10px; border:1px solid #334155; text-align:left;">Download</th><th style="padding:10px; border:1px solid #334155; text-align:left;">Upload</th></tr>
+<tr><td style="padding:8px; border:1px solid #334155;">Audio only call</td><td style="padding:8px; border:1px solid #334155;">100 kbps</td><td style="padding:8px; border:1px solid #334155;">100 kbps</td></tr>
+<tr><td style="padding:8px; border:1px solid #334155;">HD video (720p)</td><td style="padding:8px; border:1px solid #334155;">2 Mbps</td><td style="padding:8px; border:1px solid #334155;">2 Mbps</td></tr>
+<tr><td style="padding:8px; border:1px solid #334155;">Full HD video (1080p)</td><td style="padding:8px; border:1px solid #334155;">4 Mbps</td><td style="padding:8px; border:1px solid #334155;">4 Mbps</td></tr>
+<tr><td style="padding:8px; border:1px solid #334155;">4K video</td><td style="padding:8px; border:1px solid #334155;">15 Mbps</td><td style="padding:8px; border:1px solid #334155;">15 Mbps</td></tr>
+<tr><td style="padding:8px; border:1px solid #334155;">HD screen sharing</td><td style="padding:8px; border:1px solid #334155;">4 Mbps</td><td style="padding:8px; border:1px solid #334155;">4 Mbps</td></tr>
+</table>
+
+<h3>Quality of Service (QoS) for Video Conferencing</h3>
+<p>To ensure a smooth experience, the network must be optimized:</p>
+<ul>
+<li><strong>Latency</strong>: Below 150 ms (ideal < 50 ms). High latency delays the conversation.</li>
+<li><strong>Jitter</strong>: Below 30 ms. High jitter causes stuttering and freezing.</li>
+<li><strong>Packet loss</strong>: Below 0.5% for audio, below 1% for video.</li>
+<li><strong>Traffic prioritization</strong>: Mark RTP packets with DSCP EF (46) for voice and AF41 (34) for video.</li>
+</ul>
+
+<h3>Network Configuration for Video Conferencing</h3>
+<p>Platforms use specific port ranges that need to be opened on the firewall:</p>
+<ul>
+<li><strong>Microsoft Teams</strong>: UDP 3478-3481, TCP 443, TCP 5060 (SIP)</li>
+<li><strong>Zoom</strong>: UDP 8801-8810, TCP 443, TCP 444</li>
+<li><strong>Google Meet</strong>: UDP 19305-19309, TCP 443, TCP 5222, TCP 5228</li>
+<li><strong>Cisco Webex</strong>: TCP 443, TCP 8443, UDP 9000-9999</li>
+</ul>
+
+<h2>Practical Example at Matrix Telecom</h2>
+<div class="matrix-example">
+<strong>Example 1:</strong> Matrix deploys Microsoft Teams with network optimization for a client SME with 30 employees who want to adopt telework 2 days a week.<br><br>
+<strong>QoS Configuration on the Client's MikroTik Router:</strong><br>
+<pre><code># Mark Teams traffic
+/ip firewall mangle
+# Detect Teams traffic by ports
+add chain=prerouting protocol=udp dst-port=3478-3481
+  action=mark-packet new-packet-mark=teams-media passthrough=no
+add chain=prerouting protocol=tcp dst-port=443
+  action=mark-packet new-packet-mark=teams-signal passthrough=no
+
+# Mark SIP/RTP flows (for integrated VoIP telephony)
+add chain=prerouting protocol=udp dst-port=5060
+  action=mark-packet new-packet-mark=voip-signal passthrough=no
+add chain=prerouting protocol=udp dst-port=10000-20000
+  action=mark-packet new-packet-mark=voip-media passthrough=no
+
+# Configure priority queues
+/queue tree
+add name=global max-limit=50M
+add parent=global packet-mark=voip-media priority=1
+add parent=global packet-mark=teams-media priority=2
+add parent=global packet-mark=teams-signal priority=4
+add parent=global packet-mark=no-mark priority=8</code></pre>
+<strong>Example 2:</strong> An executive uses Zoom from home. Their Matrix Internet link is 20 Mbps symmetric. Prioritizing Zoom traffic prevents freezing during important meetings.<br><br>
+<pre><code># Check link quality
+# Test latency to Teams servers
+ping teams.microsoft.com -n 100
+# Acceptable latency? < 100 ms = OK
+
+# Test throughput
+speedtest-cli --server-id=XXXX   # Choose a nearby server
+
+# Check packet loss to Teams server
+pathping teams.microsoft.com</code></pre>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>Microsoft Teams Admin Center</strong> — Teams administration<br>
+Web interface for managing Teams settings for an organization.<br>
+<strong>Usage:</strong><br>
+<pre><code># Access
+https://admin.teams.microsoft.com
+
+# Important configuration for Matrix clients:
+1. Meetings > Meeting policies
+   - Media bit rate (max): 10000 Kbps (10 Mbps)
+   - Allow IP video: ON
+   - Screen sharing mode: Entire screen
+   - Allow meeting recording: ON
+
+2. Voice > Phone numbers
+   - Assign PSTN calling numbers
+
+3. Users
+   - Manage Teams licenses
+   - Configure external access
+
+# Call quality verification
+https://callanalytics.teams.microsoft.com
+# Analyze audio quality, packet loss, jitter</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Zoom Admin Portal</strong> — Zoom administration<br>
+<strong>Usage:</strong><br>
+<pre><code># Access
+https://zoom.us/profile
+
+# Recommended settings for Matrix clients:
+Settings > Meeting:
+  - Video quality: HD (1080p)
+  - Enable original sound: OFF (unless necessary)
+  - Virtual background: ON
+  - Waiting room: ON (security)
+  - Require encryption for 3rd party endpoints: ON
+
+Settings > Recording:
+  - Automatic recording: OFF (to save storage)
+  - Cloud recording: if included in the plan
+
+# Monitoring
+Dashboard > Quality & Performance
+  - Check MOS (Mean Opinion Score)
+  - Analyze periods of poor quality</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Jitsi Meet (self-hosted)</strong> — Open source solution<br>
+Open source alternative that Matrix can host for clients who want to keep control of their data.<br>
+<strong>Installation:</strong><br>
+<pre><code># Quick installation on Ubuntu 22.04
+apt install -y jitsi-meet
+
+# Configuration
+/usr/share/jitsi-meet/scripts/install-jitsi-meet.sh
+
+# Key points:
+- Ports to open: TCP 443, UDP 10000 (RTP)
+- SSL via Let's Encrypt (certbot)
+- Reverse proxy configuration (nginx)
+
+# Configuration file
+/etc/jitsi/meet/meet.matrix.cm-config.js:
+  enableClosePage: true
+  disableDeepLinking: false
+  resolution: 720
+  constraints: {
+    video: { height: { ideal: 720, max: 1080 } }
+  }
+
+# Add authenticated users
+/etc/jitsi/jicofo/sip-communicator.properties:
+  org.jitsi.jicofo.auth.URL=XMPP:meet.matrix.cm</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Network testing tools for video conferencing</strong><br>
+<strong>Usage:</strong><br>
+<pre><code># Connectivity test to Teams servers
+Test-NetConnection teams.microsoft.com -Port 443
+Test-NetConnection -ComputerName teams.microsoft.com -Port 3478 -InformationLevel Detailed
+
+# QoS DSCP analysis (check packet marking)
+# On Windows, with PowerShell:
+Get-NetAdapterRss
+netsh int tcp show global
+
+# Bandwidth test with priority (iperf3)
+# Server
+iperf3 -s -p 5201
+# Client with simulated QoS flow
+iperf3 -c 10.0.0.1 -p 5201 -u -b 2M -S 0x2E
+# DSCP 0x2E = EF (Expedited Forwarding) for high priority
+
+# Microsoft Network Monitor
+# Download from Microsoft</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Integrated Teams/Zoom diagnostic tools</strong><br>
+Each platform provides built-in tools for diagnosing issues.<br>
+<strong>Usage:</strong><br>
+<pre><code># Microsoft Teams - Call Analytics
+# Access: https://admin.teams.microsoft.com/analytics/reports
+
+# Individual report:
+1. Select a user
+2. Choose "Call history"
+3. Analyze parameters:
+   - Average packet loss rate (network)
+   - Average jitter (ms)
+   - Round trip time (ms)
+   - Device (microphone, speaker)
+
+# Zoom - Quality Dashboard
+# Access: https://zoom.us/account/dashboard
+
+# Zoom built-in network test
+https://zoom.us/test
+# Full audio and video test</code></pre>
+</div>
+
+<div class="video-link">
+<strong>Recommended Videos:</strong><br>
+<a href="https://www.youtube.com/results?search_query=video+conferencing+bandwidth+QoS" target="_blank">Bandwidth and QoS for Video Conferencing</a><br>
+<a href="https://www.youtube.com/results?search_query=Microsoft+Teams+QoS+configuration" target="_blank">Microsoft Teams QoS Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=Zoom+network+requirements+best+practices" target="_blank">Zoom Network Best Practices</a><br>
+<a href="https://www.youtube.com/results?search_query=Jitsi+Meet+self+host+setup" target="_blank">Jitsi Meet Self-Hosting Setup</a>
+</div>
+
+<div class="tip">
+<strong>Tip for the Intern:</strong><br>
+1. Video conferencing quality is directly linked to network quality. Before any important meeting, check latency, packet loss, and available bandwidth.<br>
+2. Download and use the official testing tools for each platform (Zoom Test, Teams Call Analytics).<br>
+3. QoS is your best friend: prioritize video conferencing traffic on client routers you configure at Matrix.<br>
+4. If a client complains about freezing: first check WiFi (signal, interference), then the Internet connection, then the PC itself (CPU, RAM).<br>
+5. Train clients on best practices: close unnecessary applications, use an Ethernet cable if possible, avoid sharing the connection with heavy downloads during meetings.<br>
+6. At Matrix, ask which video conferencing solutions are most requested by clients and how you can optimize them.
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Optimize a Client Network for Video Conferencing with QoS</strong></p>
+<p>At Matrix, clients frequently complain about poor video quality during meetings. The root cause is often a congested upstream link with no QoS. This task teaches you to configure QoS on a MikroTik CPE to prioritize video conferencing traffic (Zoom, Teams, Webex).</p>
+<ol>
+  <li>Identify the video conferencing traffic: Zoom uses UDP ports 8801-8810, Teams uses 3478-3481 UDP.</li>
+  <li>SSH into the MikroTik CPE and create a packet mark for video traffic: <code>/ip firewall mangle add chain=forward protocol=udp dst-port=8801-8810 action=mark-packet new-packet-mark=video-conf</code>.</li>
+  <li>Create a queue with priority: <code>/queue tree add name=Video-Queue parent=ether1 packet-mark=video-conf limit-at=5M max-limit=10M priority=1</code>.</li>
+  <li>Create a default queue for other traffic with priority 8 and max-limit equal to the link speed.</li>
+  <li>Run a speedtest while on a Zoom call — verify that the call quality remains good even when the link is saturated.</li>
+  <li>Check the queue stats: <code>/queue tree print detail</code> to see how much bandwidth the video traffic uses.</li>
+  <li>Document the QoS rules in the device notes for future reference by other NOC engineers.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Measure Network Readiness for a Video Conference Call</strong></p>
+<p>Before an important client meeting, Matrix NOC engineers pre-qualify the network. This task covers the key metrics — latency, jitter, packet loss, and throughput — that determine whether a video call will be successful.</p>
+<ol>
+  <li>From the client's network, run <code>ping -n 100 zoom.us</code> and record the average latency and packet loss percentage.</li>
+  <li>Run a jitter test: <code>iperf3 -c server-ip -u -b 1M -t 30</code> and check the jitter (must be &lt; 30 ms).</li>
+  <li>Measure available bandwidth: <code>iperf3 -c server-ip -t 10</code> (TCP) and confirm at least 2 Mbps upload/download are free.</li>
+  <li>Check for Wi-Fi interference: on a client laptop, run <code>netsh wlan show interfaces</code> (Windows) and check signal strength (> -65 dBm) and channel utilization.</li>
+  <li>If Wi-Fi signal is weak, suggest moving closer to the AP or using a wired Ethernet connection.</li>
+  <li>Compile a readiness report: pass if latency &lt; 100 ms, jitter &lt; 30 ms, loss = 0%, throughput &gt; 2 Mbps.</li>
+  <li>If any metric fails, identify the bottleneck (uplink saturation, Wi-Fi interference, ISP issue) and escalate.</li>
+</ol>
+</div>
+
+</div>
+<div class="footer">
+<p>Matrix Telecom &mdash; Internship Guide &mdash; Video Conferencing / Telework Services</p>
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

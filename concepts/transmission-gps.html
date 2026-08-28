@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPS / Google Earth - Matrix Transmission Guide</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>GPS &amp; Google Earth for the Network</h1>
+<a class="back" href="index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<h2>Definition</h2>
+<p>GPS (Global Positioning System) is a satellite navigation system that precisely determines the geographic coordinates of a point on Earth. In the context of telecommunications at Matrix Telecom, GPS and Google Earth are used for tower positioning, fiber optic route mapping, customer cartography, and network deployment optimization.</p>
+
+<img src="https://source.unsplash.com/600x400/?gps,satellite,map" alt="GPS Satellite Mapping">
+
+<h2>Coordinate Systems</h2>
+
+<h3>Latitude and Longitude</h3>
+<p>Latitude measures north-south position relative to the equator (0&deg; to 90&deg; N/S). Longitude measures east-west position relative to the Greenwich meridian (0&deg; to 180&deg; E/W). For Yaound&eacute;, the approximate coordinates are 3&deg;52&prime;N 11&deg;31&prime;E.</p>
+
+<h3>UTM (Universal Transverse Mercator)</h3>
+<p>A cartographic projection system that divides the Earth into 60 zones of 6&deg; longitude each. Yaound&eacute; is located in UTM zone 33N. UTM coordinates are expressed in meters (Easting, Northing), facilitating distance and area calculations.</p>
+
+<h3>Coordinate Formats</h3>
+<ul>
+<li><strong>DD (Decimal Degrees):</strong> 3.8667&deg;N, 11.5167&deg;E &mdash; ideal for Google Earth</li>
+<li><strong>DMS (Degrees Minutes Seconds):</strong> 3&deg;52&prime;00&Prime;N, 11&deg;31&prime;00&Prime;E &mdash; traditional format</li>
+<li><strong>UTM:</strong> 33N 332500E 4275000N &mdash; used for field surveys</li>
+</ul>
+
+<h2>How It Works</h2>
+<p>GPS uses a constellation of 31 satellites orbiting at approximately 20,200 km altitude. Each satellite continuously emits a signal containing its position and precise time (atomic clock). The GPS receiver calculates its distance from at least 4 satellites by measuring signal propagation time. Through triangulation, it determines its 3D position (latitude, longitude, altitude) with 2 to 5 meter accuracy under normal conditions.</p>
+
+<p>Google Earth uses satellite imagery, aerial photography, and GIS (Geographic Information System) data to create a 3D model of the Earth. KML/KMZ files allow importing points, lines, and polygons to overlay network information on the map.</p>
+
+<h2>Application at Matrix Telecom Yaound&eacute;</h2>
+
+<div class="matrix-example">
+<strong>Case Study: Fiber Optic Route Mapping</strong>
+<p>Matrix Telecom deploys fiber optics in the neighborhoods of Yaound&eacute; (Mvan, Nlongkak, Bastos, Mfoundi). Here is how GPS and Google Earth are used:</p>
+<ol>
+<li><strong>Field survey:</strong> The transmission team walks the neighborhood with a Garmin GPS or smartphone in survey mode. At each intersection, they record a waypoint.</li>
+<li><strong>Import into Google Earth:</strong> The waypoints are exported as GPX or KML files, then imported into Google Earth Pro.</li>
+<li><strong>Route tracing:</strong> By connecting the points, a path is created representing the exact cable route. The total distance can be measured.</li>
+<li><strong>Infrastructure addition:</strong> ODF cabinets, connection points, and customers are added as placemarks with their exact coordinates.</li>
+<li><strong>Map export:</strong> The final KMZ map is shared with maintenance and sales teams.</li>
+</ol>
+<p><strong>Result:</strong> A complete map of Matrix's fiber network in Yaound&eacute;, viewable by all technicians on Google Earth.</p>
+</div>
+
+<h3>Tower and Antenna Positioning</h3>
+<p>To install a new WiFi tower or point-to-point antenna, the following steps are performed:</p>
+<ul>
+<li><strong>Line of Sight (LoS):</strong> Verification on Google Earth using the elevation tool to ensure no obstacles (hills, buildings) block the signal.</li>
+<li><strong>Precise coordinates:</strong> GPS survey at the installation point to document the exact location.</li>
+<li><strong>Distance measurement:</strong> Using the ruler tool in Google Earth to verify link range.</li>
+<li><strong>Planning:</strong> Creating a KML overlay with radio links, azimuth angles, and distances.</li>
+</ul>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>Google Earth Pro</strong> (free)<br>
+<strong>Usage:</strong>
+<ul>
+<li>Download from google.com/earth/about/versions/</li>
+<li>Create a new project: File &gt; New &gt; Folder</li>
+<li>Add a placemark: yellow pin icon, enter coordinates in DD or DMS</li>
+<li>Draw a path: path icon, click on the map to define points</li>
+<li>Measure a distance: ruler icon, click on two points</li>
+<li>View elevation profiles: right-click on a path &gt; Show Elevation Profile</li>
+<li>Export to KMZ: File &gt; Save &gt; Save Place As</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>GPS Waypoint Recorder</strong><br>
+<strong>Usage:</strong>
+<ul>
+<li>Turn on the GPS and wait for synchronization (at least 4 satellites)</li>
+<li>Mark a point: press the MARK/SAVE button</li>
+<li>Name the point with a unique identifier (e.g., FIBRE-MVAN-001)</li>
+<li>Record the displayed coordinates in the field notebook</li>
+<li>Transfer data via USB or SD card in GPX format</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>QGIS</strong> (open-source)<br>
+<strong>Usage:</strong>
+<ul>
+<li>Create a project with the WGS 84 coordinate system (EPSG:4326)</li>
+<li>Import GPX survey data: Layer &gt; Add Layer &gt; Add GPX Layer</li>
+<li>Add OpenStreetMap basemaps: Web &gt; QuickMapServices &gt; OSM</li>
+<li>Create vector layers for cables, cabinets, and customers</li>
+<li>Use the field calculator for distance formulas</li>
+<li>Export to KML for Google Earth</li>
+</ul>
+</div>
+
+<h2>Commands and Practical Examples</h2>
+
+<h3>Coordinate Conversion DMS &rarr; DD</h3>
+<p>Formula: DD = Degrees + (Minutes / 60) + (Seconds / 3600)</p>
+<pre><code># Example Yaound&eacute; 3&deg;52'00"N 11&deg;31'00"E
+Latitude DD = 3 + 52/60 + 00/3600 = 3.8667&deg;N
+Longitude DD = 11 + 31/60 + 00/3600 = 11.5167&deg;E</code></pre>
+
+<h3>Distance Calculation Between Two Points (Haversine Formula)</h3>
+<pre><code>a = sin&sup2;(&Delta;lat/2) + cos(lat1) &middot; cos(lat2) &middot; sin&sup2;(&Delta;lon/2)
+c = 2 &middot; atan2(&radic;a, &radic;(1-a))
+d = R &middot; c  (R = 6371 km)
+
+# Between Matrix Bastos (3.85N, 11.50E) and Matrix Mvan (3.78N, 11.53E)
+&Delta;lat = 3.78 - 3.85 = -0.07&deg; = -0.001222 rad
+&Delta;lon = 11.53 - 11.50 = 0.03&deg; = 0.000524 rad
+a = sin&sup2;(-0.000611) + cos(3.85&deg;) &middot; cos(3.78&deg;) &middot; sin&sup2;(0.000262)
+  = 3.73e-7 + 0.998 &middot; 0.998 &middot; 6.86e-8
+  = 4.41e-7
+c = 2 &middot; asin(&radic;4.41e-7) = 0.00133 rad
+d = 6371 &middot; 0.00133 = 8.47 km</code></pre>
+
+<h3>KML File Structure</h3>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;kml xmlns="http://www.opengis.net/kml/2.2"&gt;
+  &lt;Document&gt;
+    &lt;name&gt;Matrix Fibre Network Yde&lt;/name&gt;
+    &lt;Placemark&gt;
+      &lt;name&gt;ODF Cabinet Bastos&lt;/name&gt;
+      &lt;Point&gt;
+        &lt;coordinates&gt;11.5167,3.8667,0&lt;/coordinates&gt;
+      &lt;/Point&gt;
+    &lt;/Placemark&gt;
+    &lt;Placemark&gt;
+      &lt;name&gt;Fibre Route Bastos-Mvan&lt;/name&gt;
+      &lt;LineString&gt;
+        &lt;coordinates&gt;11.5167,3.8667 11.5200,3.8500 11.5300,3.7800&lt;/coordinates&gt;
+      &lt;/LineString&gt;
+    &lt;/Placemark&gt;
+  &lt;/Document&gt;
+&lt;/kml&gt;</code></pre>
+
+<h2>Recommended Videos</h2>
+<div class="video-link">
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=google+earth+network+mapping" target="_blank">Search: Google Earth Network Mapping</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=how+to+use+gps+for+network+planning" target="_blank">Search: GPS for Network Planning</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=QGIS+fibre+optic+mapping" target="_blank">Search: QGIS Fibre Optic Mapping</a>
+</div>
+
+<h2>Tip for the Intern</h2>
+<div class="tip">
+<strong>Tip:</strong>
+<ul>
+<li>Always verify that the GPS is calibrated and picking up at least 4 satellites before taking a reading.</li>
+<li>Record coordinates on paper in addition to the digital recording &mdash; batteries can fail.</li>
+<li>In Google Earth, use satellite image history to see infrastructure evolution.</li>
+<li>Create thematic folders in Google Earth: one for fiber, one for radio links, one for customers.</li>
+<li>Learn keyboard shortcuts: Ctrl+N (new placemark), Ctrl+T (new path), Ctrl+M (measure).</li>
+<li>For precise surveys (&lt; 1 m), use a differential GPS (DGPS) or RTK mode.</li>
+<li>Check survey accuracy: GPS displays an error margin (HDOP). An HDOP &lt; 1 is excellent.</li>
+<li>Name placemarks in a standardized way: SITE-DISTRICT-TYPE-NUMBER (e.g., FIB-BASTOS-ODF-01).</li>
+</ul>
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Survey a Fiber Route with a Handheld GPS and Export to Google Earth</strong></p>
+<p>Before trenching fiber, Matrix field teams walk the route with a GPS to record waypoints of manholes, poles, and street crossings. This data is imported into Google Earth for route planning. This task simulates the survey workflow using a GPS device or smartphone app.</p>
+<ol>
+  <li>Set the GPS device to WGS 84 coordinate system and enable tracking (track every 5 meters).</li>
+  <li>Walk the planned route: mark waypoints at each manhole, pole, and road crossing with descriptive names (e.g., "MH-Bastos-01", "POLE-Nlongkak-03").</li>
+  <li>After the walk, export the track and waypoints as GPX and KML files.</li>
+  <li>Open Google Earth Pro on a PC and import the KML file: <strong>File &gt; Open</strong>.</li>
+  <li>In Google Earth, create a folder for the project and organize waypoints into subfolders by street segment.</li>
+  <li>Add a path (polyline) tracing the fiber route, using the track as reference. Set the path color to blue with 50% opacity.</li>
+  <li>Add a photo of each significant landmark (attach to its placemark) for the civil works team to reference.</li>
+  <li>Save the project as a KMZ file and share with the installation team.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Measure and Validate GPS Coordinates for a New Site Survey</strong></p>
+<p>Accuracy matters: a 10-meter error in GPS coordinates can lead to digging in the wrong location. Matrix requires that all site coordinates are validated against known reference points. This task teaches GPS accuracy verification.</p>
+<ol>
+  <li>At the survey site, allow the GPS receiver to acquire at least 6 satellites (check satellite page on the device).</li>
+  <li>Stand at the exact location (e.g., the POP entrance) and let the GPS stabilize for 2-3 minutes.</li>
+  <li>Record the coordinates in degrees decimal format (DD.DDDDD) and note the HDOP (Horizontal Dilution of Precision) — must be &lt; 2.</li>
+  <li>Save the waypoint and move 10 meters north, then re-record. The difference should be approximately 0.00009&deg; in latitude.</li>
+  <li>Cross-check with Google Earth: enter the coordinates in the search bar and verify the pin falls on the correct building.</li>
+  <li>If the pin is more than 5 meters off, re-survey the location. If consistent, note a correction offset in the survey log.</li>
+  <li>Document the final coordinates in the site database with the date and HDOP value.</li>
+</ol>
+</div>
+
+<h2>Best Practices</h2>
+<ul>
+<li>Use the WGS 84 coordinate system (EPSG:4326) for all surveys.</li>
+<li>Save surveys in GPX format (standard) rather than proprietary.</li>
+<li>Back up KML/KMZ files in the cloud.</li>
+<li>When tracing fiber routes, follow roads and sidewalks in Google Earth for a realistic path.</li>
+<li>Use Google Earth layers (traffic, relief, 3D buildings) for better planning.</li>
+<li>Train field teams in GPS and Google Earth usage to ensure data quality.</li>
+</ul>
+
+</div>
+
+<div class="footer">
+Matrix Telecom &mdash; Internship Guide &mdash; Transmission &mdash; GPS &amp; Google Earth
+</div>
+
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

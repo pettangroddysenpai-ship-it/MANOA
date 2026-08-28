@@ -1,0 +1,418 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPPLAN — IP Address Management (IPAM) | Matrix Telecom Internship</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>IPPLAN — IP Address Management (IPAM)</h1>
+  <a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<h2>Definition &amp; Overview</h2>
+<p>IP Address Management (IPAM) is the systematic process of planning, tracking, and managing IP address space and subnets within a network. For an ISP like Matrix Telecom in Yaoundé, effective IPAM is essential for avoiding IP conflicts, ensuring efficient use of allocated address blocks, and providing accurate documentation for troubleshooting and auditing. An IPPLAN (IP Plan) is the concrete document or software tool that records every subnet allocation, VLAN assignment, and device IP across the entire network.</p>
+<p>Without a reliable IPPLAN, Matrix's engineers would struggle to know which IP blocks are assigned to which client, where free space exists for new clients, and which subnets belong to which region or service type. This leads to wasted IP space, duplicate allocations, and prolonged outage resolution times.</p>
+
+<img src="https://source.unsplash.com/600x400/?network,server,technology" alt="Network IP Management">
+
+<h2>How IPAM Works — Technical Deep Dive</h2>
+
+<h3>Hierarchical IP Space Organization</h3>
+<p>An IPAM system organizes the allocated IP space (obtained from AFRINIC for Cameroon providers, typically a /20 or larger block) into a hierarchical tree of subnets. Each subnet is characterized by its CIDR notation (e.g., 196.168.50.0/28), its purpose (client link, infrastructure, management), and its geographical or functional location. Subnets are further subdivided into smaller blocks for point-to-point links (/30), client LANs (/28 or /24), and internal infrastructure (/24).</p>
+
+<h3>Lifecycle of an IP Allocation</h3>
+<ol>
+  <li><strong>Request:</strong> An engineer or sales agent identifies a need for IP space (new client, new PoP, internal server).</li>
+  <li><strong>Reservation:</strong> The IPAM admin reserves a block in the tool, marking it with the client name, contact, and requested subnet size.</li>
+  <li><strong>Allocation:</strong> The specific subnet is assigned from the appropriate pool (e.g., "Douala Client Subnets"). The gateway, first/last usable IP, and broadcast address are calculated and recorded.</li>
+  <li><strong>Assignment:</strong> Individual IPs are assigned to specific network interfaces — CPE WAN IP, CPE LAN subnet, management IP, loopback, etc.</li>
+  <li><strong>Monitoring &amp; Reconciliation:</strong> The monitoring system (SolarWinds/PRTG/Cacti) polls the assigned IPs. Periodic scans (nmap, arp-scan) detect unrecorded devices and flag discrepancies.</li>
+  <li><strong>Reclamation:</strong> When a client disconnects, the IP block is deallocated in the IPAM and returned to the free pool, potentially after a quarantine period.</li>
+</ol>
+
+<h3>VLAN-to-Subnet Mapping</h3>
+<p>A robust IPPLAN also maintains a 1:1 mapping between VLAN IDs and IP subnets. For example, VLAN 100 corresponds to subnet 196.168.100.0/24 and is described as "Bastos Business Clients." This prevents overlapping subnets across access switches and simplifies troubleshooting when tracing a client port to its subnet.</p>
+
+<h2>Subnet Calculation Examples (CIDR Notation)</h2>
+
+<p>Every network engineer must be able to calculate subnets quickly. Below is the complete CIDR reference table for IPv4:</p>
+
+<pre><code>CIDR     Subnet Mask          Total IPs   Usable IPs   Typical Use
+/32      255.255.255.255      1           1            Host route
+/30      255.255.252          4           2            PtP link (most common)
+/29      255.255.255.248      8           6            Small client PoP
+/28      255.255.255.240      16          14           Medium client PoP
+/27      255.255.255.224      32          30           Large client PoP
+/26      255.255.192          64          62           Small office
+/25      255.255.128          128         126          Medium office
+/24      255.255.255.0        256         254          Standard site
+/23      255.255.254.0        512         510          Campus / large office
+/22      255.255.252.0        1024        1022         ISP aggregation
+/21      255.255.248.0        2048        2046         Regional block
+/20      255.255.240.0        4096        4094         ISP main block</code></pre>
+
+<h3>Step-by-Step Subnet Calculation Example</h3>
+<pre><code>Problem: You need to allocate a /28 subnet for a new business client.
+Your available pool is 196.168.50.0/24.
+
+Available subnets in 196.168.50.0/24:
+  196.168.50.0/28   (196.168.50.0 – 196.168.50.15)
+  196.168.50.16/28  (196.168.50.16 – 196.168.50.31)
+  196.168.50.32/28  (196.168.50.32 – 196.168.50.47)
+  ...
+
+Details for 196.168.50.16/28:
+  Network ID:     196.168.50.16
+  First Usable:   196.168.50.17
+  Gateway:        196.168.50.17 (or .16, varies by architecture)
+  Last Usable:    196.168.50.30
+  Broadcast:      196.168.50.31
+  Subnet Mask:    255.255.255.240
+  Usable IPs:     14</code></pre>
+
+<h3>Point-to-Point Link (/30) Example</h3>
+<pre><code>For the link between Matrix core router and client CPE:
+  Subnet:         10.200.1.0/30
+  Matrix Side:    10.200.1.1
+  CPE Side:       10.200.1.2
+  Broadcast:      10.200.1.3
+  Subnet Mask:    255.255.255.252
+  Usable IPs:     2</code></pre>
+
+<h2>Practical Example at Matrix Telecom Yaoundé</h2>
+
+<div class="matrix-example">
+<strong>Matrix Context:</strong> Managing IP Allocations for All Clients – Tracking Which IP Is Assigned to Which CPE<br><br>
+<p>At Matrix Telecom, each new business client requires at minimum three IP allocations:</p>
+<ol>
+  <li>A management IP (often from a 10.x.x.x/8 private range) assigned to the CPE's bridge or loopback interface for remote monitoring (ping, SNMP, SSH).</li>
+  <li>A public /30 (or private /30 if using CGNAT) for the WAN link from Matrix's aggregation router to the CPE.</li>
+  <li>A private LAN subnet for the client's internal network (typically /28 or /24, depending on client size).</li>
+</ol>
+<p>These allocations are recorded in the IPAM with the client name, CPE serial number, CPE model, installation date, and circuit ID. Without accurate IPAM records, an engineer troubleshooting a client outage would have to manually trace cables, ping sweep subnets, or guess which IP corresponds to which client — wasting valuable time during an active outage.</p>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>PHPIPAM — Open Source IPAM</strong><br>
+<strong>Type:</strong> Web-based IPAM application (free, self-hosted)<br>
+<strong>Access:</strong> Usually at http://ipam.matrixtelecom.local or http://phpipam.matrixtelecom.cm<br>
+<strong>Features:</strong><br>
+<ul>
+  <li>Organize IP space into sections (e.g., Yaoundé, Douala, Infrastructure, Clients)</li>
+  <li>Add subnets and automatically calculate CIDR, usable range, and utilization</li>
+  <li>Assign individual IPs to devices with hostname, owner, and notes</li>
+  <li>Subnet visualization — color-coded utilization bar</li>
+  <li>VLAN management with 802.1q ID tracking</li>
+  <li>Import/export via CSV for bulk operations</li>
+  <li>Permission-based access (read-only for interns, admin for NOC)</li>
+</ul>
+<strong>Usage steps for adding a subnet:</strong>
+<ol>
+  <li>Log into PHPIPAM</li>
+  <li>Navigate to the appropriate section (e.g., Yaoundé > Client Subnets)</li>
+  <li>Click "Add subnet" and enter the CIDR</li>
+  <li>Fill in description, VLAN ID, and tags</li>
+  <li>Click "Create"</li>
+</ol>
+</div>
+
+<div class="tool-box">
+<strong>Excel / Google Sheets — Simple IP Tracking</strong><br>
+<strong>Type:</strong> Spreadsheet-based IPAM (used when dedicated software is not available)<br>
+<strong>Typical column layout:</strong><br>
+<pre><code>Subnet (CIDR) | Client Name | Site | CPE Model | CPE Serial | WAN IP | Gateway | VLAN | Status | Date Assigned</code></pre>
+<strong>Caveats:</strong> Excel lacks validation (two people can assign the same IP), concurrent editing, and subnet auto-calculation. It is a useful starting point but should be replaced by PHPIPAM or NetBox as soon as practical.<br>
+<strong>Pro tip for interns:</strong> If Matrix uses Excel for IPAM, volunteer to migrate it to PHPIPAM — it's a valuable project for your internship portfolio.
+</div>
+
+<div class="tool-box">
+<strong>NetBox — Advanced IPAM + DCIM</strong><br>
+<strong>Type:</strong> Open-source IPAM and Data Center Infrastructure Management<br>
+<strong>Features:</strong> In addition to PHPIPAM capabilities, NetBox tracks devices, racks, cables, circuit terminations, power panels, and much more. It is the de facto standard for serious ISP IPAM implementations.<br>
+<strong>Access:</strong> Often at http://netbox.matrixtelecom.local<br>
+<strong>Usage:</strong> NetBox uses a "prefix" (subnet) and "IP address" model. Prefixes can be hierarchical (parent/child). Each device can have multiple IPs assigned to its interfaces.
+</div>
+
+<h2>How to Avoid IP Conflicts</h2>
+<p>IP conflicts (two devices on the same subnet with the same IP) cause one or both devices to lose connectivity. Common causes at an ISP include:</p>
+<ul>
+  <li>Two engineers simultaneously allocating the same /30 from an outdated Excel sheet</li>
+  <li>Forgotten devices (decommissioned CPEs) still powered on and claiming an IP</li>
+  <li>DHCP scope overlapping with static assignments</li>
+  <li>Duplicate DHCP servers configured accidentally</li>
+</ul>
+<p><strong>Mitigation strategies:</strong></p>
+<ul>
+  <li>Use an IPAM tool (PHPIPAM/NetBox) as the single source of truth — always check before assigning</li>
+  <li>Enable DHCP snooping on access switches to block rogue DHCP servers</li>
+  <li>Run weekly IP scans (<code>nmap -sn 196.168.0.0/16</code>) and reconcile with IPAM records</li>
+  <li>Use arp-scan to detect active IPs not in the IPAM: <code>arp-scan --interface=eth0 196.168.50.0/24</code></li>
+  <li>In case of a conflict, disconnect the offending device, change its IP, then reconnect</li>
+</ul>
+
+<h2>Video Tutorials</h2>
+
+<div class="video-link">
+<strong>Recommended YouTube Searches:</strong><br>
+<ul>
+  <li><a href="https://www.youtube.com/results?search_query=IP+address+management+IPAM+subnet" target="_blank">IP Address Management (IPAM) &amp; Subnetting</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=phpipam+installation+and+configuration+guide" target="_blank">PHPIPAM Installation and Configuration Guide</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=netbox+ipam+tutorial+isp" target="_blank">NetBox IPAM Tutorial for ISPs</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=subnetting+made+easy+cidr+notation" target="_blank">Subnetting Made Easy — Master CIDR</a></li>
+</ul>
+</div>
+
+<h2>Tips for the Intern</h2>
+
+<div class="tip">
+<strong>Intern Tip:</strong><br>
+<ul>
+  <li><strong>Memorize the CIDR chart</strong> (especially /24, /28, /29, /30). You will calculate subnets daily.</li>
+  <li><strong>Ask first, assign second:</strong> Always check with a senior engineer before allocating a new subnet. There may be reserved blocks you don't know about.</li>
+  <li><strong>Document everything:</strong> If you assign an IP, immediately update the IPAM. "I'll do it later" leads to lost IPs and conflicts.</li>
+  <li><strong>Use ping sweeps to verify:</strong> Before assigning a block, run <code>nmap -sn</code> to confirm it's truly empty.</li>
+  <li><strong>Learn the IPAM tool of choice at Matrix:</strong> If they use PHPIPAM, learn its API. If NetBox, learn the REST API. Automating IP allocations is a superpower.</li>
+  <li><strong>Understand private vs. public IP space:</strong> Matrix likely uses 10.0.0.0/8 for internal management, and AFRINIC-allocated public IPs for client subnets and BGP announcements.</li>
+  <li><strong>Keep a subnet cheat sheet pinned:</strong> Print the CIDR table above and tape it to your monitor.</li>
+  <li><strong>IPv6 is coming:</strong> Even if Matrix hasn't deployed IPv6 yet, learn the IPv6 subnetting model (/64 per subnet, /48 per site). AFRINIC encourages IPv6 adoption.</li>
+</ul>
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Design a Subnet Scheme for a New Matrix Office Site</strong></p>
+<p>Matrix Telecom is opening a new branch in Douala with 3 departments (Sales: 30 hosts, NOC: 50 hosts, Admin: 20 hosts) plus a management network (10 hosts) and a guest Wi-Fi (100 hosts). You must plan the IP addressing using the 10.20.0.0/16 block. This exercise simulates the daily IPAM work a network engineer performs when onboarding a new site.</p>
+<ol>
+  <li>Determine the smallest subnet (prefix length) that fits each department's host requirement plus 20% growth margin.</li>
+  <li>Allocate subnets sequentially from 10.20.0.0/16: Sales first, then NOC, Admin, Management, Guest.</li>
+  <li>Document each subnet in the IPAM tool (or a spreadsheet) with: subnet ID, gateway (first usable IP), VLAN ID, and purpose.</li>
+  <li>Verify no overlapping ranges using a subnet calculator (e.g., <code>ipcalc 10.20.0.0/24</code> on Linux).</li>
+  <li>Define a routing summary: can all subnets be summarized as 10.20.0.0/20? Show the calculation.</li>
+  <li>Add a comment in the IPAM for each block with the site name and contact person.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Perform an IP Address Audit with Ping Sweep</strong></p>
+<p>Before deploying new equipment at a client site, you must verify that the planned IP range is actually unused. At Matrix, conflicts caused by overlapping private IP assignments can bring down a customer's network. This task teaches you to audit a subnet before allocation using standard CLI tools.</p>
+<ol>
+  <li>Given a candidate subnet 192.168.50.0/24, run <code>nmap -sn 192.168.50.0/24</code> from a Linux jump host in the NOC.</li>
+  <li>Record all responding IPs, their MAC addresses, and any reverse DNS names.</li>
+  <li>Cross-reference the discovered IPs against the IPAM database — flag any that are not documented.</li>
+  <li>If a conflict is found (IP in IPAM but responding to ping from a different MAC), escalate to the senior engineer.</li>
+  <li>Update the IPAM with the audit results and add a note "Last audited: [date]".</li>
+</ol>
+</div>
+
+<h2>IP Planning Best Practices</h2>
+<ul>
+  <li>Allocate IP blocks hierarchically to enable route summarization. Group subnets by region, then by client type.</li>
+  <li>Leave 10–20% free space in every subnet for future growth. Do not allocate 100% of a /24.</li>
+  <li>Standardize on /30 (not /31) for point-to-point links unless all equipment supports RFC 3021.</li>
+  <li>Use private IP space (10.x.x.x/8) for all management and infrastructure; reserve public IPs for client-facing allocations and BGP.</li>
+  <li>Define a naming convention for subnets: e.g., "CM-NS-YDE-INFRA-01" (Cameroon, Network Services, Yaoundé, Infrastructure, index).</li>
+  <li>Document every subnet with VLAN ID, switch port, gateway IP, and responsible engineer's contact.</li>
+  <li>Reconcile IPAM with actual network state every quarter via automated scanning.</li>
+</ul>
+
+<h2>Example: Full Client IP Allocation Record</h2>
+<pre><code>Client Name:       Les Etablissements Nkwi SARL
+Circuit ID:        MT-YDE-2025-0891
+Service:           Fiber Pro 100/50 Mbps
+CPE Model:         MikroTik RB4011
+CPE Serial:        9F7G2H4K
+
+Management IP:     10.200.10.45/24 (CPE loopback)
+WAN Link:          196.168.240.0/30
+  - Matrix side:   196.168.240.1 (Core-RTR-Bastos)
+  - CPE side:      196.168.240.2
+Client LAN:        196.168.200.0/28
+  - Gateway:       196.168.200.1 (on CPE)
+  - Usable range:  196.168.200.2 – 196.168.200.14
+  - Broadcast:     196.168.200.15
+VLAN ID:           200
+Install Date:      2025-08-15
+Engineer:          Paul B. (NOC) 
+Status:            Active</code></pre>
+
+</div>
+
+<div class="footer">
+  Matrix Telecom Internship Guide — Monitoring Category — IPPLAN
+</div>
+
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

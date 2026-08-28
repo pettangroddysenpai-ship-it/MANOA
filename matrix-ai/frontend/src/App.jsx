@@ -4,12 +4,13 @@ import { MessageCircle, Map, LayoutDashboard, Bot, Star, Flame, Award, Wifi, Wif
 import ChatView from './components/ChatView.jsx';
 import ProgressListView from './components/ProgressListView.jsx';
 import DashboardView from './components/DashboardView.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import { api } from './services/api.js';
 
 const TABS = [
   { id: 'chat', label: 'Assistant', icon: MessageCircle },
   { id: 'roadmaps', label: 'Feuilles de route', icon: Map },
-  { id: 'dashboard', label: 'Admin', icon: LayoutDashboard },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ];
 
 export default function App() {
@@ -119,7 +120,11 @@ export default function App() {
         <div className={tab === 'chat' ? 'w-full pt-6' : 'mx-auto max-w-5xl pt-6'}>
           {tab === 'chat' && <ChatView onXpGained={handleXpGained} onModeChange={setMode} />}
           {tab === 'roadmaps' && <ProgressListView onXpGained={handleXpGained} />}
-          {tab === 'dashboard' && <DashboardView />}
+          {tab === 'dashboard' && (
+            <ErrorBoundary>
+              <DashboardView />
+            </ErrorBoundary>
+          )}
         </div>
       </main>
     </div>

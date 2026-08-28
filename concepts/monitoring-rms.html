@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RMS — Remote Monitoring System | Matrix Telecom Internship</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>RMS — Remote Monitoring System</h1>
+  <a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<h2>Definition &amp; Overview</h2>
+<p>A Remote Monitoring System (RMS) is a centralized platform that enables network engineers to monitor, manage, and troubleshoot network devices — routers, switches, firewalls, access points — without requiring physical access to the equipment. For an ISP like Matrix Telecom, RMS is not a luxury but a necessity: the network spans the entire city of Yaoundé and beyond, and dispatching a technician to every site for routine checks or simple fixes would be prohibitively expensive and slow.</p>
+<p>An RMS combines several capabilities into one system: device discovery and inventory, real-time monitoring via SNMP/ping, remote CLI access (SSH/Telnet) through a secured jump host, configuration backup/restore, firmware management, and out-of-band management (OOBM) for devices that lose primary connectivity. It is the single pane of glass from which the NOC team operates.</p>
+
+<img src="https://source.unsplash.com/600x400/?server,control,monitoring" alt="Remote Server Monitoring">
+
+<h2>How It Works — Technical Deep Dive</h2>
+
+<h3>1. Agentless vs. Agent-Based Monitoring</h3>
+<p>Most RMS platforms support both models:</p>
+<ul>
+  <li><strong>Agentless:</strong> The RMS communicates with devices using standard protocols (SNMP, ICMP, SSH, Telnet, HTTP). No software is installed on the target device. This is preferred for routers, switches, and firewalls where installing an agent is not possible or undesirable.</li>
+  <li><strong>Agent-Based:</strong> A small software agent is installed on servers (Windows/Linux) to collect detailed OS-level metrics — process list, disk I/O, application logs. Common agents include SolarWinds Agent, Zabbix agent, and PRTG Remote Probe.</li>
+</ul>
+
+<h3>2. Out-of-Band Management (OOBM)</h3>
+<p>OOBM is a critical component of RMS that ensures management access even when the production network is down. Methods include:</p>
+<ul>
+  <li><strong>Dedicated management VLAN:</strong> A separate Layer 3 domain with private IPs (10.x.x.x) that carries only management traffic. This VLAN is separate from client data traffic.</li>
+  <li><strong>LTE/4G Backup:</strong> The CPE or router has a cellular modem that provides a backup management path when the primary fiber or copper link fails.</li>
+  <li><strong>Console Servers:</strong> Hardware devices (e.g., OpenGear, Raritan) that aggregate serial console ports from multiple routers. Engineers SSH into the console server and select the port corresponding to the target device, providing console-level access even if the network stack is non-functional.</li>
+  <li><strong>BMC/iLO/iDRAC:</strong> For servers, the Baseboard Management Controller provides serial-over-LAN, remote power control, and virtual media — all accessible via dedicated management NIC on the OOBM VLAN.</li>
+</ul>
+
+<h3>3. Session Management and Auditing</h3>
+<p>RMS platforms typically provide a web-based SSH/Telnet client or integrate with a bastion/jump host. All sessions are logged: who accessed which device, at what time, and what commands were executed. This audit trail is essential for compliance (e.g., PCI-DSS, ISO 27001) and for incident postmortems.</p>
+
+<h3>4. Configuration Backup and Compliance</h3>
+<p>The RMS automatically backs up device configurations at scheduled intervals (nightly, weekly). Configurations are stored in version control (e.g., Git or the RMS's internal database). Engineers can compare configurations between backups, roll back to a known-good configuration after a failed change, and audit configuration drift over time.</p>
+
+<h3>5. Automated Workflows</h3>
+<p>Advanced RMS platforms support automation: when an alarm fires, the RMS can execute a pre-defined remediation script (e.g., bounce a port, restart a service, change a routing parameter). This reduces the mean time to repair (MTTR) for common issues like a stuck BGP session or a hung interface.</p>
+
+<h2>Practical Example at Matrix Telecom Yaoundé</h2>
+
+<div class="matrix-example">
+<strong>Matrix Context:</strong> Which RMS Platform Does Matrix Use? Ask the Engineers!<br><br>
+<p><strong>Important:</strong> Before diving into this topic, ask your supervisor or a senior NOC engineer: <em>"What RMS platform does Matrix Telecom use? Is it SolarWinds RMS, a custom solution, or something else?"</em> The specific tool may vary, but the concepts in this page are universal.</p>
+<p>At Matrix, the RMS is used daily for:</p>
+<ul>
+  <li><strong>Monitoring core infrastructure:</strong> The two upstream routers (one in Douala, one in Yaoundé) are polled every 60 seconds via ICMP and SNMP. If either goes down, the RMS sends an SMS to the on-call engineer within 2 minutes.</li>
+  <li><strong>Client CPE management:</strong> Each of the 400+ active client CPEs is accessible via SSH through the RMS jump host. When a client calls to report slow internet, the NOC engineer SSHes into the CPE, checks bandwidth usage, interface errors, and signal strength without leaving the Yaoundé office.</li>
+  <li><strong>Configuration backup:</strong> Every night at 02:00, the RMS connects to every managed device, downloads the running configuration, and stores it in a versioned archive. If a configuration change breaks a client link, engineers can quickly roll back to the previous night's backup.</li>
+  <li><strong>Power cycling:</strong> Some CPEs are connected to intelligent PDUs (Power Distribution Units). Through the RMS, engineers can remotely power-cycle a stuck CPE without needing a site visit.</li>
+</ul>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>RMS Web UI</strong><br>
+<strong>Access:</strong> Typically https://rms.matrixtelecom.local (internal network)<br>
+<strong>Purpose:</strong> The primary interface for day-to-day monitoring and management<br>
+<strong>Common pages:</strong>
+<ul>
+  <li><strong>Dashboard:</strong> Shows overall network health — number of devices up/down, active alarms, interface utilization top-N.</li>
+  <li><strong>Device Inventory:</strong> Searchable list of all managed devices with model, firmware, location, and status.</li>
+  <li><strong>Remote Console:</strong> Built-in SSH/HTTPS launcher. Select a device, click "Connect", and get a terminal session instantly.</li>
+  <li><strong>Backup Manager:</strong> View configuration backup history, compare revisions, and restore.</li>
+  <li><strong>Reports:</strong> Scheduled reports on uptime, SLA compliance, and bandwidth trends.</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>SSH / Telnet</strong><br>
+<strong>Purpose:</strong> Direct CLI access to devices for detailed troubleshooting<br>
+<strong>Usage:</strong>
+<pre><code># Direct SSH to a device on the management VLAN
+ssh noc-admin@10.200.10.1
+
+# SSH via the RMS bastion host (jump box)
+ssh -J noc@bastion.matrixtelecom.cm noc-admin@10.200.10.1
+
+# Use SSH key pairs for passwordless access
+ssh-keygen -t ed25519 -f ~/.ssh/matrix_rms_key
+ssh-copy-id -i ~/.ssh/matrix_rms_key noc-admin@10.200.10.1
+
+# Telnet (only on isolated OOBM networks, no encryption)
+telnet 10.200.10.1 23</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>SNMP for Health Checks</strong><br>
+<strong>Purpose:</strong> Quick health checks from the command line without the full RMS<br>
+<strong>Common commands:</strong>
+<pre><code># Check device uptime
+snmpget -v2c -c matrix_ro 10.200.10.1 1.3.6.1.2.1.1.3.0
+
+# List all interfaces
+snmpwalk -v2c -c matrix_ro 10.200.10.1 1.3.6.1.2.1.2.2.1.2
+
+# Check interface operational status
+snmpwalk -v2c -c matrix_ro 10.200.10.1 1.3.6.1.2.1.2.2.1.8
+
+# Get interface bandwidth utilization (ifHCInOctets, 64-bit counter)
+snmpwalk -v2c -c matrix_ro 10.200.10.1 1.3.6.1.2.1.31.1.1.1.6</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Console Server (e.g., OpenGear)</strong><br>
+<strong>Purpose:</strong> Serial console access to routers when SSH/SNMP is unavailable<br>
+<strong>Usage:</strong>
+<pre><code># SSH to the console server
+ssh admin@console-server.matrixtelecom.local
+
+# List ports and their connected devices
+show port-summary
+
+# Connect to port 8 (connected to Core-RTR-Yaounde console port)
+connect port 8
+# You now have serial console access to Core-RTR-Yaounde
+# This works even if the router's network stack has crashed</code></pre>
+</div>
+
+<h2>Common RMS Platforms at ISPs</h2>
+<ul>
+  <li><strong>SolarWinds RMS:</strong> Integrated with Orion. Provides remote desktop, SSH console, power management, and configuration backup.</li>
+  <li><strong>Zabbix (with automated actions):</strong> Open-source. Can trigger remote commands via SSH on alert conditions.</li>
+  <li><strong>PRTG (with probes):</strong> Distributed monitoring with remote probes that can be placed at each PoP for local monitoring continuity.</li>
+  <li><strong>ManageEngine OpManager:</strong> Commercial. Good mid-range solution with integrated remote control.</li>
+  <li><strong>OpenGear Console Servers + LibreNMS:</strong> Hardware console servers combined with an open-source monitoring platform.</li>
+  <li><strong>Custom Bastion + Monitoring:</strong> A hardened Linux VM with SSH access to all management IPs, combined with Nagios/Icinga for alerts.</li>
+</ul>
+
+<h2>Video Tutorials</h2>
+
+<div class="video-link">
+<strong>Recommended YouTube Searches:</strong><br>
+<ul>
+  <li><a href="https://www.youtube.com/results?search_query=remote+monitoring+system+network+management" target="_blank">Remote Monitoring System Network Management</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=out+of+band+management+network+bastion+host" target="_blank">Out-of-Band Management and Bastion Hosts</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=console+server+opengear+setup+tutorial" target="_blank">Console Server Setup Tutorial (OpenGear)</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=SSH+jump+host+bastion+configuration" target="_blank">SSH Jump Host / Bastion Configuration</a></li>
+</ul>
+</div>
+
+<h2>Tips for the Intern</h2>
+
+<div class="tip">
+<strong>Intern Tip:</strong><br>
+<ul>
+  <li><strong>Find out what Matrix uses:</strong> Ask the NOC team "What is our RMS?" and "Can I get a demo account to explore?" Understanding the specific RMS is a top priority.</li>
+  <li><strong>Master SSH:</strong> You will SSH into devices constantly. Practice using SSH keys, config files, jump hosts, port forwarding, and ProxyJump.</li>
+  <li><strong>Learn the management IP scheme:</strong> Matrix likely uses a consistent scheme like 10.200.x.x for management IPs. Knowing the scheme makes it easy to reach any device.</li>
+  <li><strong>Always verify remote access:</strong> After a new CPE is installed, immediately SSH into it from the NOC to verify remote management works before the technician leaves the site.</li>
+  <li><strong>Understand in-band vs. out-of-band:</strong> If you manage a device through its production-facing IP, it's in-band. Through a dedicated management port/VLAN, it's out-of-band. Know the difference.</li>
+  <li><strong>Keep a session log:</strong> When troubleshooting, save your SSH session to a file. The exact commands and outputs you ran are invaluable for post-incident reports.</li>
+  <li><strong>Ask about console servers:</strong> If Matrix uses them, ask for a tour of the rack. Understanding how serial console cabling works is rare knowledge that impresses interviewers.</li>
+  <li><strong>Automate config backups:</strong> Even if the RMS does it, write a small Python/Bash script that does the same for your lab devices. Understanding the backup/restore process deeply is crucial.</li>
+</ul>
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Remotely Access a MikroTik Router via the RMS Platform</strong></p>
+<p>Matrix Telecom uses an RMS (Remote Management System) to centrally manage hundreds of MikroTik and Cisco devices across Yaounde. The ability to remotely connect to a device without a physical presence is critical for NOC efficiency. This exercise simulates connecting to a remote CPE via the RMS web console.</p>
+<ol>
+  <li>Log in to the RMS dashboard (e.g., MikroTik TheDude or Matrix's internal RMS).</li>
+  <li>Locate the target device in the device list — filter by site "Bastos-POP" or the name provided by your supervisor.</li>
+  <li>Click the device and select <strong>Remote Desktop / SSH</strong> from the action menu.</li>
+  <li>Verify the connection opens a WinBox or SSH session directly to the router.</li>
+  <li>Run <code>/system resource print</code> to check uptime, CPU load, and free memory.</li>
+  <li>Disconnect properly (close the session) and log the device status in the RMS notes field.</li>
+  <li>Repeat with a second device in a different POP to confirm multi-device access works.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Schedule and Review an Automatic Configuration Backup</strong></p>
+<p>Regular backups are mandatory at Matrix Telecom. Every router configuration must be backed up daily so that a failed device can be replaced within minutes. This task teaches you to configure automated backups in the RMS and verify the backup files are complete and restorable.</p>
+<ol>
+  <li>In the RMS, navigate to <strong>Backup &gt; Schedule Backup</strong>.</li>
+  <li>Select a MikroTik router and set a daily schedule at 02:00 AM with retention of 30 backups.</li>
+  <li>Choose backup type: <strong>Binary .backup</strong> (full) and <strong>Export .rsc</strong> (human-readable script).</li>
+  <li>Enable <strong>Email notification</strong> on failure and set the destination NOC email.</li>
+  <li>Manually trigger the backup once and wait for completion.</li>
+  <li>Download the <code>.backup</code> file and verify its size matches the expected device config size.</li>
+  <li>Open the <code>.rsc</code> file in a text editor to confirm it contains interface, IP, and route configuration lines.</li>
+</ol>
+</div>
+
+<h2>Security Best Practices for RMS</h2>
+<ul>
+  <li>Place management interfaces on a dedicated, isolated VLAN with strict ACLs.</li>
+  <li>Use SSH keys instead of passwords. Disable password-based SSH on all devices.</li>
+  <li>Use SNMPv3 with authentication and encryption (authPriv) when possible.</li>
+  <li>Enable MFA (multi-factor authentication) for RMS web UI logins.</li>
+  <li>Log and audit all remote sessions. Know who accessed which device and when.</li>
+  <li>Use a bastion/jump host: never expose management IPs directly to the internet.</li>
+  <li>Rotate SNMP community strings and SSH keys quarterly.</li>
+  <li>Document the RMS architecture and access procedures in a wiki.</li>
+</ul>
+
+<h2>Device Onboarding Checklist for RMS</h2>
+<ol>
+  <li>Assign a unique management IP from the OOBM VLAN range (e.g., 10.200.x.x/24).</li>
+  <li>Configure the management interface in a dedicated VRF (if supported) or at minimum restrict ACLs to NOC source IPs.</li>
+  <li>Enable SNMP with a restricted read-only community and limit to RMS IP.</li>
+  <li>Enable SSH with key-based authentication.</li>
+  <li>Configure NTP — accurate timestamps are essential for correlating logs.</li>
+  <li>Forward Syslog to the central Syslog server (a component of RMS).</li>
+  <li>Add the device to the RMS inventory with all fields (serial, model, firmware, location).</li>
+  <li>Run an initial configuration backup in the RMS.</li>
+  <li>Test remote SSH access through the RMS jump host.</li>
+  <li>Verify SNMP data appears in the RMS dashboard (CPU, memory, interfaces).</li>
+</ol>
+
+<h2>Troubleshooting Remote Access Issues</h2>
+<pre><code>Problem: Cannot SSH to device 10.200.10.1
+Checklist:
+  [ ] Can you ping 10.200.10.1? If no, check OOBM connectivity.
+  [ ] Is SSH port open? nmap -p 22 10.200.10.1
+  [ ] Does the device have a default route in the management VRF?
+  [ ] Are there ACLs blocking SSH from the NOC subnet?
+  [ ] Is the device powered on? (check UPS status via OOBM if available)
+  [ ] Is the SSH service running? (check with console server if accessible)
+  [ ] If all else fails, lodge a site visit request.</code></pre>
+
+</div>
+
+<div class="footer">
+  Matrix Telecom Internship Guide — Monitoring Category — RMS
+</div>
+
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

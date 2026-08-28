@@ -1,0 +1,523 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POP Infrastructure - Matrix Transmission Guide</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+th, td { padding: 10px 12px; text-align: left; border: 1px solid #1e293b; }
+th { background: #1e293b; color: #60a5fa; }
+td { background: #0f172a; color: #cbd5e1; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>POP Infrastructure</h1>
+<a class="back" href="index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<h2>Definition of a POP</h2>
+<p>A POP (Point of Presence) is a physical site where Matrix Telecom installs its network equipment to connect customers to the Internet. It is the central service point for a geographic area. Each POP is a mini-datacenter that hosts routers, switches, OLTs, fiber patch panels, batteries, and power supplies.</p>
+
+<img src="https://source.unsplash.com/600x400/?datacenter,infrastructure,network" alt="Network Infrastructure Datacenter">
+
+<h2>Role of the POP in the Network</h2>
+<p>The POP is the convergence point between Matrix's Internet backbone and end customers. It performs several critical functions:</p>
+<ul>
+<li><strong>Aggregation:</strong> Collects traffic from all customers in the area</li>
+<li><strong>Distribution:</strong> Distributes connectivity to customers via fiber, microwave, or copper</li>
+<li><strong>Routing:</strong> Routes traffic to Matrix's Internet backbone</li>
+<li><strong>Redundancy:</strong> Ensures service continuity in case of failure</li>
+<li><strong>Power:</strong> Provides stabilized and backup power to equipment</li>
+</ul>
+
+<h2>POP Equipment</h2>
+
+<table>
+<thead>
+<tr>
+<th>Equipment</th>
+<th>Function</th>
+<th>Matrix Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core router</td>
+<td>BGP routing, backbone connection</td>
+<td>MikroTik CCR1072, Cisco ASR1000</td>
+</tr>
+<tr>
+<td>Distribution switch</td>
+<td>Access traffic aggregation</td>
+<td>MikroTik CRS328, Cisco 3850</td>
+</tr>
+<tr>
+<td>OLT (GPON)</td>
+<td>Fiber network termination</td>
+<td>Huawei MA5800, Nokia ISAM</td>
+</tr>
+<tr>
+<td>ODF (fiber patching)</td>
+<td>Optical connection</td>
+<td>48-port SC/APC panel</td>
+</tr>
+<tr>
+<td>Copper patch bay</td>
+<td>RJ45 connection</td>
+<td>Cat6a 24p patch panel</td>
+</tr>
+<tr>
+<td>Servers</td>
+<td>DHCP, AAA, monitoring</td>
+<td>HP ProLiant DL20, Raspberry Pi</td>
+</tr>
+<tr>
+<td>UPS</td>
+<td>Stabilized power supply</td>
+<td>APC Smart-UPS 3000VA</td>
+</tr>
+<tr>
+<td>External batteries</td>
+<td>Electrical autonomy</td>
+<td>48V 100Ah battery</td>
+</tr>
+<tr>
+<td>Cooling</td>
+<td>Temperature control</td>
+<td>9000-12000 BTU AC</td>
+</tr>
+<tr>
+<td>Microwave antennas</td>
+<td>Inter-POP links</td>
+<td>Ubiquiti AF-5X, Mimosa B5</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Redundancy and High Availability</h2>
+
+<h3>Network Redundancy</h3>
+<ul>
+<li><strong>Dual backbone link:</strong> Each POP connects to the main POP via two distinct paths (fiber + microwave)</li>
+<li><strong>Backup router:</strong> VRRP (Virtual Router Redundancy Protocol) with a second standby router</li>
+<li><strong>LACP:</strong> Link aggregation between router and distribution switch to avoid single point of failure</li>
+<li><strong>Redundant VLANs:</strong> Spanning Tree Protocol (RSTP/MSTP) to prevent loops and ensure resilience</li>
+</ul>
+
+<h3>Power Redundancy</h3>
+<ul>
+<li><strong>Dual power:</strong> Each device is plugged into two separate PDUs (A and B)</li>
+<li><strong>UPS:</strong> Filters voltage variations and provides 15-30 minutes of autonomy</li>
+<li><strong>Batteries:</strong> External batteries (48V DC) extend autonomy to 2-4 hours</li>
+<li><strong>Generator:</strong> For critical POPs, a generator takes over after 30 seconds</li>
+<li><strong>Surge protectors:</strong> Protection against surges on every incoming line (mains and network cables)</li>
+</ul>
+
+<h3>Cooling Redundancy</h3>
+<ul>
+<li>Two independent air conditioners (N+1)</li>
+<li>Each AC can cool the POP alone if the other fails</li>
+<li>Temperature probe with SMS alert if T&deg; &gt; 30&deg;C or &lt; 15&deg;C</li>
+</ul>
+
+<h2>Power and Energy</h2>
+
+<h3>Typical Consumption</h3>
+<table>
+<thead>
+<tr>
+<th>Equipment</th>
+<th>Consumption</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core router (CCR1072)</td>
+<td>100-150W</td>
+</tr>
+<tr>
+<td>Distribution switch (CRS328)</td>
+<td>50-80W (without PoE)</td>
+</tr>
+<tr>
+<td>OLT (MA5800 with 2 cards)</td>
+<td>200-300W</td>
+</tr>
+<tr>
+<td>HP DL20 server</td>
+<td>100-150W</td>
+</tr>
+<tr>
+<td>Powered ONTs (x64)</td>
+<td>~64W (1W each)</td>
+</tr>
+<tr>
+<td>Microwave antenna (AF-5X)</td>
+<td>15-25W</td>
+</tr>
+<tr>
+<td>Air conditioner</td>
+<td>800-1500W</td>
+</tr>
+<tr>
+<td><strong>POP Total</strong></td>
+<td><strong>~1.5 to 3 kW</strong></td>
+</tr>
+</tbody>
+</table>
+
+<h3>UPS Sizing</h3>
+<pre><code>Total POP power = 2500W
+UPS battery voltage = 48V
+Required autonomy = 2 hours
+Required capacity = (2500W &times; 2h) / 48V = 104 Ah
+Selected batteries: 2 &times; 100Ah in parallel = 200Ah (safety margin)</code></pre>
+
+<h2>Practical Case: Visiting a Matrix POP</h2>
+
+<div class="matrix-example">
+<strong>Guided Tour of the Matrix Mvan POP in Yaound&eacute;</strong>
+<p>Here is what you will see when visiting the Matrix Mvan POP:</p>
+<ol>
+<li><strong>Entrance:</strong> Reinforced door with electronic lock + keypad. Only authorized personnel have access.</li>
+<li><strong>Fire extinguisher:</strong> CO2 extinguisher (suitable for electrical equipment) next to the door.</li>
+<li><strong>42U Rack:</strong> Black closed rack with glass door. Ambient temperature: 22&deg;C.</li>
+<li><strong>Top of rack (U1-U4):</strong> ODF panel with 48 SC/APC fibers. Each fiber is labeled with its destination.</li>
+<li><strong>U5-U8:</strong> Huawei MA5800-X15 OLT. Pigtail cables run from the ODF to the OLT.</li>
+<li><strong>U9-U12:</strong> MikroTik CRS328 distribution switch. Green SFP+ fiber connections to the router.</li>
+<li><strong>U13-U16:</strong> MikroTik CCR1072 core router. 10G fiber link to the central POP (Bastos).</li>
+<li><strong>U17-U18:</strong> Copper patch bay with Cat6a patch cables to the router and switch.</li>
+<li><strong>U19-U20:</strong> APC PDU with consumption monitoring. Two independent PDUs (A and B).</li>
+<li><strong>U21-U22:</strong> APC Smart-UPS 3000VA. Green LEDs: everything is normal.</li>
+<li><strong>U23-U24:</strong> External batteries 48V 100Ah.</li>
+<li><strong>Bottom of rack:</strong> Free space for expansion.</li>
+<li><strong>Outside the rack:</strong> 12000 BTU wall-mounted AC, ceiling smoke detector, IP camera.</li>
+<li><strong>On the roof:</strong> Parabolic antennas (microwave link to Bastos POP) and 4G backup antenna.</li>
+</ol>
+</div>
+
+<h2>POP Intervention Procedure</h2>
+
+<ol>
+<li><strong>Prerequisites:</strong> Report arrival to the NOC. Wear PPE (insulated shoes, anti-static gloves).</li>
+<li><strong>Verification:</strong> Check temperature, humidity, LED status.</li>
+<li><strong>Inspection:</strong> Visually check each device. Identify any alarms.</li>
+<li><strong>Intervention:</strong> If replacement or maintenance, follow the specific procedure.</li>
+<li><strong>Documentation:</strong> Record the intervention in the POP logbook.</li>
+<li><strong>Closure:</strong> Verify everything is functional. Close the door. Report to NOC.</li>
+</ol>
+
+<h2>Tools Used for POP Maintenance</h2>
+
+<div class="tool-box">
+<strong>Digital Multimeter (DC Power Meter)</strong><br>
+<strong>Usage:</strong>
+<ul>
+<li>Measure battery voltage (48V DC nominal, between 42V and 54V)</li>
+<li>Check mains input voltage (220-240V AC)</li>
+<li>Measure current draw of each device (ammeter mode)</li>
+<li>Verify ground continuity</li>
+</ul>
+<pre><code># Typical measurements in a Matrix POP
+Battery voltage: 53.2V DC (good, battery charged)
+Mains voltage: 231V AC (within norms)
+Router consumption: 0.45A at 48V = 21.6W (correct)
+OLT consumption: 3.8A at 48V = 182.4W (correct)</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Thermometer / Hygrometer with Probe</strong><br>
+<strong>Usage:</strong>
+<ul>
+<li>Measure temperature at several locations in the POP (top, middle, bottom of rack)</li>
+<li>Check ambient humidity</li>
+<li>Ideal: 20-24&deg;C, 40-55% RH</li>
+<li>Alert threshold: &gt; 30&deg;C or &lt; 15&deg;C, RH &gt; 70%</li>
+<li>Use an infrared thermometer for hotspots</li>
+</ul>
+<pre><code># Measurement points in a POP
+Top of rack (air intake): 21.5&deg;C, 48% RH
+Middle of rack (OLT): 23.8&deg;C
+Bottom of rack (UPS): 22.1&deg;C
+AC output: 14.5&deg;C
+Outside temperature: 32&deg;C</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Thermal Camera</strong><br>
+<strong>Usage:</strong>
+<ul>
+<li>Detect abnormal hot spots on equipment</li>
+<li>Identify a failing fan</li>
+<li>Locate overheating equipment</li>
+<li>Models: Flir E8, Seek Thermal, or smartphone accessory</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>Electrical Outlet Tester</strong><br>
+<strong>Usage:</strong>
+<ul>
+<li>Verify electrical outlet wiring (phase, neutral, ground)</li>
+<li>Detect phase-neutral reversal or missing ground</li>
+<li>Models: Fluke T90, Klein Tools RT105</li>
+</ul>
+</div>
+
+<h2>POP Monitoring</h2>
+
+<p>POPs are monitored 24/7 by Matrix's NOC (Network Operations Center) via:</p>
+<ul>
+<li><strong>SNMP:</strong> Each device sends its indicators (CPU, memory, traffic, temperature)</li>
+<li><strong>Nagios / Zabbix:</strong> Alerts in case of failure or threshold exceeded</li>
+<li><strong>Syslog:</strong> Centralized logging of all devices</li>
+<li><strong>Temperature:</strong> Probe with SMS alert if temperature exceeds 30&deg;C</li>
+<li><strong>IP camera:</strong> Video surveillance of the POP</li>
+</ul>
+
+<pre><code># Example SNMP check of a POP
+snmpwalk -v2c -c public 10.0.0.1 1.3.6.1.2.1.1.5.0  # POP name
+snmpwalk -v2c -c public 10.0.0.1 1.3.6.1.2.1.1.3.0  # Uptime
+snmpwalk -v2c -c public 10.0.0.1 .1.3.6.1.4.1.14988.1.1.3.8.0  # MikroTik CPU temperature</code></pre>
+
+<h2>Recommended Videos</h2>
+<div class="video-link">
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=ISP+point+of+presence+tour" target="_blank">Search: ISP Point of Presence Tour</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=data+center+power+redundancy+explained" target="_blank">Search: Data Center Power Redundancy</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=network+operations+center+tour" target="_blank">Search: Network Operations Center Tour</a><br>
+<strong>YouTube:</strong> <a href="https://www.youtube.com/results?search_query=UPS+installation+and+maintenance" target="_blank">Search: UPS Installation and Maintenance</a>
+</div>
+
+<h2>Tip for the Intern</h2>
+<div class="tip">
+<strong>Tip:</strong>
+<ul>
+<li><strong>ASK TO VISIT A POP!</strong> It is the best way to learn. Observe everything, take notes and photos (with permission).</li>
+<li>Before entering a POP, make sure you have the necessary authorizations and are accompanied by a senior technician.</li>
+<li>Never touch any equipment without explicit instruction. Mishandling can cut off access for hundreds of customers.</li>
+<li>Learn to recognize equipment LEDs (green = OK, orange = warning, red = fault). Each device has its own code.</li>
+<li>In a POP, noise is normal (fans). If the noise changes pitch, investigate (probable fan failure).</li>
+<li>Always check the last battery maintenance date. Lead batteries last 3-5 years.</li>
+<li>Keep a stock of consumables in each POP: RJ45 cables of various lengths, labels, velcro, connectors.</li>
+<li>Note the GPS coordinates of the POP. Useful for emergency interventions.</li>
+</ul>
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Perform a Weekly POP Maintenance Visit</strong></p>
+<p>Matrix NOC engineers inspect each POP weekly to prevent failures. This task walks through a complete POP site visit using the standard Matrix maintenance checklist, covering environmental, power, network, and physical security checks.</p>
+<ol>
+  <li>Upon arrival, verify the POP door is locked and the security seal is intact. Log the visit time in the site log.</li>
+  <li>Check ambient temperature and humidity with a thermo-hygrometer: target 18-25&deg;C and 40-60%. Record values.</li>
+  <li>Inspect the UPS: check the front panel for "On Battery" or "Battery Low" alarms. Measure battery voltage at the terminals (target > 48V DC).</li>
+  <li>Check each device's front panel LEDs: power LED solid green, link/activity LEDs blinking normally. Note any amber or red LEDs.</li>
+  <li>Listen for unusual fan noise (indicating failing fans). Clean any fan filters if dusty using compressed air.</li>
+  <li>Review event logs on the core router: <code>show logging</code> (Cisco) or <code>/log print</code> (MikroTik) for errors since the last visit.</li>
+  <li>Take a photo of the rack (front and rear) and sign the maintenance log with your name and date.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Document a New Equipment Installation in the POP Log</strong></p>
+<p>When new equipment is added to a POP, it must be documented: serial numbers, port connections, IP addresses, power circuits, and warranty dates. This task simulates onboarding a new MikroTik CCR switch.</p>
+<ol>
+  <li>Locate an available rack unit (U-space) and mount the MikroTik CCR with screws and cage nuts.</li>
+  <li>Connect power: plug into a UPS outlet and note the outlet number (e.g., UPS-A, Outlet 4).</li>
+  <li>Connect Ethernet cables: label both ends with the source and destination device names.</li>
+  <li>Note the device serial number, model, and MAC address from the sticker on the chassis.</li>
+  <li>In the POP documentation spreadsheet (or IPAM), add a new row with: Device Name = "CCR-Bastos-03", IP = 10.10.10.3/24, Serial = XXXXXX, Rack U = U15-U16.</li>
+  <li>Configure the management IP and default route. Verify connectivity with a ping to the NOC server.</li>
+  <li>Take a photo of the installed device with the serial number visible and attach it to the documentation.</li>
+</ol>
+</div>
+
+<h2>Weekly Maintenance Checklist</h2>
+<pre><code>[] Ambient temperature between 18-25&deg;C
+[] Humidity between 40-60%
+[] Battery voltage &gt; 48V DC
+[] All equipment LEDs green
+[] No audible alarms
+[] Fans operational
+[] No excessive dust
+[] Cables organized and labeled
+[] Logbook signed
+[] General cleanliness of the room</code></pre>
+
+</div>
+
+<div class="footer">
+Matrix Telecom &mdash; Internship Guide &mdash; Transmission &mdash; POP Infrastructure
+</div>
+
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

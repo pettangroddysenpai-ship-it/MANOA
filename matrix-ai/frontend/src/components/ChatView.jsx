@@ -4,7 +4,7 @@ import { Send, Mic, Square, Volume2, Bot, User, Youtube } from 'lucide-react';
 import Robot from './Robot.jsx';
 import RoadmapView from './RoadmapView.jsx';
 import StickmanCanvas from './StickmanCanvas.jsx';
-import { useSpeech } from '../hooks/useSpeech.js';
+import { useVoice } from '../hooks/useVoice.js';
 import { api } from '../services/api.js';
 
 const SUGGESTIONS = [
@@ -24,7 +24,7 @@ export default function ChatView({ onXpGained, onModeChange }) {
     online: typeof navigator !== 'undefined' ? navigator.onLine : false,
     label: typeof navigator !== 'undefined' && navigator.onLine ? 'Mode en ligne' : 'Mode hors ligne',
   });
-  const { listening, speaking, voiceSupported, listen, stopListening, speak, stopSpeaking } = useSpeech();
+  const { recording, speaking, voiceSupported, error: voiceError, startRecording, stopRecording, speak, stopSpeaking } = useVoice();
   const bottomRef = useRef(null);
   const robotRef = useRef(null);
   const [robotSize, setRobotSize] = useState(450);
@@ -103,13 +103,13 @@ export default function ChatView({ onXpGained, onModeChange }) {
   };
 
   const handleMic = async () => {
-    if (listening) {
-      stopListening();
+    if (recording) {
+      const text = await stopRecording();
+      if (text) await send(text);
       return;
     }
     stopSpeaking();
-    const text = await listen();
-    if (text) await send(text);
+    await startRecording();
   };
 
   const speakAnswer = async (content) => {
@@ -239,18 +239,18 @@ export default function ChatView({ onXpGained, onModeChange }) {
             <button
               onClick={handleMic}
               disabled={!voiceSupported}
-              title={voiceSupported ? 'Parler' : 'Voix non supportee'}
+              title={voiceSupported ? (recording ? 'Arrter' : 'Parler') : 'Voix non supportee'}
               className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition ${
-                listening ? 'animate-pulse bg-rose-500 text-white' : 'bg-green-500/15 text-green-700 hover:bg-green-500/30'
+                recording ? 'animate-pulse bg-rose-500 text-white' : 'bg-green-500/15 text-green-700 hover:bg-green-500/30'
               } ${!voiceSupported ? 'opacity-40' : ''}`}
             >
-              {listening ? <Square size={16} /> : <Mic size={18} />}
+              {recording ? <Square size={16} /> : <Mic size={18} />}
             </button>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && send()}
-              placeholder={listening ? 'Je vous ecoute...' : 'Posez votre question telecom...'}
+              placeholder={recording ? 'Je vous ecoute...' : 'Posez votre question telecom...'}
               className="flex-1 bg-transparent px-2 text-sm text-neutral-800 outline-none placeholder:text-neutral-500"
             />
             <button
@@ -261,6 +261,9 @@ export default function ChatView({ onXpGained, onModeChange }) {
               <Send size={17} />
             </button>
           </div>
+          {voiceError && (
+            <p className="mt-1.5 px-2 text-xs text-rose-500">{voiceError}</p>
+          )}
         </div>
       </div>
 

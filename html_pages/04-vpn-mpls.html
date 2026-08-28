@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN / MPLS - Matrix Telecom</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>VPN / MPLS</h1>
+            <div class="subtitle">Matrix Telecom Yaoundé</div>
+            <div class="badge">Service Infrastructure — Services</div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="breadcrumb"><a href="index.html">Accueil</a> / Services / VPN / MPLS</div>
+
+        <section>
+            <h2>1. VPN (Virtual Private Network)</h2>
+            <p>Un <strong>VPN</strong> est un tunnel chiffré créé au-dessus d'un réseau public (Internet) pour sécuriser les communications entre deux points.</p>
+
+            <h3>Types de VPN</h3>
+            <div class="card">
+                <table>
+                    <tr><th>Type</th><th>Description</th><th>Usage</th></tr>
+                    <tr><td>Site-to-Site</td><td>Interconnexion de deux réseaux locaux</td><td>Entreprise avec plusieurs succursales</td></tr>
+                    <tr><td>Remote Access</td><td>Connexion individuelle au réseau</td><td>Télétravail, employés nomades</td></tr>
+                    <tr><td>Client-to-Site</td><td>Similaire à Remote Access</td><td>VPN SSL/OpenVPN</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Protocoles VPN</h2>
+
+            <h3>2.1 IPSec (Internet Protocol Security)</h3>
+            <p>Protocole de sécurité pour IP. Chiffrement fort. Deux modes :</p>
+            <ul>
+                <li><strong>Transport Mode</strong> : Chiffre uniquement le payload</li>
+                <li><strong>Tunnel Mode</strong> : Chiffre tout le paquet (utilisé pour Site-to-Site)</li>
+            </ul>
+            <p>Composants : <strong>AH</strong> (Authentication Header) + <strong>ESP</strong> (Encapsulating Security Payload) + <strong>IKE</strong> (Internet Key Exchange)</p>
+
+            <h3>2.2 GRE (Generic Routing Encapsulation)</h3>
+            <p>Protocole de tunneling léger. Ne chiffre pas le trafic, mais peut être combiné avec IPSec pour la sécurité.</p>
+
+            <h3>2.3 OpenVPN</h3>
+            <p>VPN open-source utilisant SSL/TLS. Flexible et facile à configurer.</p>
+
+            <h3>2.4 WireGuard</h3>
+            <p>VPN moderne, rapide et léger. Chiffrement moderne (ChaCha20).</p>
+        </section>
+
+        <section>
+            <h2>3. MPLS (Multiprotocol Label Switching)</h2>
+            <p>MPLS est une technologie de <strong>backbone privé</strong> utilisée par les opérateurs télécoms. Il crée un réseau privé virtuel performant.</p>
+
+            <div class="diagram">
+    ┌──────────────────────────────────────────────────────────────┐
+    │                RÉSEAU MPLS - MATRIX TELECOM                  │
+    └──────────────────────────────────────────────────────────────┘
+
+    ┌─────────┐                                          ┌─────────┐
+    │ Site A  │                                          │ Site B  │
+    │Yaoundé  │                                          │ Douala  │
+    └────┬────┘                                          └────┬────┘
+         │                                                    │
+    ┌────▼──────────┐         MPLS Backbone        ┌─────────▼────┐
+    │   PE Router   │◄────────────────────────────►│  PE Router   │
+    │  (Yaoundé)    │    ┌─────┐    ┌─────┐        │  (Douala)    │
+    └───────────────┘    │ P   │────│ P   │        └──────────────┘
+                         │Rtr  │    │Rtr  │
+                         └─────┘    └─────┘
+
+    Label Switched Path (LSP): A → PE(Yde) → P → P → PE(Dla) → B
+            </div>
+
+            <h3>Concepts clés MPLS</h3>
+            <ul>
+                <li><strong>Labels</strong> : Étiquettes de 32 bits ajoutées aux paquets</li>
+                <li><strong>PE (Provider Edge)</strong> : Routeur d'entrée/sortie du backbone</li>
+                <li><strong>P (Provider)</strong> : Routeur core du backbone</li>
+                <li><strong>CE (Customer Edge)</strong> : Routeur côté client</li>
+                <li><strong>VRF</strong> : Virtual Routing and Forwarding (isolation de routage)</li>
+                <li><strong>LDP</strong> : Label Distribution Protocol</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Configuration MikroTik - IPSec VPN</h2>
+            <pre><code># IPSec VPN Site-to-Site sur MikroTik
+/ip ipsec proposal
+set [ find default=yes ] auth-algorithms=sha256 \
+    enc-algorithms=aes-256-cbc lifetime=8h pfs-group=modp2048
+
+/ip ipsec peer
+add exchange-mode=main-l2tp send-initial-contact=yes \
+    local-address=198.51.100.1
+
+/ip ipsec profile
+set [ find default=yes ] hash-algorithm=sha256 \
+    enc-algorithm=aes-256 dh-group=modp2048 lifetime=1d
+
+/ip ipsec policy
+add src-address=10.10.1.0/24 dst-address=10.10.2.0/24 \
+    tunnel=yes peer=peer1 action=encrypt</code></pre>
+        </section>
+
+        <section>
+            <h2>5. Chez Matrix Telecom</h2>
+            <div class="card">
+                <p>Matrix Telecom utilise VPN/MPLS pour :</p>
+                <ul>
+                    <li>Interconnexion de sites d'entreprises clientes</li>
+                    <li>Réseau privé MPLS backbone national</li>
+                    <li>VPN Remote Access pour télétravail</li>
+                    <li>Connexion sécurisée entre POPs</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>6. Équipements</h2>
+            <div class="tool-card"><div class="tool-name">Cisco</div><p>Routeurs ASR/ISR pour backbone MPLS</p></div>
+            <div class="tool-card"><div class="tool-name">MikroTik</div><p>CPE et routeurs d'accès</p></div>
+            <div class="tool-card"><div class="tool-name">Fortinet</div><p>Pare-feu FortiGate pour VPN IPSec</p></div>
+            <div class="tool-card"><div class="tool-name">CheckPoint</div><p>Sécurité et VPN enterprise</p></div>
+        </section>
+
+        <section>
+            <h2>7. Vidéos recommandées</h2>
+            <a href="https://www.youtube.com/results?search_query=ipsec+vpn+explained" class="video-link" target="_blank">🎬 IPSec VPN Explained</a>
+            <a href="https://www.youtube.com/results?search_query=mpls+vrf+tutorial" class="video-link" target="_blank">🎬 MPLS VRF Tutorial</a>
+            <a href="https://www.youtube.com/results?search_query=mikrotik+ipsec+site+to+site" class="video-link" target="_blank">🎬 MikroTik IPSec Site-to-Site</a>
+        </section>
+
+        <footer>
+            <p>Matrix Telecom Yaoundé — Stage Service Delivery & Infrastructure</p>
+        </footer>
+    </div>
+</body>
+</html>

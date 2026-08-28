@@ -3,13 +3,18 @@ node_modules/
 dist/
 *.log
 
-# Env
-backend/.env
+# Env / secrets
+**/.env
+**/.env.local
 
-# Data locale
-backend/data/
-backend/uploads/
+# Local runtime data
+**/backend/data/
+**/backend/uploads/
 
 # OS
 Thumbs.db
+Desktop.ini
 .DS_Store
+
+# Office temp files
+~$*

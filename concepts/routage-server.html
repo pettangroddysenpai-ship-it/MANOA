@@ -1,0 +1,557 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servers (Windows/Linux) - ROUTING Guide | Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Windows &amp; Linux Servers</h1>
+<a class="back" href="../index.html">&larr; Back to Routing Guide</a>
+</div>
+
+<div class="container">
+
+<h2>Definition</h2>
+<p>Servers are the core of Matrix Telecom's and its clients' IT infrastructure. They provide essential services such as authentication (Active Directory), name resolution (DNS), IP address assignment (DHCP), web hosting (Apache/Nginx) and virtualization (VMware, Hyper-V, Proxmox). Matrix uses two main families: <strong>Windows Server</strong> for enterprise environments and <strong>Linux (Ubuntu/Debian)</strong> for specific services and core infrastructure.</p>
+
+<img src="https://source.unsplash.com/600x400/?server,datacenter,technology" alt="Data Center Servers">
+
+<h2>What are servers used for at Matrix Telecom?</h2>
+<ul>
+<li><strong>Active Directory</strong>: Centralized management of users, computers, group policies (GPO) for enterprise clients.</li>
+<li><strong>DNS</strong>: Authoritative name servers for client domains (matrix.cm, etc.) and recursive resolution for the Internet.</li>
+<li><strong>DHCP</strong>: IP address assignment to Matrix network clients and enterprise clients.</li>
+<li><strong>Web Hosting</strong>: Apache/Nginx servers for client websites.</li>
+<li><strong>Virtualization</strong>: VMware vSphere / Hyper-V / Proxmox for shared hosting of clients in the Matrix datacenter.</li>
+<li><strong>Database</strong>: MySQL/MariaDB, PostgreSQL for client applications.</li>
+<li><strong>Email</strong>: Exchange Server (Windows) or Postfix/Dovecot (Linux) for professional emails.</li>
+<li><strong>Backup</strong>: Backup servers (Veeam, Bacula, rsync) for client data backup.</li>
+</ul>
+
+<h2>Windows Server</h2>
+
+<h3>Active Directory &amp; DNS</h3>
+<pre><code># Promote server to domain controller (PowerShell)
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+Import-Module ADDSDeployment
+Install-ADDSForest -DomainName "matrix.cm" -DomainMode WinThreshold -ForestMode WinThreshold
+
+# Verify AD
+Get-ADDomainController -Filter *
+Get-ADUser -Filter * | Format-Table Name, Enabled
+
+# DNS Configuration
+Add-DnsServerPrimaryZone -Name "client1.cm" -ZoneFile "client1.cm.dns"
+Add-DnsServerResourceRecordA -ZoneName "client1.cm" -Name "www" -IPv4Address "10.0.0.10"</code></pre>
+
+<h3>DHCP Server</h3>
+<pre><code># Install DHCP role (PowerShell)
+Install-WindowsFeature -Name DHCP -IncludeManagementTools
+Add-DhcpServerv4Scope -Name "LAN Client" -StartRange 192.168.1.100 -EndRange 192.168.1.200 -SubnetMask 255.255.255.0
+Set-DhcpServerv4OptionValue -ScopeId 192.168.1.0 -Router 192.168.1.1 -DnsServer 192.168.1.10,8.8.8.8
+
+# Authorize DHCP server in AD
+Add-DhcpServerInDC -DnsName "dhcp1.matrix.cm"</code></pre>
+
+<h3>User Management (PowerShell)</h3>
+<pre><code># Create a new user
+New-ADUser -Name "John Doe" -GivenName John -Surname Doe `
+  -SamAccountName jdoe -UserPrincipalName jdoe@matrix.cm `
+  -Path "OU=Employees,DC=matrix,DC=cm" -AccountPassword (ConvertTo-SecureString "P@ssw0rd!" -AsPlainText -Force) `
+  -Enabled $true
+
+# Add user to a group
+Add-ADGroupMember -Identity "VPN_Access" -Members jdoe</code></pre>
+
+<h3>GPO (Group Policy Object)</h3>
+<pre><code># These operations are normally done via the "Group Policy Management Console"
+# PowerShell example: create a GPO and link to an OU
+New-GPO -Name "ProxySettings" -Comment "Configure proxy for all users"
+Set-GPRegistryValue -Name "ProxySettings" -Key "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" `
+  -ValueName ProxyEnable -Type DWord -Value 1
+Set-GPRegistryValue -Name "ProxySettings" -Key "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" `
+  -ValueName ProxyServer -Type String -Value "192.168.1.50:3128"
+New-GPLink -Name "ProxySettings" -Target "OU=Employees,DC=matrix,DC=cm"</code></pre>
+
+<h2>Linux Server (Ubuntu/Debian)</h2>
+
+<h3>Basic Configuration</h3>
+<pre><code># Update and install basic tools
+sudo apt update && sudo apt upgrade -y
+sudo apt install net-tools curl wget htop iotop ufw fail2ban -y
+
+# Network configuration (netplan)
+sudo nano /etc/netplan/01-netcfg.yaml</code></pre>
+<pre><code># /etc/netplan/01-netcfg.yaml
+network:
+  version: 2
+  ethernets:
+    eth0:
+      addresses:
+        - 10.0.0.10/24
+      routes:
+        - to: default
+          via: 10.0.0.1
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1]</code></pre>
+<pre><code>sudo netplan apply</code></pre>
+
+<h3>DNS Server (BIND9)</h3>
+<pre><code>sudo apt install bind9 bind9utils -y
+
+# /etc/bind/named.conf.local
+zone "client1.cm" {
+    type master;
+    file "/etc/bind/db.client1.cm";
+};
+
+# /etc/bind/db.client1.cm
+$TTL 86400
+@       IN  SOA ns1.client1.cm. admin.client1.cm. (
+            2026070101 ; Serial
+            3600       ; Refresh
+            1800       ; Retry
+            604800     ; Expire
+            86400 )    ; Negative TTL
+;
+@       IN  NS  ns1.client1.cm.
+@       IN  A   10.0.0.10
+www     IN  A   10.0.0.10
+mail    IN  A   10.0.0.11
+
+sudo systemctl restart bind9</code></pre>
+
+<h3>DHCP Server (ISC DHCP)</h3>
+<pre><code>sudo apt install isc-dhcp-server -y
+
+# /etc/dhcp/dhcpd.conf
+subnet 192.168.1.0 netmask 255.255.255.0 {
+    range 192.168.1.100 192.168.1.200;
+    option routers 192.168.1.1;
+    option subnet-mask 255.255.255.0;
+    option domain-name-servers 10.0.0.10, 8.8.8.8;
+    option domain-name "client1.cm";
+    default-lease-time 86400;
+    max-lease-time 172800;
+}
+
+host client-printer {
+    hardware ethernet AA:BB:CC:DD:EE:FF;
+    fixed-address 192.168.1.50;
+}
+
+sudo systemctl restart isc-dhcp-server</code></pre>
+
+<h3>Apache Web Server</h3>
+<pre><code>sudo apt install apache2 -y
+
+# Create a VirtualHost
+sudo nano /etc/apache2/sites-available/matrix-client.conf
+
+&lt;VirtualHost *:80&gt;
+    ServerName www.client1.cm
+    ServerAdmin admin@matrix.cm
+    DocumentRoot /var/www/client1
+    ErrorLog ${APACHE_LOG_DIR}/client1_error.log
+    CustomLog ${APACHE_LOG_DIR}/client1_access.log combined
+&lt;/VirtualHost&gt;
+
+sudo mkdir -p /var/www/client1
+sudo chown -R www-data:www-data /var/www/client1
+sudo a2ensite matrix-client.conf
+sudo systemctl reload apache2</code></pre>
+
+<h3>Nginx Web Server (reverse proxy + HTTPS)</h3>
+<pre><code>sudo apt install nginx certbot python3-certbot-nginx -y
+
+sudo nano /etc/nginx/sites-available/matrix-app
+
+server {
+    listen 443 ssl;
+    server_name app.matrix.cm;
+
+    ssl_certificate /etc/letsencrypt/live/app.matrix.cm/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/app.matrix.cm/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+
+sudo ln -s /etc/nginx/sites-available/matrix-app /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx</code></pre>
+
+<h3>Virtualization with Proxmox</h3>
+<pre><code># Proxmox VE is installed bare-metal on the server
+# Basic commands:
+qm list                          # List VMs
+qm create 100 --name client-vm --memory 2048 --net0 virtio,bridge=vmbr0
+qm importdisk 100 /var/lib/vz/template/iso/ubuntu-24.04.qcow2 local-lvm
+qm set 100 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-100-disk-0
+qm set 100 --boot c --bootdisk scsi0
+qm set 100 --vga virtio
+qm start 100
+
+pct list                         # List LXC containers
+pct create 200 local:vztmpl/ubuntu-24.04-standard_24.04-1_amd64.tar.zst
+pct start 200</code></pre>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>Windows Server Tools:</strong><br>
+- <strong>Hyper-V Manager</strong>: Management of virtual machines on Windows Server.<br>
+- <strong>Active Directory Users &amp; Computers</strong>: Management of AD users and groups.<br>
+- <strong>Group Policy Management Console</strong>: Creation and management of GPOs.<br>
+- <strong>DNS Manager</strong>: DNS zone configuration.<br>
+- <strong>DHCP Manager</strong>: DHCP scope and lease management.<br>
+- <strong>PowerShell</strong>: Automation of all Windows Server tasks.<br>
+- <strong>Remote Desktop Services</strong>: Remote access to Windows servers.<br><br>
+
+<strong>Linux Server Tools:</strong><br>
+- <strong>SSH</strong>: Remote access to Linux servers. <code>ssh admin@10.0.0.10</code><br>
+- <strong>systemctl</strong>: systemd service management. <code>systemctl status apache2</code><br>
+- <strong>journalctl</strong>: Log viewing. <code>journalctl -u nginx -n 50 --no-pager</code><br>
+- <strong>htop/iotop</strong>: Real-time CPU/RAM and disk monitoring.<br>
+- <strong>ufw</strong>: Simple firewall. <code>ufw allow 80/tcp</code><br>
+- <strong>fail2ban</strong>: Protection against SSH brute-force attacks.<br>
+- <strong>rsync</strong>: File synchronization and backups. <code>rsync -avz /data/ backup@10.0.0.20:/backup/</code><br>
+- <strong>cron</strong>: Scheduling recurring tasks.<br>
+- <strong>Proxmox Web UI</strong>: Web interface for managing VMs and containers (port 8006).<br><br>
+
+<strong>Multi-platform:</strong><br>
+- <strong>VMware vSphere</strong>: Management of ESXi hosts and VMs via vCenter.<br>
+- <strong>Veeam Backup &amp; Replication</strong>: Backup of Windows and Linux VMs.<br>
+- <strong>Ansible</strong>: Server configuration automation.<br>
+- <strong>Docker / Docker Compose</strong>: Application containerization.<br>
+- <strong>PuTTY / Windows Terminal</strong>: SSH clients.
+</div>
+
+<h2>Practical Example at Matrix Telecom</h2>
+
+<div class="matrix-example">
+<strong>Use Case:</strong> Shared server infrastructure in the Matrix datacenter in Yaound&eacute;.<br><br>
+<strong>Architecture:</strong>
+<ul>
+<li>3 Proxmox hosts in a cluster (HA) for virtualization.</li>
+<li>1 Windows Server 2022 as DC (AD, DNS, DHCP) for Matrix infrastructure.</li>
+<li>1 Windows Server 2022 dedicated to monitoring (Zabbix, PRTG).</li>
+<li>5 Linux VMs (Ubuntu 24.04) hosting client websites (Apache/Nginx).</li>
+<li>1 Veeam backup server (Windows) with 90-day retention.</li>
+<li>1 Zimbra mail server (Linux) for client emails.</li>
+</ul>
+<br>
+<strong>New client (website) deployment procedure:</strong>
+<ol>
+<li>Create a VM on Proxmox: 2 vCPU, 4 GB RAM, 50 GB disk.</li>
+<li>Install Ubuntu 24.04 LTS with network configuration (static IP from client pool).</li>
+<li>Install Apache, PHP, MySQL.</li>
+<li>Configure VirtualHosts for the client's domains.</li>
+<li>Configure DNS zones on the Windows DNS server (A, MX, CNAME records).</li>
+<li>Configure Nginx reverse proxy for SSL (Let's Encrypt).</li>
+<li>Add the VM to Zabbix monitoring.</li>
+<li>Configure Veeam backup (snapshot + daily backup).</li>
+<li>Provide the client with FTP/SFTP access and connection information.</li>
+</ol>
+<br>
+<strong>Automated deployment script (Ansible):</strong>
+<pre><code>---
+- name: Deploy client web server
+  hosts: client_vm
+  become: yes
+  tasks:
+    - name: Install Apache and PHP
+      apt:
+        name:
+          - apache2
+          - php
+          - php-mysql
+          - libapache2-mod-php
+        state: present
+        update_cache: yes
+    - name: Enable Apache modules
+      apache2_module:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - rewrite
+        - ssl
+    - name: Create VirtualHost
+      template:
+        src: vhost.conf.j2
+        dest: "/etc/apache2/sites-available/{{ domain }}.conf"
+    - name: Enable site
+      command: a2ensite {{ domain }}.conf
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted</code></pre>
+</div>
+
+<h2>Recommended Videos</h2>
+<div class="video-link">
+<strong>YouTube - Windows Server &amp; Linux Tutorials</strong><br>
+<a href="https://www.youtube.com/results?search_query=windows+server+vs+linux+server+basics" target="_blank">Windows Server vs Linux Comparison</a><br>
+<a href="https://www.youtube.com/results?search_query=windows+server+active+directory+installation+step+by+step" target="_blank">Active Directory Installation Windows Server</a><br>
+<a href="https://www.youtube.com/results?search_query=ubuntu+server+setup+for+beginners" target="_blank">Ubuntu Server for Beginners</a><br>
+<a href="https://www.youtube.com/results?search_query=apache+virtual+host+configuration+ubuntu" target="_blank">Apache VirtualHost Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=nginx+reverse+proxy+setup+ssl" target="_blank">Nginx Reverse Proxy + SSL</a><br>
+<a href="https://www.youtube.com/results?search_query=proxmox+ve+installation+and+configuration" target="_blank">Proxmox VE - Installation and Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=ansible+automation+for+beginners" target="_blank">Automation with Ansible</a>
+</div>
+
+<h2>Tip for the Intern</h2>
+<div class="tip">
+<strong>Good to know:</strong>
+<ul>
+<li>Windows Server and Linux are complementary. At Matrix, Windows is used for AD and client workstations, Linux for web services and virtualization.</li>
+<li>Master the basics of PowerShell and Bash shell: these are the daily tools of a system administrator.</li>
+<li>Virtualization is ubiquitous. Understand the concepts of VM, container (LXC/Docker), snapshot, HA, live migration.</li>
+<li>Always use SSH with keys rather than passwords on Linux servers.</li>
+<li>Document your infrastructure: IP addressing, passwords (via a manager), topology, software versions.</li>
+<li>Automate everything that can be automated (Ansible, shell scripts, PowerShell). Save time and avoid errors.</li>
+<li>Monitor your servers: Zabbix, Nagios, PRTG. Configure alerts for critical events.</li>
+<li>Apply security updates regularly (<code>apt update && apt upgrade</code>, Windows Update).</li>
+</ul>
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Deploy a Windows Server with AD DS and Join a Client PC</strong></p>
+<p>Matrix Telecom manages Windows servers for clients who need Active Directory, file sharing, and centralized authentication. Deploying a Domain Controller is a foundational task. This exercise guides you through installing AD DS, promoting the server, and joining a client PC to the domain.</p>
+<ol>
+  <li>Install Windows Server 2022 (or 2019) on a VM with a static IP (e.g., 192.168.10.10/24).</li>
+  <li>Open Server Manager, click <strong>Add Roles and Features</strong>, and install <strong>Active Directory Domain Services</strong>.</li>
+  <li>Promote the server to a Domain Controller: create a new forest with domain name <code>matrix.local</code>.</li>
+  <li>Set the DSRM password and complete the promotion (the server will reboot).</li>
+  <li>Log back in and open <strong>Active Directory Users and Computers</strong>.</li>
+  <li>Create an Organizational Unit (OU) named "Clients" and inside it a user "TestUser" with password <code>P@ssw0rd</code>.</li>
+  <li>On a Windows 10/11 client VM, set the DNS server to the DC's IP (192.168.10.10) and join the domain <code>matrix.local</code>.</li>
+  <li>Restart the client and log in as <code>matrix.local\TestUser</code> — verify the domain login succeeds.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Install and Configure a Linux Apache Web Server with VirtualHosts</strong></p>
+<p>Matrix Telecom hosts internal web applications (monitoring dashboards, customer portals) on Linux servers. Setting up Apache with multiple VirtualHosts is a common requirement for hosting several sites on one server.</p>
+<ol>
+  <li>Install Apache on Ubuntu Server: <code>sudo apt update && sudo apt install apache2 -y</code>.</li>
+  <li>Create two site directories: <code>sudo mkdir -p /var/www/matrix-intranet /var/www/matrix-status</code>.</li>
+  <li>Create a simple <code>index.html</code> in each directory with unique content (e.g., "Matrix Intranet" and "Matrix Status").</li>
+  <li>Copy the default config: <code>sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/matrix-intranet.conf</code>.</li>
+  <li>Edit the new config: set <code>ServerName intranet.matrix.local</code>, <code>DocumentRoot /var/www/matrix-intranet</code>.</li>
+  <li>Enable the site: <code>sudo a2ensite matrix-intranet.conf</code> and reload Apache: <code>sudo systemctl reload apache2</code>.</li>
+  <li>Repeat steps 4-6 for the second site with <code>ServerName status.matrix.local</code>.</li>
+  <li>From a client, add DNS entries (or use <code>/etc/hosts</code>) pointing both hostnames to the server IP and verify both sites load in a browser.</li>
+</ol>
+</div>
+
+<h2>Troubleshooting</h2>
+<ul>
+<li><strong>Windows Server won't start:</strong> Use safe mode (F8 at startup). Use DSRM (Directory Services Repair Mode) for AD.</li>
+<li><strong>DNS not resolving:</strong> Check the service (<code>systemctl status bind9</code>), logs, zone permissions, firewall rules.</li>
+<li><strong>SSH connection refused:</strong> Check SSH config (<code>/etc/ssh/sshd_config</code>), authorized keys, firewall (<code>ufw status</code>).</li>
+<li><strong>Apache not serving pages:</strong> Check VirtualHosts (<code>apache2ctl -S</code>), <code>/var/www</code> permissions, error logs.</li>
+<li><strong>Proxmox VM won't start:</strong> Check resources (memory, disk), status via <code>qm status &lt;id&gt;</code> or <code>pct status &lt;id&gt;</code>.</li>
+<li><strong>Backup fails:</strong> Check disk space on target, network permissions, backup tool logs.</li>
+<li><strong>AD issue:</strong> Use <code>dcdiag</code> and <code>repadmin /replsum</code> to diagnose replication problems.</li>
+</ul>
+
+<h2>Best Practices</h2>
+<ul>
+<li>Follow the principle of least privilege for administrator accounts.</li>
+<li>Use dedicated service accounts (no personal accounts for services).</li>
+<li>Configure log rotation (logrotate on Linux, Event Log size on Windows).</li>
+<li>Separate networks: management, production, backup, DMZ.</li>
+<li>Use SSL certificates everywhere (Let's Encrypt for exposed services).</li>
+<li>Perform regular backup restore tests.</li>
+<li>Maintain an up-to-date inventory of all servers (IP, OS, services, versions).</li>
+</ul>
+
+<h2>Additional Resources</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/windows-server/" target="_blank" style="color:#60a5fa;">Windows Server Documentation</a></li>
+<li><a href="https://ubuntu.com/server/docs" target="_blank" style="color:#60a5fa;">Ubuntu Server Documentation</a></li>
+<li><a href="https://www.proxmox.com/en/documentation" target="_blank" style="color:#60a5fa;">Proxmox VE Documentation</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/index.html" target="_blank" style="color:#60a5fa;">Ansible Documentation</a></li>
+<li><a href="https://httpd.apache.org/docs/" target="_blank" style="color:#60a5fa;">Apache HTTP Server Documentation</a></li>
+<li><a href="https://nginx.org/en/docs/" target="_blank" style="color:#60a5fa;">Nginx Documentation</a></li>
+</ul>
+
+</div>
+
+<div class="footer">
+Matrix Telecom Yaound&eacute; - ROUTING Internship Guide - July 2026
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Acc&egrave;s Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

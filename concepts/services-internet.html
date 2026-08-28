@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internet Services - Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Internet Services</h1>
+<a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+<div class="container">
+
+<img src="https://source.unsplash.com/600x400/?internet,network,global" alt="Global Internet Network">
+
+<h2>Definition and Detailed Explanation</h2>
+<p>The Internet is a global network of interconnected networks using the TCP/IP protocol to enable communication between billions of devices. As an Internet Service Provider (ISP), Matrix Telecom acts as an intermediary between global backbone providers and end users in Cameroon.</p>
+<p>The Internet operates through a hierarchy of tiers:</p>
+<ul>
+<li><strong>Tier 1</strong>: Global operators that own submarine and terrestrial fiber optic cables (e.g., Lumen, Level3, Tata Communications). They do not purchase transit from anyone.</li>
+<li><strong>Tier 2</strong>: Regional operators that purchase transit from Tier 1 and peer with other operators.</li>
+<li><strong>Tier 3</strong>: Local ISPs like Matrix Telecom that purchase bandwidth from Tier 2/Tier 1 and resell it to end customers.</li>
+</ul>
+<p>Matrix's customers can be individuals (residential connections) or businesses (professional connections with SLA).</p>
+
+<h2>How It Works</h2>
+
+<h3>OSI and TCP/IP Model</h3>
+<p>Communication on the Internet follows the TCP/IP model (4 layers) which corresponds to layers 3 and 4 of the OSI model:</p>
+<ul>
+<li><strong>Layer 1 - Physical</strong>: Cables (fiber optic, copper Cat5e/Cat6), electrical/optical signals, connectors (SFP, RJ45).</li>
+<li><strong>Layer 2 - Data Link (Ethernet)</strong>: MAC addresses, Ethernet frames, VLAN (802.1Q), PPPoE, ARP. Matrix's distribution switch uses VLANs to separate customers.</li>
+<li><strong>Layer 3 - Network (IP)</strong>: IP addresses (IPv4/IPv6), routing, subnets, NAT. Matrix's border router makes routing decisions.</li>
+<li><strong>Layer 4 - Transport (TCP/UDP)</strong>: TCP (reliable, connection-oriented) for web (port 80/443) and email; UDP (fast, connectionless) for DNS (53), VoIP (RTP), streaming.</li>
+</ul>
+
+<h3>ISP Network Architecture</h3>
+<p>An ISP like Matrix maintains a distribution network consisting of:</p>
+<ul>
+<li><strong>Edge routers</strong>: Connected to upstream providers via fiber optic.</li>
+<li><strong>Distribution routers</strong>: Aggregate customer traffic.</li>
+<li><strong>Access routers / CPE</strong>: Equipment installed at the customer site (MikroTik, Huawei, Cisco).</li>
+<li><strong>AAA servers</strong>: Authentication, authorization, and accounting (RADIUS, PPPoE).</li>
+</ul>
+
+<h3>IP Addressing</h3>
+<p>Each customer receives an IP address, either public or private:</p>
+<ul>
+<li><strong>Public IP</strong>: Routable address on the Internet. Limited (IPv4 exhausted). Matrix has an IP block allocated by AFRINIC.</li>
+<li><strong>Private IP</strong>: Address used internally (ranges 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16). Translated to public IP via NAT.</li>
+</ul>
+<p><strong>NAT (Network Address Translation)</strong> allows multiple customers to share a single public IP. Matrix's router performs PAT (Port Address Translation) to map internal connections to the outside.</p>
+
+<h3>DNS (Domain Name System)</h3>
+<p>DNS translates domain names (google.com) into IP addresses. Matrix operates its own recursive DNS servers and is authoritative for its customers' domains. DNS queries are often cached to improve performance.</p>
+
+<h3>DHCP (Dynamic Host Configuration Protocol)</h3>
+<p>Matrix's DHCP server automatically assigns IP addresses to customers. DHCP leases have a configurable time-to-live (TTL). DHCP reservations allow assigning a fixed IP to a specific customer based on their MAC address.</p>
+
+<h3>Bandwidth, Latency, and Packet Loss</h3>
+<ul>
+<li><strong>Bandwidth</strong>: Maximum theoretical throughput (in Mbps or Gbps). Matrix offers plans from 5 Mbps to 1 Gbps.</li>
+<li><strong>Latency</strong>: Time required for a packet to travel from source to destination (ms). Fiber optic has much lower latency than copper or wireless.</li>
+<li><strong>Packet Loss</strong>: Percentage of packets lost. Ideally 0%. Packet loss degrades connection quality, especially for VoIP and streaming.</li>
+<li><strong>Jitter</strong>: Variation in latency. High jitter disrupts real-time applications (voice, video).</li>
+</ul>
+
+<h3>Quality of Service (QoS)</h3>
+<p>Matrix uses QoS to prioritize certain types of traffic:</p>
+<ul>
+<li>VoIP and video traffic: high priority</li>
+<li>Web and email traffic: normal priority</li>
+<li>P2P downloads: low priority</li>
+</ul>
+<p>QoS is configured on MikroTik routers using queues and packet marking (Mangle).</p>
+
+<h3>PPP (Point-to-Point Protocol) and PPPoE</h3>
+<p>Many of Matrix's residential customers use PPPoE (PPP over Ethernet) to establish a session. Each customer receives a username and password, and Matrix's Radius server centralizes authentication, accounting, and billing.</p>
+<p>The PPPoE process happens in two steps:</p>
+<ul>
+<li><strong>Discovery (PPPoE Discovery)</strong>: The customer's modem/router and Matrix's server identify each other through PADI, PADO, PADR, PADS packets.</li>
+<li><strong>PPP Session</strong>: Once the session is established, PAP/CHAP authentication is performed against the Radius server. IP parameters (address, DNS, gateway) are negotiated via IPCP.</li>
+</ul>
+
+<h3>BGP (Border Gateway Protocol)</h3>
+<p>BGP is the routing protocol used between ISPs. Matrix uses BGP to exchange routes with its upstream providers. This allows:</p>
+<ul>
+<li>Advertising Matrix's IP blocks to the rest of the Internet</li>
+<li>Choosing the best path for outbound traffic (via BGP attributes: AS Path, Local Preference, MED)</li>
+<li>Automatically failing over to a backup link if the primary link fails</li>
+<li>Load balancing between multiple upstream providers</li>
+</ul>
+
+<h3>Submarine Fiber Optic Cables in Cameroon</h3>
+<p>Cameroon is connected to the following submarine cables:</p>
+<ul>
+<li><strong>SAT-3/WASC</strong>: Cable connecting West Africa to Europe. Lands in Douala and Kribi. Limited capacity (several hundred Gbps).</li>
+<li><strong>ACE (Africa Coast to Europe)</strong>: Cable running along the West African coast to France. Lands in Limb&eacute;.</li>
+<li><strong>WACS (West Africa Cable System)</strong>: Connects South Africa to the United Kingdom. Landing point in Cameroon.</li>
+<li><strong>SAIL (South Atlantic Inter Link)</strong>: Connects Cameroon to Brazil (recent project).</li>
+</ul>
+<p>Matrix negotiates access to these cables through its upstream providers. Matrix's Point of Presence (PoP) in Douala is the main entry point for international traffic.</p>
+
+<h3>IPv6</h3>
+<p>IPv4 is exhausted. IPv4 address blocks are rare and expensive. Matrix is progressively deploying IPv6 (128 bits, hexadecimal notation) for its customers. IPv6-capable customers can benefit from native IPv6 connectivity with addresses from the block allocated to Matrix by AFRINIC.</p>
+<p>The IPv4/IPv6 transition uses techniques such as:</p>
+<ul>
+<li><strong>Dual Stack</strong>: Customers receive both an IPv4 and an IPv6 address.</li>
+<li><strong>NAT64/DNS64</strong>: Allows IPv6-only customers to access IPv4 servers.</li>
+<li><strong>6to4 or Teredo tunnels</strong>: Encapsulation of IPv6 within IPv4.</li>
+</ul>
+
+<h3>RADIUS and Accounting</h3>
+<p>Matrix's RADIUS server (FreeRADIUS or MikroTik User Manager) centralizes:</p>
+<ul>
+<li><strong>Authentication</strong>: Verification of customer PPPoE/PPTP/L2TP credentials.</li>
+<li><strong>Authorization</strong>: Resource allocation (bandwidth, IP pool, connection time).</li>
+<li><strong>Accounting</strong>: Recording of connection duration and data volume consumed (essential for billing).</li>
+</ul>
+<p>Vendor Specific Attributes (VSA) allow transmitting MikroTik-specific parameters such as bandwidth limits.</p>
+
+<h2>Practical Example at Matrix Telecom</h2>
+<div class="matrix-example">
+<strong>Example:</strong> Matrix purchases a 1 Gbps link from the SAT-3 submarine operator via a Point of Presence in Douala. This link is shared among all customers. To ensure fairness, Matrix configures per-customer bandwidth limits:<br><br>
+<code>Client A: 50 Mbps / 30 Mbps (down/up)</code><br>
+<code>Client B: 100 Mbps / 50 Mbps</code><br>
+<code>Client C: 10 Mbps / 5 Mbps</code><br><br>
+The MikroTik router uses <strong>PCQ (Per Connection Queue)</strong> to balance traffic among multiple customers sharing the same link. A <strong>Firewall Mangle</strong> marks packets and queues limit bandwidth per source IP address.<br><br>
+<strong>Corresponding MikroTik Configuration:</strong><br>
+<pre><code>/ip firewall mangle
+add chain=prerouting src-address=192.168.1.0/24 \
+  action=mark-packet new-packet-mark=client_A passthrough=no
+add chain=prerouting src-address=192.168.2.0/24 \
+  action=mark-packet new-packet-mark=client_B passthrough=no
+
+/queue simple
+add name=Client_A target=192.168.1.0/24 max-limit=30M/50M
+add name=Client_B target=192.168.2.0/24 max-limit=50M/100M
+
+# Bandwidth monitoring
+/tool traffic-monitor
+add interface=sfp1 name=monitor-upstream
+  trigger=received-threshold threshold=900M
+  on-event="/log warning &quot;Bandwidth near limit!&quot;"
+
+# PCQ for fair sharing among customers
+/queue type
+add name=pcq-download kind=pcq pcq-classifier=src-address
+add name=pcq-upload kind=pcq pcq-classifier=dst-address
+
+/queue tree
+add name=global-download parent=global packet-mark=!no-mark queue=pcq-download
+add name=global-upload parent=global packet-mark=!no-mark queue=pcq-upload</code></pre>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>Wireshark</strong> — Network packet analysis<br>
+Allows capturing and inspecting network traffic in real time. Useful for diagnosing performance issues, identifying malformed packets, or analyzing TCP sessions.<br>
+<strong>Usage:</strong><br>
+<pre><code># Install Wireshark from wireshark.org
+# Select the network interface to listen on
+# Apply a display filter:
+http            # HTTP traffic only
+ip.addr == 10.0.0.1  # Traffic to a specific IP
+tcp.port == 443 # HTTPS traffic
+dns             # DNS queries
+arp             # ARP requests</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Ping</strong> — Basic connectivity test<br>
+Sends ICMP Echo Request packets to check if a machine is reachable and measure latency.<br>
+<strong>Usage:</strong><br>
+<pre><code>ping 8.8.8.8           # Test connection to Google DNS
+ping -t google.com     # Continuous ping (Windows)
+ping -c 10 google.com  # 10 pings (Linux/Mac)
+ping -n 10 google.com  # 10 pings (Windows)</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Traceroute</strong> — Network path discovery<br>
+Shows the path packets take from source to destination, listing each intermediate router (hop).<br>
+<strong>Usage:</strong><br>
+<pre><code>tracert google.com     # Windows
+traceroute google.com  # Linux/Mac
+# Analyze hops that add latency or lose packets</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>Speedtest</strong> — Bandwidth measurement<br>
+Throughput testing tool to measure download speed, upload speed, and latency.<br>
+<strong>Usage:</strong><br>
+<pre><code># Via speedtest.net (web interface)
+# Via CLI (Ookla Speedtest CLI):
+speedtest-cli --simple
+# Or with the Speedtest by Ookla application</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>MikroTik WinBox</strong> — MikroTik router configuration<br>
+Graphical interface for managing MikroTik RouterOS routers. Allows configuring interfaces, firewall, NAT, queues, and monitoring traffic.<br>
+<strong>Usage:</strong><br>
+<pre><code>1. Download WinBox from mikrotik.com
+2. Connect via MAC address or IP
+3. User: admin (default, must change)
+4. Check interfaces: Interfaces > Ethernet
+5. Configure NAT: IP > Firewall > NAT
+6. Limit bandwidth: Queues > Simple Queues</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>MikroTik RouterOS CLI</strong> — Network diagnostic commands<br>
+In addition to WinBox, the RouterOS CLI allows advanced diagnostics.<br>
+<strong>Usage:</strong><br>
+<pre><code># SSH connection
+ssh admin@192.168.88.1
+
+# View interfaces and traffic
+/interface print detail
+/interface monitor-traffic ether1
+
+# View ARP table
+/ip arp print
+
+# View active connections
+/ip firewall connection print count-only
+/ip firewall connection print where protocol=tcp
+
+# Test DNS resolution
+/tool dns-test google.com
+
+# View DNS cache
+/ip dns cache print
+
+# Traceroute from the router
+/tool traceroute 8.8.8.8
+
+# Analyze logs in real time
+/log print follow
+
+# View CPU and memory load
+/system resource print
+/system health print</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>SNMP and Zabbix</strong> — Infrastructure monitoring<br>
+Matrix uses SNMP (Simple Network Management Protocol) to monitor router status, bandwidth, and alerts.<br>
+<strong>Usage:</strong><br>
+<pre><code># Enable SNMP on MikroTik
+/snmp community
+add name=monitor address=10.0.0.0/24 read-access=yes
+/snmp set enabled=yes
+
+# Test SNMP from a monitoring workstation (Linux)
+snmpwalk -v2c -c monitor 192.168.88.1 1.3.6.1.2.1.2.2  # Interfaces
+snmpwalk -v2c -c monitor 192.168.88.1 1.3.6.1.2.1.25   # System
+
+# Zabbix - Create a host
+Agent or SNMP:
+- IP: 192.168.88.1
+- Template: Template Module ICMP Ping
+- Template: Template Net MikroTik SNMP
+
+# Typical alerts:
+- Interface down
+- CPU > 80%
+- Bandwidth usage > 90%
+- High temperature (SFP, CPU)</code></pre>
+</div>
+
+<div class="video-link">
+<strong>Recommended Videos:</strong><br>
+<a href="https://www.youtube.com/results?search_query=how+internet+works+ISP+architecture" target="_blank">How the Internet Works - ISP Architecture</a><br>
+<a href="https://www.youtube.com/results?search_query=NAT+explained+network+address+translation" target="_blank">NAT Explained in Detail</a><br>
+<a href="https://www.youtube.com/results?search_query=DNS+resolution+explained" target="_blank">DNS Resolution</a><br>
+<a href="https://www.youtube.com/results?search_query=MikroTik+bandwidth+management+queue" target="_blank">MikroTik Bandwidth Management</a>
+</div>
+
+<div class="tip">
+<strong>Tip for the Intern:</strong><br>
+When you arrive at Matrix, ask these questions:<br>
+1. Where is the connection point with the upstream provider?<br>
+2. Which router performs NAT translation?<br>
+3. How is bandwidth distributed among customers?<br>
+4. What is the total purchased throughput and what is the utilization rate?<br>
+5. How are traffic spikes managed?<br>
+6. Is there failover if the main link goes down?
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Trace the Internet Path from Matrix to an Upstream Provider</strong></p>
+<p>Understanding the path your traffic takes across the Internet is crucial for diagnosing latency and packet loss issues. At Matrix Telecom, you will frequently use traceroute to identify where a link degrades. This task maps the route from a Matrix router to an international destination.</p>
+<ol>
+  <li>SSH into a Matrix router or Linux jump host in the NOC.</li>
+  <li>Run <code>traceroute -n 8.8.8.8</code> and note each hop's IP and latency.</li>
+  <li>Identify the first hop (Matrix gateway), the upstream provider's router, and subsequent hops.</li>
+  <li>Use <code>whois</code> on each external hop IP to identify which ISP or carrier owns it.</li>
+  <li>If a hop shows <code>* * *</code> (timeout), determine whether it's a firewall filtering ICMP or actual packet loss.</li>
+  <li>Run the same traceroute during peak hours (18:00-21:00) and compare latency differences.</li>
+  <li>Document the complete path: Matrix POP &rarr; Transit Provider &rarr; International IX &rarr; Destination.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Calculate Bandwidth Requirements for a New Client</strong></p>
+<p>Before a new client is connected, Matrix must size the link correctly. This task teaches you to estimate bandwidth needs based on user count and applications, then verify the allocation using monitoring tools.</p>
+<ol>
+  <li>Assume a client with 50 employees who use web browsing, email, VoIP, and video conferencing.</li>
+  <li>Estimate per-user requirements: web=1 Mbps, email=0.5 Mbps, VoIP=0.1 Mbps, video=2 Mbps.</li>
+  <li>Calculate the concurrent usage (assume 30% simultaneous for web, 10% for video) and total required bandwidth.</li>
+  <li>Add a 20% overhead for protocols and bursts. Propose a CIR (Committed Information Rate) to the client.</li>
+  <li>Provision the link on the MikroTik CPE with a queue: <code>/queue simple add name="Client50" target=192.168.x.0/24 max-limit=proposed_speed</code>.</li>
+  <li>Verify the limit using PRTG or Cacti: run a speedtest from the client side and compare with the queue.</li>
+  <li>Adjust the queue if the speedtest shows more or less than the provisioned rate.</li>
+</ol>
+</div>
+
+</div>
+<div class="footer">
+<p>Matrix Telecom &mdash; Internship Guide &mdash; Internet Services</p>
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

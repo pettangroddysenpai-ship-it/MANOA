@@ -6,6 +6,7 @@ import chatRoutes from './routes/chat.js';
 import progressRoutes from './routes/progress.js';
 import adminRoutes from './routes/admin.js';
 import documentRoutes from './routes/documents.js';
+import voiceRoutes from './routes/voice.js';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use('/api', chatRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/documents', documentRoutes);
+app.use('/api/voice', voiceRoutes);
 
 app.use((err, _req, res, _next) => {
   console.error('[server] unhandled error:', err);

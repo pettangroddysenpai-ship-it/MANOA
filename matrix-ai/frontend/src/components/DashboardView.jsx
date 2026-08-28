@@ -58,6 +58,16 @@ export default function DashboardView() {
     );
   }
 
+  if (!stats) {
+    return (
+      <div className="mx-auto mt-24 w-full max-w-sm text-center">
+        <div className="glass rounded-3xl p-8">
+          <div className="text-sm text-neutral-500">Chargement...</div>
+        </div>
+      </div>
+    );
+  }
+
   const cards = stats && [
     { label: 'Chats aujourdhui', value: stats.chatsToday, icon: Flame, color: 'from-orange-500 to-rose-500' },
     { label: 'Chats total', value: stats.chatsTotal, icon: MessageSquare, color: 'from-green-500 to-emerald-400' },
@@ -86,7 +96,7 @@ export default function DashboardView() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {cards.map((c) => (
+        {cards?.map((c) => (
           <motion.div
             key={c.label}
             initial={{ opacity: 0, y: 10 }}

@@ -1,0 +1,431 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP-Link / Linksys - ROUTING Guide | Matrix Telecom</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>TP-Link / Linksys (Small Business)</h1>
+<a class="back" href="../index.html">&larr; Back to Routing Guide</a>
+</div>
+
+<div class="container">
+
+<h2>Definition</h2>
+<p>TP-Link and Linksys are manufacturers of network equipment aimed at consumers and small/medium businesses. Their routers are known for their ease of configuration via web interface, affordable cost, and reliability. The most common ranges at Matrix Telecom are TP-Link Archer (Wi-Fi AC/AX), TL-WR841N, TL-MR3420 and Linksys EA/E series.</p>
+
+<img src="https://source.unsplash.com/600x400/?wifi,router,network" alt="WiFi Router Network">
+
+<h2>What are TP-Link and Linksys used for at Matrix Telecom?</h2>
+<p>These routers are mainly used for <strong>SOHO (Small Office / Home Office)</strong> clients. Unlike MikroTik which are more complex but more powerful, TP-Link and Linksys offer <strong>quick setup</strong> and an intuitive user interface. Matrix deploys them for clients who do not need advanced features (complex QoS, VPN, VLANs).</p>
+
+<h2>Comparison: When to use which equipment?</h2>
+<table style="width:100%; border-collapse: collapse; margin:20px 0; color:#cbd5e1;">
+<tr style="background:#1e293b; border-bottom:2px solid #3b82f6;">
+<th style="padding:10px; text-align:left;">Criteria</th>
+<th style="padding:10px; text-align:left;">TP-Link / Linksys</th>
+<th style="padding:10px; text-align:left;">MikroTik</th>
+<th style="padding:10px; text-align:left;">Cisco</th>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+<td style="padding:8px;">Ease of use</td>
+<td style="padding:8px;">&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+<td style="padding:8px;">&#9733;&#9733;&#9733;</td>
+<td style="padding:8px;">&#9733;&#9733;</td>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+<td style="padding:8px;">Advanced features</td>
+<td style="padding:8px;">&#9733;&#9733;</td>
+<td style="padding:8px;">&#9733;&#9733;&#9733;&#9733;</td>
+<td style="padding:8px;">&#9733;&#9733;&#9733;&#9733;&#9733;</td>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+<td style="padding:8px;">Price</td>
+<td style="padding:8px;">$$</td>
+<td style="padding:8px;">$$$</td>
+<td style="padding:8px;">$$$$$</td>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+<td style="padding:8px;">VPN support</td>
+<td style="padding:8px;">Limited</td>
+<td style="padding:8px;">Full</td>
+<td style="padding:8px;">Full</td>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+<td style="padding:8px;">Centralized management</td>
+<td style="padding:8px;">No (individual interface)</td>
+<td style="padding:8px;">WinBox / API</td>
+<td style="padding:8px;">Cisco Prime / DNA</td>
+</tr>
+<tr>
+<td style="padding:8px;">Use at Matrix</td>
+<td style="padding:8px;">SOHO clients</td>
+<td style="padding:8px;">Standard CPE + core network</td>
+<td style="padding:8px;">Enterprise clients / network core</td>
+</tr>
+</table>
+
+<h2>How It Works</h2>
+
+<h3>Router Mode (default)</h3>
+<p>The router acts as a gateway between the local network (LAN) and the Internet (WAN). It performs NAT (Network Address Translation) to allow multiple devices to share a single public IP address. The built-in DHCP server distributes local IP addresses.</p>
+
+<h3>Access Point Mode</h3>
+<p>In this mode, the router acts as an Ethernet switch + Wi-Fi access point. It does <strong>not</strong> perform NAT or routing. It is connected to an existing main router. Useful for extending Wi-Fi coverage in an office.</p>
+
+<h3>Repeater / Range Extender Mode</h3>
+<p>The router captures the existing Wi-Fi signal and retransmits it. Useful for covering dead zones. Note: bandwidth is reduced by half.</p>
+
+<h2>Step-by-Step Configuration</h2>
+
+<h3>Step 1: Accessing the Web Interface</h3>
+<p>Connect your PC to a LAN port on the router. Open a browser and type the router's default IP address:</p>
+<ul>
+<li><strong>TP-Link</strong> : <code>http://192.168.0.1</code> or <code>http://tplinkwifi.net</code></li>
+<li><strong>Linksys</strong> : <code>http://192.168.1.1</code> or <code>http://myrouter.local</code></li>
+</ul>
+<p>Default credentials: admin / admin (or the credentials on the router's label).</p>
+
+<h3>Step 2: Internet (WAN) Configuration</h3>
+<ol>
+<li>Go to "Network" &gt; "WAN" or "Internet".</li>
+<li>Select the connection type: <strong>Dynamic IP</strong> (DHCP), <strong>PPPoE</strong> (ISP), <strong>Static IP</strong>.</li>
+<li>For PPPoE, enter the username and password provided by Matrix.</li>
+<li>Click "Save" or "Connect".</li>
+</ol>
+
+<h3>Step 3: Wi-Fi Configuration</h3>
+<ol>
+<li>Go to "Wireless" &gt; "Basic Settings".</li>
+<li>Choose the SSID (network name), for example "Matrix-Client42".</li>
+<li>Disable WPS (not secure).</li>
+<li>Go to "Wireless Security".</li>
+<li>Choose <strong>WPA2-PSK</strong> or <strong>WPA3-PSK</strong> if available.</li>
+<li>Set a strong password (12 characters minimum, letters + numbers + symbols).</li>
+<li>Save. The router will reboot.</li>
+</ol>
+
+<h3>Step 4: DHCP Configuration (optional)</h3>
+<ol>
+<li>Go to "Network" &gt; "DHCP Server".</li>
+<li>Address range: for example 192.168.0.100 to 192.168.0.200.</li>
+<li>Lease time: 1 day (1440 minutes) for clients.</li>
+<li>Gateway: the router's IP (192.168.0.1).</li>
+<li>DNS: 8.8.8.8, 1.1.1.1 or Matrix DNS.</li>
+</ol>
+
+<h3>Step 5: Port Forwarding</h3>
+<p>To allow access to internal services from the Internet (web server, IP camera, etc.):</p>
+<ol>
+<li>Go to "Forwarding" &gt; "Virtual Servers" (TP-Link) or "Security &gt; Apps & Gaming" (Linksys).</li>
+<li>Add a rule: External port 80 &rarr; Local IP 192.168.0.10 port 80 (HTTP).</li>
+<li>Save.</li>
+</ol>
+
+<h2>Practical Example at Matrix Telecom</h2>
+
+<div class="matrix-example">
+<strong>Use Case:</strong> Deploying a TP-Link Archer AX73 for a small neighborhood shop in Yaound&eacute;.<br><br>
+<strong>Client need:</strong> 30 Mbps Internet, Wi-Fi for 10 employees and a network printer.<br><br>
+<strong>Procedure:</strong>
+<ol>
+<li>The Matrix technician arrives at the client's location with a pre-configured router.</li>
+<li>He connects the fiber/ADSL cable to the WAN (blue) port of the router.</li>
+<li>He connects to the web interface via a smartphone or laptop.</li>
+<li>He configures the WAN connection type: PPPoE with Matrix credentials.</li>
+<li>He sets the SSID "Matrix-Boutique-A" with WPA2 password.</li>
+<li>He tests the Internet connection on a client workstation.</li>
+<li>He records the connection details (router IP, PPPoE ID, SSID/Wi-Fi password) in the client file.</li>
+</ol>
+<br>
+<strong>Specific settings:</strong>
+<ul>
+<li>The DHCP range is limited to 15 addresses (192.168.0.100-114) to avoid exhaustion.</li>
+<li>The built-in firewall (SPI) is enabled in "Security".</li>
+<li>The firmware is updated before deployment.</li>
+<li>Access to the administration interface is restricted to local IPs.</li>
+</ul>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>Web Interface</strong> - Access via browser (Chrome, Firefox, Edge). Allows full router configuration.<br>
+<em>Usage:</em> Type the router's IP in the address bar.<br><br>
+
+<strong>Firmware Update</strong> - Updating the router's internal software. Essential for security and performance.<br>
+<em>Usage:</em> Download the firmware from the official site (TP-Link or Linksys Support), go to "System Tools &gt; Firmware Upgrade", select the .bin file and click Upgrade. Never cut power during the update.<br><br>
+
+<strong>TP-Link Tether (mobile app)</strong> - Android/iOS app to configure TP-Link routers from a smartphone. Useful for quick deployments.<br>
+<em>Usage:</em> Connect the smartphone to the router's Wi-Fi or via Bluetooth, launch the app and follow instructions.<br><br>
+
+<strong>Linksys App</strong> - Mobile app for Linksys routers. Quick setup via wizard.<br>
+<em>Usage:</em> Download from the store, create a Linksys Smart Wi-Fi account if needed.<br><br>
+
+<strong>PuTTY (telnet/SSH)</strong> - Some professional TP-Link routers (TL-ER6020, etc.) support command line access.<br>
+<em>Usage:</em> <code>ssh admin@192.168.0.1</code>
+</div>
+
+<h2>Advantages and Limitations</h2>
+<ul>
+<li><strong>Advantages:</strong> Affordable price, intuitive configuration, reliable, good Wi-Fi performance for standard use.</li>
+<li><strong>Limitations:</strong> Limited advanced features (basic QoS, no BGP/OSPF, limited VPN), less suited for large deployments.</li>
+<li>No centralized management: each router is configured individually.</li>
+<li>Limited log management, no advanced SNMP monitoring.</li>
+</ul>
+
+<h2>Recommended Videos</h2>
+<div class="video-link">
+<strong>YouTube - TP-Link / Linksys Tutorials</strong><br>
+<a href="https://www.youtube.com/results?search_query=tplink+router+configuration" target="_blank">TP-Link Basic Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=linksys+router+setup+guide" target="_blank">Linksys Configuration</a><br>
+<a href="https://www.youtube.com/results?search_query=tplink+access+point+mode+setup" target="_blank">TP-Link Access Point Mode</a><br>
+<a href="https://www.youtube.com/results?search_query=tplink+port+forwarding+configuration" target="_blank">TP-Link Port Forwarding</a><br>
+<a href="https://www.youtube.com/results?search_query=linksys+velop+mesh+wifi+setup" target="_blank">Linksys Velop (Mesh Wi-Fi)</a>
+</div>
+
+<h2>Tip for the Intern</h2>
+<div class="tip">
+<strong>Good to know:</strong>
+<ul>
+<li>TP-Link/Linksys routers are simpler than MikroTik but have their own specifics. Take the time to read the model's manual.</li>
+<li>Always check the firmware version before deployment. Outdated firmware may have security vulnerabilities.</li>
+<li>Note the default IP address of the router (192.168.0.1 or 192.168.1.1). If it conflicts with the client's network, change it.</li>
+<li>For SOHO deployments, these routers are the ideal choice. For clients with evolving needs, recommend a MikroTik.</li>
+<li>If the password is forgotten, the reset button (10 seconds) restores factory settings.</li>
+<li>The QoS on these routers is basic but sufficient to limit a client's bandwidth.</li>
+</ul>
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Configure a TP-Link Router as a Simple CPE for a Small Client</strong></p>
+<p>Matrix Telecom occasionally deploys TP-Link or Linksys routers for small business clients with basic needs (Internet sharing, Wi-Fi, port forwarding). Configuring one from scratch teaches the fundamentals of home/SOHO routing that scale up to enterprise concepts.</p>
+<ol>
+  <li>Reset the TP-Link router to factory defaults by holding the Reset button for 10 seconds.</li>
+  <li>Connect a PC to a LAN port and access the web interface at http://192.168.0.1 (default credentials: admin/admin).</li>
+  <li>Go to <strong>Network &gt; WAN</strong> and set the connection type to PPPoE. Enter the username and password provided by the client's ISP (or use Dynamic IP for a lab test).</li>
+  <li>Set the LAN IP to 192.168.10.1 and enable the DHCP server with pool 192.168.10.100-200.</li>
+  <li>Configure Wi-Fi: set SSID = "Matrix-Client-WiFi", security = WPA2-PSK, password = a strong key.</li>
+  <li>Go to <strong>Forwarding &gt; Virtual Servers</strong> and add a port forwarding rule for an internal server (e.g., port 3389 to 192.168.10.50 for RDP).</li>
+  <li>Click <strong>Save & Reboot</strong> and verify the client PC gets an IP via DHCP and can ping 8.8.8.8.</li>
+  <li>Test the port forward: from outside, telnet to the router's WAN IP on port 3389 — it should reach the internal server.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Perform a Firmware Upgrade and Backup the Configuration</strong></p>
+<p>Keeping router firmware up-to-date is critical for security. Matrix requires that all deployed CPEs run the latest stable firmware version. This task teaches you how to safely upgrade firmware and maintain a backup archive for quick restoration.</p>
+<ol>
+  <li>Identify the current firmware version: go to <strong>System Tools &gt; Firmware Version</strong> on the TP-Link web interface.</li>
+  <li>Visit the TP-Link support site and download the latest stable firmware for the exact model number.</li>
+  <li>Back up current configuration: go to <strong>System Tools &gt; Backup & Restore</strong>, click <strong>Backup</strong>, and save the <code>.bin</code> file.</li>
+  <li>Upgrade the firmware: select the downloaded firmware file and click <strong>Upgrade</strong>. Do NOT power off the router during the process.</li>
+  <li>After the router reboots, verify the new firmware version is displayed on the status page.</li>
+  <li>Restore the backup config: go to <strong>Backup & Restore</strong>, select the saved <code>.bin</code>, and click <strong>Restore</strong>.</li>
+  <li>Verify all settings (SSID, DHCP, port forwarding) are intact after restoration.</li>
+  <li>Save a second backup with the post-upgrade configuration, naming it with the date: <code>config_2026-07-03.bin</code>.</li>
+</ol>
+</div>
+
+<h2>Troubleshooting</h2>
+<ul>
+<li><strong>No access to web interface:</strong> Check your PC's IP (it must be in the same subnet as the router). Try pinging the router's IP.</li>
+<li><strong>No Internet connection:</strong> Check the LED indicators (Power, WAN, LAN). Check the WAN connection type and PPPoE credentials.</li>
+<li><strong>Slow Wi-Fi:</strong> Change the Wi-Fi channel (1, 6 or 11 for 2.4 GHz). Move the router away from interference sources (microwaves, cordless phones).</li>
+<li><strong>Some sites won't open:</strong> Check the configured DNS. Switch to 8.8.8.8 / 1.1.1.1.</li>
+<li><strong>Router rebooting in a loop:</strong> Power supply issue or corrupted firmware. Try a factory reset and firmware reinstall via recovery mode.</li>
+</ul>
+
+<h2>Best Practices</h2>
+<ul>
+<li>Disable WPS (known vulnerability).</li>
+<li>Change the default SSID and password.</li>
+<li>Enable SPI firewall (Stateful Packet Inspection).</li>
+<li>Limit admin access to local IPs only.</li>
+<li>Update firmware regularly.</li>
+<li>Disable UPnP if not needed (security risk).</li>
+</ul>
+
+<h2>Additional Resources</h2>
+<ul>
+<li><a href="https://www.tp-link.com/fr/support/" target="_blank" style="color:#60a5fa;">TP-Link Support</a></li>
+<li><a href="https://www.linksys.com/fr/support/" target="_blank" style="color:#60a5fa;">Linksys Support</a></li>
+<li><a href="https://emulator.tp-link.com/" target="_blank" style="color:#60a5fa;">TP-Link Interface Simulator</a></li>
+<li><a href="https://www.tp-link.com/fr/support/faq/" target="_blank" style="color:#60a5fa;">TP-Link FAQ</a></li>
+</ul>
+
+</div>
+
+<div class="footer">
+Matrix Telecom Yaound&eacute; - ROUTING Internship Guide - July 2026
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Acc&egrave;s Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

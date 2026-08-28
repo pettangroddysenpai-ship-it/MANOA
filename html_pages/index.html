@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Telecom Internship - Tracking Sheet Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #0a1628 0%, #1a2744 50%, #0d2137 100%); color: #e0e8f0; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc); padding: 40px 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,82,212,0.4); }
+        .header h1 { font-size: 2.2em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+        .section { margin-bottom: 40px; }
+        .section-title { font-size: 1.6em; margin-bottom: 20px; padding: 15px 20px; border-radius: 10px; display: flex; align-items: center; gap: 12px; }
+        .section-title.services { background: linear-gradient(135deg, #00b4d8, #0077b6); }
+        .section-title.transmission { background: linear-gradient(135deg, #2dc653, #1a936f); }
+        .section-title.routing { background: linear-gradient(135deg, #f77f00, #d65f00); }
+        .section-title.monitoring { background: linear-gradient(135deg, #9b5de5, #7209b7); }
+        .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 25px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; color: #e0e8f0; display: block; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); border-color: rgba(99,179,237,0.5); background: rgba(255,255,255,0.1); }
+        .card h3 { font-size: 1.2em; margin-bottom: 10px; color: #63b3ed; }
+        .card p { font-size: 0.9em; opacity: 0.7; line-height: 1.5; }
+        .card .icon { font-size: 2em; margin-bottom: 10px; }
+        .footer { text-align: center; padding: 30px; opacity: 0.6; font-size: 0.9em; }
+        .week-schedule { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 25px; margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.1); }
+        .week-schedule h2 { margin-bottom: 15px; color: #63b3ed; }
+        .week-item { padding: 10px 15px; margin: 5px 0; border-radius: 8px; background: rgba(255,255,255,0.05); }
+        .week-item strong { color: #63b3ed; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Matrix Telecom Yaounde</h1>
+        <p>Internship Tracking Sheet - Complete Guide</p>
+        <p style="margin-top:8px;opacity:0.7;">Service Delivery & Service Infrastructure</p>
+    </div>
+    <div class="container">
+        <div class="week-schedule">
+            <h2>Recommended Study Schedule</h2>
+            <div class="week-item"><strong>Week 1:</strong> Networking fundamentals (IP, subnetting, DNS, DHCP), Internet service, Fiber Optics, GPS/Google Earth</div>
+            <div class="week-item"><strong>Week 2:</strong> MikroTik, Cisco basics, VLANs, Routing, NAT, VPNs, and wireless links (NanoStation)</div>
+            <div class="week-item"><strong>Week 3:</strong> Enterprise services: VoIP, MPLS/IPLC, Proxy Servers, Video Surveillance, Messaging, Domain Names</div>
+            <div class="week-item"><strong>Week 4:</strong> Monitoring and operations: SolarWinds, PRTG, Cacti, Odoo, IPPLAN, troubleshooting, documentation</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title services">&#128268; SERVICES</div>
+            <div class="cards">
+                <a class="card" href="01_internet.html"><div class="icon">&#127760;</div><h3>Internet</h3><p>ISP architecture, IP addressing, NAT, DNS, DHCP, bandwidth management</p></a>
+                <a class="card" href="02_iplc.html"><div class="icon">&#128279;</div><h3>IPLC</h3><p>International Private Leased Circuit - dedicated private connections</p></a>
+                <a class="card" href="03_voip.html"><div class="icon">&#128222;</div><h3>VoIP</h3><p>Voice over IP, SIP, RTP, PBX, Asterisk, IP Phones</p></a>
+                <a class="card" href="04_vpn_mpls.html"><div class="icon">&#128274;</div><h3>VPN / MPLS</h3><p>Encrypted tunnels, IPSec, GRE, MPLS labels, VRF</p></a>
+                <a class="card" href="05_video_surveillance.html"><div class="icon">&#128249;</div><h3>Video Surveillance</h3><p>IP Cameras, NVR, DVR, ONVIF, PoE</p></a>
+                <a class="card" href="06_domain_name.html"><div class="icon">&#128269;</div><h3>Domain Name</h3><p>DNS, domain registration, hosting, name servers</p></a>
+                <a class="card" href="07_video_conference.html"><div class="icon">&#128187;</div><h3>Video Conference / Teleworking</h3><p>Teams, Zoom, QoS, bandwidth requirements</p></a>
+                <a class="card" href="08_messaging.html"><div class="icon">&#128231;</div><h3>Messaging</h3><p>SMTP, IMAP, POP3, Microsoft Exchange</p></a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title transmission">&#128225; TRANSMISSION</div>
+            <div class="cards">
+                <a class="card" href="09_gps_google_earth.html"><div class="icon">&#128205;</div><h3>GPS / Google Earth</h3><p>Tower positioning, fiber routes, coordinate systems</p></a>
+                <a class="card" href="10_internet_technologies.html"><div class="icon">&#128246;</div><h3>Internet Technologies</h3><p>xDSL, Fiber, LTE, Microwave, Satellite</p></a>
+                <a class="card" href="11_fiber_optic.html"><div class="icon">&#128161;</div><h3>Fiber Optic</h3><p>Single/Multi mode, GPON, OLT, ONU, OTDR, splicing</p></a>
+                <a class="card" href="12_physical_architecture.html"><div class="icon">&#127959;</div><h3>Physical Architecture</h3><p>POP to customer, rack organization, distribution</p></a>
+                <a class="card" href="13_pop_infrastructure.html"><div class="icon">&#127981;</div><h3>POP Infrastructure</h3><p>Point of Presence - routers, switches, fiber, UPS</p></a>
+                <a class="card" href="14_nanostation.html"><div class="icon">&#128225;</div><h3>NanoStation (M13, M5)</h3><p>Wireless point-to-point, Ubiquiti, bridge mode, alignment</p></a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title routing">&#128260; ROUTAGE</div>
+            <div class="cards">
+                <a class="card" href="15_mikrotik.html"><div class="icon">&#128421;</div><h3>MikroTik</h3><p>WinBox, RouterOS, bridges, firewall, NAT, PPPoE, VLAN</p></a>
+                <a class="card" href="16_tplink_linksys.html"><div class="icon">&#128246;</div><h3>TP-Link / Linksys</h3><p>Small business routers, AP mode, NAT, wireless security</p></a>
+                <a class="card" href="17_cisco.html"><div class="icon">&#128225;</div><h3>Cisco</h3><p>IOS, VLAN, STP, OSPF, ACL, Packet Tracer</p></a>
+                <a class="card" href="18_checkpoint.html"><div class="icon">&#128737;</div><h3>CheckPoint</h3><p>Enterprise firewall, policies, VPN, threat prevention</p></a>
+                <a class="card" href="19_proxy_server.html"><div class="icon">&#127760;</div><h3>Proxy Server</h3><p>Squid, forward/reverse proxy, Linux/Windows</p></a>
+                <a class="card" href="20_pap2t.html"><div class="icon">&#128222;</div><h3>PAP2T</h3><p>Cisco ATA adapter - analog to VoIP conversion</p></a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title monitoring">&#128200; MONITORING</div>
+            <div class="cards">
+                <a class="card" href="21_solarwinds.html"><div class="icon">&#128200;</div><h3>SolarWinds</h3><p>Enterprise monitoring, SNMP, alerts, performance</p></a>
+                <a class="card" href="22_ipplan.html"><div class="icon">&#128203;</div><h3>IPPLAN</h3><p>IP Address Management - track IPs, VLANs, devices</p></a>
+                <a class="card" href="23_rms.html"><div class="icon">&#128225;</div><h3>RMS</h3><p>Remote Monitoring/Management System</p></a>
+                <a class="card" href="24_odoo.html"><div class="icon">&#128188;</div><h3>Odoo</h3><p>ERP - CRM, billing, inventory, HR</p></a>
+                <a class="card" href="25_cacti.html"><div class="icon">&#128200;</div><h3>Cacti</h3><p>Open-source monitoring, SNMP, RRDTool, graphs</p></a>
+                <a class="card" href="26_prtg.html"><div class="icon">&#128202;</div><h3>PRTG</h3><p>Sensors, notifications, maps, dashboards</p></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Matrix Telecom Yaounde - Internship Tracking Sheet Guide | Service Delivery & Infrastructure</p>
+    </div>
+</body>
+</html>

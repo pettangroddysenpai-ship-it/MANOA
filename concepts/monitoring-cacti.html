@@ -1,0 +1,443 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cacti — Open-Source Network Graphing | Matrix Telecom Internship</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.8; }
+.header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 40px 20px; text-align: center; border-bottom: 3px solid #3b82f6; }
+.header h1 { color: #60a5fa; font-size: 2em; }
+.header .back { color: #94a3b8; text-decoration: none; font-size: 0.9em; display: block; margin-top: 10px; }
+.header .back:hover { color: #60a5fa; }
+.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+h2 { color: #60a5fa; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #1e293b; }
+h3 { color: #93c5fd; margin: 20px 0 10px; }
+p { margin-bottom: 15px; color: #cbd5e1; }
+ul, ol { margin: 10px 0 20px 20px; color: #cbd5e1; }
+li { margin-bottom: 8px; }
+.tip { background: #1e293b; border-left: 4px solid #fbbf24; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tip strong { color: #fbbf24; }
+.tool-box { background: #1e293b; border-left: 4px solid #3b82f6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.tool-box strong { color: #60a5fa; }
+.video-link { background: #1e293b; border-left: 4px solid #ef4444; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.video-link a { color: #f87171; }
+.video-link strong { color: #f87171; }
+.matrix-example { background: #1e293b; border-left: 4px solid #4ade80; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.matrix-example strong { color: #4ade80; }
+code { background: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #93c5fd; }
+pre { background: #1e293b; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+pre code { background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid #1e293b; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9em; border-top: 1px solid #1e293b; margin-top: 40px; }
+.abbr { border-bottom: 1px dotted #60a5fa; cursor: help; position: relative; display: inline; }
+.abbr:hover::after { content: attr(data-tip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #1e293b; color: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.85em; white-space: nowrap; border: 1px solid #3b82f6; z-index: 1000; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+
+.exercise { background: #1e293b; border-left: 4px solid #8b5cf6; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.exercise strong { color: #8b5cf6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Cacti — Open-Source Network Performance Graphing</h1>
+  <a class="back" href="../index.html">&larr; Back to Index</a>
+</div>
+
+<div class="container">
+
+<h2>Definition &amp; Overview</h2>
+<p>Cacti is a popular open-source web-based network monitoring and graphing tool. It leverages the SNMP protocol to collect data from network devices (routers, switches, servers) and stores the collected metrics in RRDTool (Round Robin Database) files. These RRD files efficiently store time-series data in a fixed-size circular buffer, enabling Cacti to keep years of historical data without consuming excessive disk space.</p>
+<p>At Matrix Telecom, Cacti can be used to generate bandwidth utilization graphs for client uplinks, monitor CPU and memory trends on core routers, and visually track interface errors over time. While Cacti's alerting is limited compared to SolarWinds, its graphing capabilities are excellent and entirely free (GPL licensed).</p>
+
+<img src="https://source.unsplash.com/600x400/?network,monitoring,graph" alt="Network Monitoring Dashboard">
+
+<h2>How It Works — Technical Deep Dive</h2>
+
+<h3>1. Data Collection Pipeline</h3>
+<p>Cacti's operation follows a five-step cycle that repeats every polling interval (default 5 minutes):</p>
+<ol>
+  <li><strong>Scheduler (Cron):</strong> The system cron triggers <code>poller.php</code> every 5 minutes. This PHP script is the heart of Cacti.</li>
+  <li><strong>Data Source Resolution:</strong> The poller reads the MySQL database to determine which devices need to be polled, what data queries (OIDs) to use, and the SNMP credentials for each device.</li>
+  <li><strong>SNMP Queries:</strong> For each device, the poller sends SNMP GET requests to retrieve the specified OIDs (interface octets, CPU load, etc.). Cacti supports SNMP v1, v2c, and v3.</li>
+  <li><strong>RRDTool Update:</strong> The poller passes each collected value to RRDTool, which updates the corresponding .rrd file. RRDTool handles data normalization, consolidation (averaging, max, min), and archiving into multiple Round Robin Archives (RRAs).</li>
+  <li><strong>Graph Rendering (On Demand):</strong> When a user navigates to a graph page in the Cacti web UI, the application calls RRDTool to generate a PNG image from the .rrd data. The graph is cached for performance.</li>
+</ol>
+
+<h3>2. RRDTool Deep Dive</h3>
+<p>RRDTool is the storage engine behind Cacti. An RRD file is created with a fixed size calculated from the configured number of data sources (DS) and round robin archives (RRA). Once created, the file never grows — old data is overwritten by new data.</p>
+
+<pre><code># Creating a Cacti RRD file manually (what Cacti does automatically)
+rrdtool create /var/www/cacti/rra/matrix_rtr_traffic_1.rrd \
+  --step 300 \
+  DS:traffic_in:COUNTER:600:0:10000000000 \
+  DS:traffic_out:COUNTER:600:0:10000000000 \
+  RRA:AVERAGE:0.5:1:576 \
+  RRA:AVERAGE:0.5:6:1440 \
+  RRA:AVERAGE:0.5:24:4380 \
+  RRA:AVERAGE:0.5:288:3650 \
+  RRA:MAX:0.5:1:576 \
+  RRA:MAX:0.5:6:1440 \
+  RRA:MAX:0.5:24:4380
+
+Each RRA stores:
+  - 1×576 = 576 values at 5 min intervals (48 hours)
+  - 6×1440 = 1440 values at 30 min averages (30 days)
+  - 24×4380 = 4380 values at 2 hour averages (1 year)
+  - 288×3650 = 3650 values at 1 day averages (10 years)</code></pre>
+
+<h3>3. Template System</h3>
+<p>Cacti uses a hierarchical template system to simplify configuration:</p>
+<ul>
+  <li><strong>Host Templates:</strong> Define default data queries and graph templates for a device type (e.g., "Generic SNMP Device", "MikroTik Router", "Linux Server").</li>
+  <li><strong>Graph Templates:</strong> Define the visual layout of a graph (lines, colors, legend, axis labels). Example: "Interface - Traffic (bits/sec, 64-bit count)".</li>
+  <li><strong>Data Templates:</strong> Define the SNMP OID and data source type (COUNTER, GAUGE, DERIVE, ABSOLUTE) for a specific metric.</li>
+  <li><strong>Data Queries:</strong> XML-based scripts that auto-discover multiple data sources from a device (e.g., discovering all interfaces via ifTable).</li>
+</ul>
+
+<h2>Step-by-Step: Adding a Device for Monitoring</h2>
+
+<ol>
+  <li><strong>Log in to Cacti</strong> (http://cacti.matrixtelecom.local/cacti/, default: admin/admin). You will be prompted to change the password on first login.</li>
+  <li><strong>Navigate to Console > Devices > Add (+).</strong></li>
+  <li><strong>Fill in the device details:</strong>
+    <ul>
+      <li><em>Description:</em> Core-RTR-Douala-Management</li>
+      <li><em>Hostname:</em> 10.200.10.1 (the OOBM management IP)</li>
+      <li><em>SNMP Version:</em> Version 2</li>
+      <li><em>SNMP Community:</em> matrix_ro</li>
+      <li><em>SNMP Port:</em> 161</li>
+      <li><em>SNMP Timeout:</em> 1000 ms</li>
+      <li><em>Device Template:</em> Generic SNMP-enabled Device</li>
+    </ul>
+  </li>
+  <li><strong>Click "Create".</strong> Cacti will immediately attempt to poll the device using SNMP. If successful, you will see green checkmarks next to system information fields (Hostname, Location, Uptime, etc.).</li>
+  <li><strong>Create Graphs:</strong> On the success page, click "Create Graphs for this Device". A list of available data queries appears:
+    <ul>
+      <li>Select "SNMP - Interface Statistics"</li>
+      <li>Check the interfaces you want to monitor (WAN, LAN, Management)</li>
+      <li>Select graph type: "In/Out Bits (64-bit)"</li>
+      <li>Click "Create"</li>
+    </ul>
+  </li>
+  <li><strong>Add to Graph Tree:</strong> Navigate to Console > Graph Trees. Select your device's parent tree (e.g., "Matrix Infrastructure > Core Routers"). Find your device and add its graphs to the tree.</li>
+  <li><strong>Verify:</strong> Wait 10–15 minutes for two polling cycles. Then navigate to Graphs > (your tree) > Core-RTR-Douala. You should see interface traffic graphs beginning to populate.</li>
+</ol>
+
+<img src="https://source.unsplash.com/600x400/?server,monitoring,interface" alt="Server Interface Monitoring">
+
+<h2>Practical Example at Matrix Telecom Yaoundé</h2>
+
+<div class="matrix-example">
+<strong>Matrix Context:</strong> Bandwidth Usage Graphs for Client Uplinks<br><br>
+<p>Matrix Telecom's NOC uses Cacti to provide historical bandwidth data for both internal analysis and client-facing reports:</p>
+<ul>
+  <li><strong>Client Uplink Graphs:</strong> Each client CPE has its WAN interface under Cacti graphing. When a business client complains of slow speeds, the NOC engineer pulls up the daily graph. If the "Inbound Traffic" line is flat at 50 Mbps (their plan limit), the client is saturating their link — no issue on Matrix's side.</li>
+  <li><strong>Core Link Capacity Planning:</strong> The Yaoundé-to-Douala backbone link is graphed monthly. The 95th percentile bandwidth is used to determine when the link needs to be upgraded from 1 Gbps to 10 Gbps.</li>
+  <li><strong>Interface Error Tracking:</strong> Cacti can graph CRC errors, runts, giants, and collisions. A sudden increase in CRC errors on a client port indicates a faulty SFP or damaged fiber — the NOC dispatches a technician to replace it before the link fails completely.</li>
+  <li><strong>Wireless CPE SNR Graphs:</strong> Using custom OIDs from MikroTik or Ubiquiti MIBs, Cacti graphs signal-to-noise ratio and signal strength over time, helping detect RF interference trends.</li>
+</ul>
+</div>
+
+<h2>Tools Used</h2>
+
+<div class="tool-box">
+<strong>Cacti Web UI</strong><br>
+<strong>Access:</strong> http://cacti.matrixtelecom.local/cacti/ (internal)<br>
+<strong>Key sections:</strong>
+<ul>
+  <li><strong>Console:</strong> All administration — devices, graphs, templates, users, settings.</li>
+  <li><strong>Graphs:</strong> Tree-based navigation. Click any graph to enlarge it. Use the time range selector (1 hour, 1 day, 1 week, 1 month, 1 year).</li>
+  <li><strong>Management:</strong> Global search across devices and graphs. System log viewer for poller errors.</li>
+</ul>
+</div>
+
+<div class="tool-box">
+<strong>RRDTool Command Line</strong><br>
+<strong>Purpose:</strong> Direct manipulation and querying of RRD files (on the Cacti server)<br>
+<strong>Common commands:</strong>
+<pre><code># Get RRD file metadata (DS names, RRA configuration)
+rrdtool info /var/www/cacti/rra/device_traffic_123.rrd
+
+# Fetch last 12 data points (1 hour at 5-min intervals)
+rrdtool fetch /var/www/cacti/rra/device_traffic_123.rrd AVERAGE --start -1h
+
+# Generate a custom graph (not through Cacti)
+rrdtool graph /tmp/custom_bw.png \
+  --start -1d --end now \
+  --title "Custom Bandwidth Graph" \
+  DEF:in=/var/www/cacti/rra/device_traffic_123.rrd:traffic_in:AVERAGE \
+  DEF:out=/var/www/cacti/rra/device_traffic_123.rrd:traffic_out:AVERAGE \
+  LINE1:in#00ff00:"Inbound" \
+  LINE1:out#0000ff:"Outbound"
+
+# Export RRD data to XML (backup)
+rrdtool dump /var/www/cacti/rra/device_traffic_123.rrd > backup_123.xml</code></pre>
+</div>
+
+<div class="tool-box">
+<strong>SNMP Command-Line Tools</strong><br>
+<strong>Purpose:</strong> Verify SNMP reachability and OID values before adding to Cacti<br>
+<strong>Essential commands:</strong>
+<pre><code># Test basic SNMP connectivity
+snmpstatus -v 2c -c matrix_ro 10.200.10.1
+
+# List all interface names
+snmpwalk -v 2c -c matrix_ro 10.200.10.1 1.3.6.1.2.1.2.2.1.2
+
+# Get interface speeds
+snmpwalk -v 2c -c matrix_ro 10.200.10.1 1.3.6.1.2.1.2.2.1.5
+
+# Use 64-bit counters (HC = High Capacity, recommended for &gt; 50 Mbps links)
+snmpwalk -v 2c -c matrix_ro 10.200.10.1 1.3.6.1.2.1.31.1.1.1.6</code></pre>
+</div>
+
+<h2>Video Tutorials</h2>
+
+<div class="video-link">
+<strong>Recommended YouTube Searches:</strong><br>
+<ul>
+  <li><a href="https://www.youtube.com/results?search_query=cacti+network+monitoring+setup+tutorial" target="_blank">Cacti Network Monitoring Setup Tutorial</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=cacti+installation+ubuntu+step+by+step" target="_blank">Cacti Installation on Ubuntu Step by Step</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=rrdtool+tutorial+create+graph+command+line" target="_blank">RRDTool Tutorial — Create Graphs from CLI</a></li>
+  <li><a href="https://www.youtube.com/results?search_query=cacti+snmp+data+query+template+creation" target="_blank">Cacti Data Query Template Creation</a></li>
+</ul>
+</div>
+
+<h2>Tips for the Intern</h2>
+
+<div class="tip">
+<strong>Intern Tip:</strong><br>
+<ul>
+  <li><strong>Ask about Cacti at Matrix:</strong> "Does Matrix use Cacti for bandwidth graphing, or is it PRTG / LibreNMS / something else?" Even if the tool differs, the SNMP+RDD concept is universal.</li>
+  <li><strong>Learn to read graphs:</strong> Being able to spot saturation, interface errors, packet loss, or CPU spikes on a Cacti graph is a core NOC skill.</li>
+  <li><strong>Set up a lab Cacti instance:</strong> Install Cacti on a VM, add your laptop as a device, and graph its interface traffic. Experiment with templates.</li>
+  <li><strong>Check the poller log first:</strong> When graphs aren't showing data, look at <code>/var/log/cacti/poller.log</code>. The error message usually points directly to the problem.</li>
+  <li><strong>Never delete RRD files carelessly:</strong> If you delete an RRD file, all historical data for that device is gone. Export the data first if it's important.</li>
+  <li><strong>Memorize common SNMP OIDs:</strong> Keep a cheat sheet of the OIDs you use most (interface octets, CPU, memory, uptime).</li>
+  <li><strong>Use 64-bit counters for high-speed interfaces:</strong> Standard 32-bit counters (ifInOctets) wrap around at about 4.2 billion bytes (every 343 seconds on a 100 Mbps link). Always use ifHCInOctets/ifHCOutOctets for links above 10 Mbps.</li>
+  <li><strong>Consider Spine for large deployments:</strong> If Matrix monitors many devices, Cacti's default PHP poller (cmd.php) will be too slow. Spine is a C-based poller that is 10–50x faster.</li>
+</ul>
+</div>
+
+<h3>Exercise</h3>
+
+<div class="exercise">
+<p><strong>Task 1: Create a Cacti Graph for a MikroTik Router Interface</strong></p>
+<p>This exercise teaches you how to add a device in Cacti, configure SNMP, and generate bandwidth graphs. At Matrix Telecom, MikroTik routers are widely used as CPEs and core devices. Being able to quickly add a new device and produce utilization graphs is essential for NOC engineers validating client links or troubleshooting congestion.</p>
+<ol>
+  <li>Log in to the Cacti web interface (or your lab VM).</li>
+  <li>Navigate to <strong>Console &gt; Devices &gt; Add</strong>.</li>
+  <li>Enter the device IP (e.g., 192.168.88.1 for a MikroTik), set SNMP version to v2c, and community string <code>matrix_ro</code>.</li>
+  <li>Select the "Generic SNMP-enabled Host" template and click <strong>Create</strong>.</li>
+  <li>Once created, click <strong>Create Graphs for this Host</strong> and choose the interfaces you want to monitor (e.g., ether1-WAN).</li>
+  <li>Add the selected graphs and wait 10-15 minutes for data to accumulate. View the graph under <strong>Graphs</strong> tab.</li>
+  <li>Verify the graph shows inbound/outbound traffic. If no data appears, check <code>/var/log/cacti/poller.log</code> for SNMP errors.</li>
+</ol>
+</div>
+
+<div class="exercise">
+<p><strong>Task 2: Build a Custom CPU Load Graph Using a Private OID</strong></p>
+<p>Matrix Telecom monitors CPU load on its MikroTik routers to detect overloads before they cause packet loss. In this task you will create a custom data template and graph template for the MikroTik CPU OID (1.3.6.1.4.1.14988.1.1.3.1). This simulates a real-world scenario where the built-in templates don't cover a vendor-specific metric.</p>
+<ol>
+  <li>Go to <strong>Console &gt; Data Templates &gt; Add</strong>.</li>
+  <li>Name it "MikroTik - CPU Load" and set the data source type to <strong>GAUGE</strong>.</li>
+  <li>Enter the OID <code>.1.3.6.1.4.1.14988.1.1.3.1</code> with SNMP community <code>matrix_ro</code>.</li>
+  <li>Create a new <strong>Graph Template</strong> that uses this data template, with a line graph showing the CPU percentage.</li>
+  <li>Assign the graph template to a MikroTik device and verify the graph populates after two polling cycles.</li>
+  <li>Optional: add a 75% warning threshold line and a 90% critical line to the graph.</li>
+</ol>
+</div>
+
+<h2>Creating Custom Templates</h2>
+<p>When the built-in Cacti templates don't meet your needs, create custom ones. Below is an example for monitoring MikroTik CPU load using the private MikroTik MIB:</p>
+
+<pre><code>Custom Data Template:
+  Name:        MikroTik CPU Load
+  Data Source: cpu_load
+  OID:         1.3.6.1.4.1.14988.1.1.3.1 (hrProcessorLoad equivalent)
+  DS Type:     GAUGE (value is instantaneous, not a counter)
+  Min Value:   0
+  Max Value:   100
+  Heartbeat:   600 seconds (10 minutes — max allowed gap)
+
+Custom Graph Template:
+  Name:        MikroTik CPU Utilization
+  Graph Type:  Line graph with area fill
+  Items:
+    AREA:cpu_load#ff6600:"CPU %"
+    GPRINT:cpu_load:LAST:"Current\:%8.2lf"
+    GPRINT:cpu_load:AVERAGE:"Average\:%8.2lf"
+    GPRINT:cpu_load:MAX:"Max\:%8.2lf"</code></pre>
+
+<h2>Performance Tuning for ISPs</h2>
+<ul>
+  <li><strong>Increase polling concurrency:</strong> In Console > Settings > Poller, set "Maximum Concurrent Processes" to 10–20 for networks with >500 devices.</li>
+  <li><strong>Use Spine:</strong> Replace the default cmd.php poller with Spine. Compile from source: <code>apt install cacti-spine</code>. Configure in <code>/etc/spine.conf</code>.</li>
+  <li><strong>Database optimization:</strong> Run <code>mysqlcheck -o cacti -p</code> weekly. Add indexes if the poller_output table is large.</li>
+  <li><strong>Separate polling servers:</strong> For very large deployments, use multiple Cacti pollers that write to a shared database (requires manual configuration).</li>
+  <li><strong>Cache graphs:</strong> Enable the RRDTool automatic caching feature in settings to avoid regenerating every graph on every page load.</li>
+</ul>
+
+<h2>Troubleshooting Guide</h2>
+<pre><code>Symptom: Graph shows "NaN" (Not a Number)
+  Cause: No data has been collected. Check SNMP reachability.
+  Fix:   snmpwalk -v 2c -c matrix_ro 10.200.10.1 system
+
+Symptom: Graphs are flat line at zero
+  Cause: Wrong OID (e.g., using 32-bit counter on a 64-bit interface)
+  Fix:   Change data template to use ifHCInOctets ifHCOutOctets
+
+Symptom: Poller output log shows "ERROR"
+  Cause: MySQL connection failure or PHP memory exhausted
+  Fix:   Check MySQL service, increase memory_limit in php.ini
+
+Symptom: "SNMP error" on device page
+  Cause: Community string incorrect, ACL blocking, or SNMP disabled
+  Fix:   Verify SNMP config on the device</code></pre>
+
+<h2>Advantages and Limitations</h2>
+<p><strong>Advantages:</strong> Free (GPL), efficient long-term storage with RRDTool, highly customizable, large community and template library, stable with thousands of devices.</p>
+<p><strong>Limitations:</strong> No built-in alerting (requires plugin or third-party tool), static PNG graphs (no interactive drill-down), dated web interface, steeper learning curve than commercial tools.</p>
+
+</div>
+
+<div class="footer">
+  Matrix Telecom Internship Guide — Monitoring Category — Cacti
+</div>
+
+</div>
+<script>
+const abbr = {
+  "AAA": "Authentication, Authorization, Accounting",
+  "ACE": "Africa Coast to Europe (submarine cable)",
+  "ACL": "Access Control List",
+  "ADSL": "Asymmetric Digital Subscriber Line",
+  "ARP": "Address Resolution Protocol",
+  "ATA": "Analog Telephone Adapter",
+  "BGP": "Border Gateway Protocol",
+  "CCR": "Cloud Core Router",
+  "CHAP": "Challenge Handshake Authentication Protocol",
+  "CIDR": "Classless Inter-Domain Routing",
+  "CLI": "Command Line Interface",
+  "CPE": "Customer Premises Equipment",
+  "CRM": "Customer Relationship Management",
+  "DC": "Direct Current",
+  "DHCP": "Dynamic Host Configuration Protocol",
+  "DNS": "Domain Name System",
+  "DVR": "Digital Video Recorder",
+  "EVE-NG": "Emulated Virtual Environment - Next Generation",
+  "FAI": "Fournisseur d'Accès Internet (French for ISP)",
+  "FreePBX": "Free Private Branch Exchange (open-source PBX)",
+  "FTP": "File Transfer Protocol",
+  "FTTH": "Fiber To The Home",
+  "GNS3": "Graphical Network Simulator 3",
+  "GPON": "Gigabit Passive Optical Network",
+  "GPS": "Global Positioning System",
+  "GRE": "Generic Routing Encapsulation",
+  "GUI": "Graphical User Interface",
+  "hAP": "home Access Point (MikroTik series)",
+  "HTTP": "Hypertext Transfer Protocol",
+  "HTTPS": "Hypertext Transfer Protocol Secure",
+  "HTB": "Hierarchical Token Bucket",
+  "ICMP": "Internet Control Message Protocol",
+  "IDS": "Intrusion Detection System",
+  "IMAP": "Internet Message Access Protocol",
+  "IP": "Internet Protocol",
+  "IPAM": "IP Address Management",
+  "IPLC": "International Private Leased Circuit",
+  "IPS": "Intrusion Prevention System",
+  "IPSec": "Internet Protocol Security",
+  "IPv4": "Internet Protocol version 4 (32-bit addressing)",
+  "IPv6": "Internet Protocol version 6 (128-bit addressing)",
+  "ISP": "Internet Service Provider",
+  "LAN": "Local Area Network",
+  "LTE": "Long Term Evolution (4G mobile standard)",
+  "MAC": "Media Access Control",
+  "MAN": "Metropolitan Area Network",
+  "MIB": "Management Information Base",
+  "MPLS": "Multi-Protocol Label Switching",
+  "NAT": "Network Address Translation",
+  "NVR": "Network Video Recorder",
+  "ODF": "Optical Distribution Frame",
+  "OID": "Object Identifier",
+  "OLT": "Optical Line Terminal",
+  "ONT": "Optical Network Terminal",
+  "ONU": "Optical Network Unit",
+  "ONVIF": "Open Network Video Interface Forum",
+  "OSPF": "Open Shortest Path First",
+  "OTDR": "Optical Time Domain Reflectometer",
+  "PAP": "Password Authentication Protocol",
+  "PBX": "Private Branch Exchange",
+  "PCQ": "Per Connection Queue",
+  "PoE": "Power over Ethernet",
+  "PoP": "Point of Presence",
+  "POP3": "Post Office Protocol version 3",
+  "PPP": "Point-to-Point Protocol",
+  "PPPoE": "Point-to-Point Protocol over Ethernet",
+  "QGIS": "Quantum Geographic Information System",
+  "QoS": "Quality of Service",
+  "RADIUS": "Remote Authentication Dial-In User Service",
+  "RMS": "Remote Monitoring System",
+  "RouterOS": "Router Operating System (MikroTik's OS)",
+  "RTP": "Real-time Transport Protocol",
+  "SFP": "Small Form-factor Pluggable",
+  "SIP": "Session Initiation Protocol",
+  "SLA": "Service Level Agreement",
+  "SMTP": "Simple Mail Transfer Protocol",
+  "SNMP": "Simple Network Management Protocol",
+  "SSH": "Secure Shell",
+  "SSL": "Secure Sockets Layer",
+  "SSID": "Service Set Identifier",
+  "STP": "Spanning Tree Protocol",
+  "TCP": "Transmission Control Protocol",
+  "TLS": "Transport Layer Security",
+  "UDP": "User Datagram Protocol",
+  "UPS": "Uninterruptible Power Supply",
+  "VDSL": "Very High Speed Digital Subscriber Line",
+  "VFL": "Visual Fault Locator",
+  "VLAN": "Virtual Local Area Network",
+  "VoIP": "Voice over Internet Protocol",
+  "VPN": "Virtual Private Network",
+  "VRF": "Virtual Routing and Forwarding",
+  "WAN": "Wide Area Network",
+  "WinBox": "Windows management tool for MikroTik RouterOS",
+  "WMI": "Windows Management Instrumentation",
+  "WPA": "Wi-Fi Protected Access",
+  "xDSL": "Digital Subscriber Line (family of technologies)"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  
+  textNodes.reverse().forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE' || parent.tagName === 'CODE' || parent.tagName === 'PRE') return;
+    
+    let html = node.textContent;
+    let changed = false;
+    
+    const sortedTerms = Object.keys(abbr).sort((a, b) => b.length - a.length);
+    
+    for (const term of sortedTerms) {
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('\\b(' + escaped + ')\\b', 'g');
+      if (re.test(html)) {
+        html = html.replace(re, '<span class="abbr" data-tip="' + abbr[term].replace(/"/g, '&quot;') + '">$1</span>');
+        changed = true;
+      }
+    }
+    
+    if (changed) {
+      const span = document.createElement('span');
+      span.innerHTML = html;
+      node.parentNode.replaceChild(span, node);
+    }
+  });
+});
+</script>
+</body>
+</html>

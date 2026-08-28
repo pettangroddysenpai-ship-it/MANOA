@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP - Matrix Telecom</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>VoIP (Voice over IP)</h1>
+            <div class="subtitle">Matrix Telecom Yaoundé</div>
+            <div class="badge">Service Infrastructure — Services</div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="breadcrumb"><a href="index.html">Accueil</a> / Services / VoIP</div>
+
+        <section>
+            <h2>1. Définition</h2>
+            <p><strong>VoIP (Voice over Internet Protocol)</strong> est la technologie permettant de transmettre des appels téléphoniques via un réseau IP (Internet ou réseau privé) au lieu du réseau téléphonique classique (PSTN).</p>
+
+            <div class="card">
+                <h3>Avantages de la VoIP</h3>
+                <ul>
+                    <li>Coût réduit (appels gratuits ou à faible coût)</li>
+                    <li>Convergence données/voix sur un même réseau</li>
+                    <li>Fonctionnalités avancées (conférence, enregistrement, transfert)</li>
+                    <li>Scalabilité facile</li>
+                    <li>Intégration avec d'autres services (email, CRM)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Protocoles VoIP</h2>
+
+            <h3>2.1 SIP (Session Initiation Protocol)</h3>
+            <p>SIP est le protocole de signalisation utilisé pour <strong>établir, modifier et terminer</strong> les sessions multimédia. C'est le protocole le plus utilisé en VoIP.</p>
+            <ul>
+                <li><strong>INVITE</strong> : Initier un appel</li>
+                <li><strong>ACK</strong> : Confirmer la réception</li>
+                <li><strong>BYE</strong> : Terminer un appel</li>
+                <li><strong>REGISTER</strong> : Enregistrer un téléphone auprès du serveur</li>
+                <li><strong>OPTIONS</strong> : Vérifier les capacités</li>
+            </ul>
+
+            <h3>2.2 RTP (Real-time Transport Protocol)</h3>
+            <p>RTP transporte le <strong>flux audio/vidéo</strong> réel après l'établissement de la session SIP. Il fonctionne sur UDP pour minimiser la latence.</p>
+
+            <h3>2.3 SRTP (Secure RTP)</h3>
+            <p>Version chiffrée de RTP pour sécuriser les communications vocales.</p>
+        </section>
+
+        <section>
+            <h2>3. Flux d'un appel VoIP</h2>
+            <div class="diagram">
+    Téléphone A          Serveur PBX/FreePBX          Téléphone B
+    ┌──────────┐                                    ┌──────────┐
+    │ SIP:     │                                    │          │
+    │ REGISTER │──► Enregistrement SIP              │          │
+    │          │◄── 200 OK                          │          │
+    │          │                                    │          │
+    │ SIP:     │                                    │          │
+    │ INVITE ──┼───────────────────────────────────►│          │
+    │          │◄───────────────────────────────────│ SIP: 180 │
+    │          │◄───────────────────────────────────│ Ringing  │
+    │          │◄───────────────────────────────────│ SIP: 200 │
+    │ SIP:ACK──┼───────────────────────────────────►│ OK       │
+    │          │                                    │          │
+    │◄═════════╪══════════ RTP Audio ═══════════════╪══════════►│
+    │          │         (UDP Port 10000-20000)     │          │
+    │ SIP:BYE──┼───────────────────────────────────►│          │
+    │          │◄───────────────────────────────────│ SIP: 200 │
+    └──────────┘                                    └──────────┘
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Composants VoIP</h2>
+
+            <h3>4.1 PBX (Private Branch Exchange)</h3>
+            <p>Central téléphonique gérant les appels internes et externes d'une entreprise.</p>
+
+            <h4>PBX Logiciels</h4>
+            <ul>
+                <li><strong>Asterisk</strong> : PBX open-source le plus populaire</li>
+                <li><strong>FreePBX</strong> : Interface graphique pour Asterisk</li>
+                <li><strong>3CX</strong> : PBX commercial avec interface web</li>
+                <li><strong>Microsoft Teams</strong> : PBX cloud intégré</li>
+            </ul>
+
+            <h3>4.2 IP Phones</h3>
+            <p>Téléphones compatibles SIP qui se connectent directement au réseau IP.</p>
+            <ul>
+                <li>Cisco IP Phone 7800/8800 series</li>
+                <li>Polycom VVX series</li>
+                <li>Yealink T-series</li>
+                <li>Grandstream GXP series</li>
+            </ul>
+
+            <h3>4.3 ATA (Analog Telephone Adapter)</h3>
+            <p>Convertisseur permettant d'utiliser des téléphones analogiques existants sur un réseau VoIP. Exemple : Cisco PAP2T.</p>
+        </section>
+
+        <section>
+            <h2>5. Configuration FreePBX</h2>
+            <pre><code># Installation de FreePBX sur Debian/Ubuntu
+sudo apt update && sudo apt install -y asterisk asterisk-core-sounds-en
+
+# Configuration sip.conf (Asterisk)
+[general]
+context=from-external
+allowoverlap=no
+udpbindaddr=0.0.0.0:5060
+tcpenable=yes
+tcpbindaddr=0.0.0.0:5061
+transport=udp
+
+[1001]
+type=friend
+host=dynamic
+secret=MonPassword123
+context=from-internal
+disallow=all
+allow=ulaw
+allow=alaw
+qualify=yes
+
+# Créer un extension dans FreePBX GUI
+# Applications -> Extensions -> Add Extension
+# Numéro: 1001, Secret: xxx, Device: SIP</code></pre>
+        </section>
+
+        <section>
+            <h2>6. Chez Matrix Telecom</h2>
+            <div class="card">
+                <p>Matrix Telecom propose des solutions VoIP pour :</p>
+                <ul>
+                    <li><strong>Téléphonie d'entreprise</strong> : PBX pour PME/PMI</li>
+                    <li><strong>Trunk SIP</strong> : lignes VoIP pour opérateurs</li>
+                    <li><strong>Téléphonie fixe</strong> : remplacement du PSTN</li>
+                    <li><strong>Solution clé en main</strong> : IP Phones + PBX + Formation</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>7. Outils de test et diagnostic</h2>
+            <div class="tool-card">
+                <div class="tool-name">Wireshark</div>
+                <p>Capturer et analyser les flux SIP/RTP. Filtrer avec <code>sip</code> ou <code>rtp</code> comme protocole. Vérifier les codes de réponse SIP (200, 404, 408, etc.).</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-name">SIPp</div>
+                <p>Outil de test de performance pour serveurs SIP. Simuler des milliers d'appels simultanés.</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-name">FreePBX</div>
+                <p>Interface web pour gérer Asterisk. Dashboard, logs d'appels, enregistrements.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>8. Vidéos recommandées</h2>
+            <a href="https://www.youtube.com/results?search_query=voip+explained+simply+networkchuck" class="video-link" target="_blank">🎬 NetworkChuck - VoIP Explained</a>
+            <a href="https://www.youtube.com/results?search_query=asterisk+freepbx+tutorial+2024" class="video-link" target="_blank">🎬 Asterisk FreePBX Tutorial</a>
+            <a href="https://www.youtube.com/results?search_query=sip+protocol+explained" class="video-link" target="_blank">🎬 SIP Protocol Deep Dive</a>
+        </section>
+
+        <section>
+            <h2>9. Conseils</h2>
+            <div class="tip">Toujours vérifier la qualité réseau (QoS) avant de déployer VoIP. La voix nécessite un débit stable et une latence < 150ms.</div>
+            <div class="warning">Un mauvais réseau peut causer de la distorsion, des coupures, et des délais dans les appels VoIP.</div>
+        </section>
+
+        <footer>
+            <p>Matrix Telecom Yaoundé — Stage Service Delivery & Infrastructure</p>
+        </footer>
+    </div>
+</body>
+</html>
